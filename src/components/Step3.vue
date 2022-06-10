@@ -14,19 +14,13 @@
             <div id="title">Bebas</div>
 
 
-        <form style="justify-content: center;">
+        <form style="justify-content: center;" class="pfp_fields" input type="image"></form>
 
-            <div class="image_fields" input type="image"></div>
-                
-          
-
-            <div id="text" style="margin-left:25%;">
-                <p>Upload an image of Your ID card</p>
+            <div id="text" style="white-space: nowrap;">
+                <p>Upload an image as Your Profile Picture</p>
             </div>
-
-        </form>
         
-<button class="buttons" id="text">Next</button>
+        <button class="buttons" id="text">Next</button>
 
         </div>
 

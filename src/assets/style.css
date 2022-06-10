@@ -3,7 +3,10 @@
 body{
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+
+    font-family: 'Poppins', sans-serif;
+    color: black;
 }
 
 .background{
@@ -34,9 +37,19 @@ body{
     align-self: center;
     width: 150px;
     height: 150px;
-    margin-bottom: 5%;
+    margin-bottom: 10px;
+    margin-top: 2%;
 
     background: #C7C7C7;
+
+    /* position: relative;
+width: 150px;
+height: 150px;
+left: 50%;
+top: 20%;
+
+background: #C7C7C7;
+border-radius: 100px; */
 
 }
 
@@ -45,8 +58,40 @@ body{
     justify-content: center;
     align-self: center;
     width: 500px;
-    height: 50px;
+    height: 40px;
     margin: 2%;
+
+    text-indent: 5%;
+
+    background-color: whitesmoke;
+
+    border-radius: 25px;
+
+}
+
+.image_fields{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    width: 500px;
+    height: 275px;
+    margin: 2%;
+
+    text-indent: 5%;
+
+    background-color: whitesmoke;
+
+    border-radius: 25px;
+
+}
+
+.pfp_fields{
+    display: flex;
+    width: 275px;
+    height: 275px;
+    margin: 2%;
+
+    text-indent: 5%;
 
     background-color: whitesmoke;
 
@@ -60,7 +105,6 @@ body{
     align-items: center;
     width: 300px;
     height: 50px;
-    margin: 5%;
 
     background-color: wheat;
 
@@ -78,7 +122,6 @@ body{
 
     align-self: center;
     vertical-align:middle;
-    text-indent: 5%;
 
     font-family: 'Poppins', sans-serif;
     color: black;

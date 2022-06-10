@@ -40,6 +40,9 @@
 
             <button class="buttons" id="text">Next</button>
         
+        <div id="text">
+            <p>Already have an account? Sign In</p>
+        </div>
         </div>
 
     </div>
