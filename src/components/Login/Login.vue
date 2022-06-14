@@ -1,7 +1,3 @@
-<style>
-@import '../assets/style.css';
-</style>
-
 <template>
     <div class="background">
         <div class="window">
@@ -27,7 +23,7 @@
             <button class="buttons" id="text">Sign In</button>
         
             <div id="text" style="white-space: nowrap;">
-                <p>Forgot your Password? Click <a href="">here</a></p>
+                <p>Forgot your Password? Click <RouterLink to="/forgot_password">here</RouterLink></p>
             </div>
         </div>
 

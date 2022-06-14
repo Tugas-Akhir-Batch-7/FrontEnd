@@ -30,17 +30,27 @@ const router = createRouter({
     {
       path: '/signup_2',
       name: 'signup_2',
-      component: () => import('../components/Step2.vue')
+      component: () => import('../components/SignUp/Step2.vue')
     },
     {
       path: '/signup_3',
       name: 'signup_3',
-      component: () => import('../components/Step3.vue')
+      component: () => import('../components/SignUp/Step3.vue')
     },
     {
       path: '/signup_4',
       name: 'signup_4',
-      component: () => import('../components/Step4.vue')
+      component: () => import('../components/SignUp/Step4.vue')
+    },
+    {
+      path: '/forgot_password',
+      name: 'forgotpwd',
+      component: () => import('../components/PasswordRecovery/PwdRecovery_1.vue')
+    },
+    {
+      path: '/forgot_password2',
+      name: 'forgotpwd2',
+      component: () => import('../components/PasswordRecovery/PwdRecovery_2.vue')
     }
   ]
 })

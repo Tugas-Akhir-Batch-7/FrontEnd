@@ -9,6 +9,14 @@ body{
     color: black;
 }
 
+.navbar{
+    display: flex;
+    /* width:100vw; */
+    flex-direction: column;
+    white-space: nowrap;
+    background-color: #C7C7C7;
+}
+
 .background{
     display: flex;
 

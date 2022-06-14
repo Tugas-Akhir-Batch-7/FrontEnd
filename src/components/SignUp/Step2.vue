@@ -1,6 +1,4 @@
-<style>
-@import '../assets/style.css';
-</style>
+
 
 <template>
     <div class="background">
@@ -16,19 +14,17 @@
 
         <form style="justify-content: center;">
 
-            <div id="text">
-                <p>
-                    Almost done! We just sent a verification code to {your email}
-                </p>
+            <div class="image_fields" input type="image"></div>
+                
+          
+
+            <div id="text" style="margin-left:25%;">
+                <p>Upload an image of Your ID card</p>
             </div>
 
-            <input type="text" class="fields">
-
         </form>
-
-        <br>
         
-        <button class="buttons" id="text">Sign Up</button>
+<button class="buttons" id="text">Next</button>
 
         </div>
 

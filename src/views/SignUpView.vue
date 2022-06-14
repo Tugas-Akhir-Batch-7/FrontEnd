@@ -1,6 +1,6 @@
 <script setup>
-import SignUpVue from '../components/Step1.vue';
-import SignUpVue2 from '../components/Step2.vue';
+import SignUpVue from '../components/SignUp/Step1.vue';
+import SignUpVue2 from '../components/SignUp/Step2.vue';
 </script>
 
 <template>

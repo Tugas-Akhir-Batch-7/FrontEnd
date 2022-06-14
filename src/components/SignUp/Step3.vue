@@ -1,7 +1,3 @@
-<style>
-@import '../assets/style.css';
-</style>
-
 <template>
     <div class="background">
 

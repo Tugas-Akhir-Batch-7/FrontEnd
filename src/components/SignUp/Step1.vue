@@ -1,7 +1,3 @@
-<style>
-@import '../assets/style.css';
-</style>
-
 <template>
     <div class="background">
         <div class="window">
@@ -41,7 +37,7 @@
             <button class="buttons" id="text">Next</button>
         
         <div id="text">
-            <p>Already have an account? Sign In</p>
+            <p>Already have an account? <RouterLink to="/login">Sign In</RouterLink></p>
         </div>
         </div>
 
@@ -51,5 +47,10 @@
 
 <script>
 
+methods:{
+    
+
+
+}
 
 </script>
