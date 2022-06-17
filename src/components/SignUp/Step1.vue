@@ -34,7 +34,7 @@
 
         </form>
 
-            <button class="buttons" id="text">Next</button>
+           <RouterLink to="/signup_2"><button class="buttons" id="text">Next</button></RouterLink>
         
         <div id="text">
             <p>Already have an account? <RouterLink to="/login">Sign In</RouterLink></p>

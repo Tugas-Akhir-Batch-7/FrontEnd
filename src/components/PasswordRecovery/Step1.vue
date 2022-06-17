@@ -16,8 +16,8 @@
 
             <br>
 
-             <div>
-                <label for="email" style="margin-left: 5%;">Enter your email here</label>
+                <label for="email">Enter your email here</label>
+            <div>
                 <input class="fields" type="email" name="email" id="text" placeholder="Your E-mail">
             </div>
 
@@ -25,7 +25,7 @@
 
             <br>
 
-            <button class="buttons" id="text"><RouterLink to='/forgot_password2'> Send Verification Code</RouterLink></button>
+            <RouterLink to='/forgot_password2'><button class="buttons" id="text"> Send Verification Code</button></RouterLink>
         
         </div>
 
@@ -34,6 +34,5 @@
 </template>
 
 <script>
-import PwdRecovery_2 from "./PwdRecovery_2.vue";
 
 </script>

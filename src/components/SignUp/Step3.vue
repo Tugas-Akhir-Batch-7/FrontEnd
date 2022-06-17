@@ -16,10 +16,14 @@
                 <p>Upload an image as Your Profile Picture</p>
             </div>
         
-        <button class="buttons" id="text">Next</button>
+        <RouterLink to="/signup_4"><button class="buttons" id="text">Next</button></RouterLink>
 
         </div>
 
     </div>
     
 </template>
+
+<script>
+
+</script>

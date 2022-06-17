@@ -12,13 +12,17 @@
 
         <form style="justify-content: center;">
 
-            <div id="text">
+            <div id="text" style="text-align: center;">
                 <p>
-                    Almost done! We just sent a verification code to {your email}
+                    Almost done! We just sent a verification code to 
+                    <br>
+                    {{email}}
+                    <br>
+                    Enter it below to complete your registration
                 </p>
             </div>
 
-            <input type="text" class="fields">
+            <input id="text" type="text" class="fields" placeholder="Verification Code">
 
         </form>
 
@@ -31,3 +35,7 @@
     </div>
     
 </template>
+
+<script>
+
+</script>

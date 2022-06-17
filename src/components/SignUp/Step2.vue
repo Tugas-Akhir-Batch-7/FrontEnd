@@ -1,5 +1,3 @@
-
-
 <template>
     <div class="background">
 
@@ -24,10 +22,14 @@
 
         </form>
         
-<button class="buttons" id="text">Next</button>
+<RouterLink to="/signup_3"><button class="buttons" id="text">Next</button></RouterLink>
 
         </div>
 
     </div>
     
 </template>
+
+<script>
+
+</script>
