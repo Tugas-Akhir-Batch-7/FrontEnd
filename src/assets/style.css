@@ -2,11 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 /* Universal */
+
+
+
 body{
 
     font-family: 'Poppins', sans-serif;
     color: black;
-    margin: 0;
+    margin: 0px;
 
 }
 
@@ -26,7 +29,9 @@ body{
 }
 
 .navbar{
-    display: flex; justify-content: space-evenly; width: 100vw;
+    display: flex; width: 100vw;
+    justify-content: space-around;
+    
 }
 
 /* Dashboard */
@@ -42,7 +47,6 @@ body{
 
     background-color: rgba(222, 222, 222, 1);
     border-radius: 25px;
-
 }
 
 
