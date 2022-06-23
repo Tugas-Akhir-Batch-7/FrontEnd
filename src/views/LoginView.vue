@@ -31,7 +31,7 @@
         </div>
       </form>
 
-      <button class="buttons" id="text" @click="login">Sign In</button>
+      <button class="buttons" id="text" @click="handleLogin">Sign In</button>
 
       <div id="text" style="white-space: nowrap">
         <p>
@@ -51,29 +51,29 @@
 <script>
 // import LoginVue from '@/components/Login/Login.vue';
 import axios from "axios";
+import store from "@/store";
 export default {
   data: () => ({
-    test: "test ya",
+    // test: "test ya",
     email: "",
     password: "",
   }),
   methods: {
-    async login() {
+    async handleLogin() {
       // console
+      // console.log(this.$store)
+
       try {
         const credentials = {
           email: this.email,
           password: this.password,
         };
-        // console.log(this.email)
-        // console.log(this.password)
-        let response = await axios.post("login", credentials);
-        console.log(response.data);
-        if (response.data.token) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-          console.log(localStorage.getItem("user"));
-        }
-        // this.$router.push("/");
+        this.$store.dispatch("auth/login", credentials);
+
+        // ini cara ambil token
+        console.log(this.$store.state.auth.token);
+       
+        this.$router.push("/");
       } catch (err) {
         console.log(err);
       }

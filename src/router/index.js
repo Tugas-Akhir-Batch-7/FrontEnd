@@ -57,9 +57,14 @@ const router = createRouter({
 })
 
 // router.beforeEach((to, from, next) => {
-//   if(localStorage.getItem('user') == null) router.push('/login')
+  // if(localStorage.getItem('user') == null) router.push('/login')
 
-//   next()
+  // next()
+  // con
+//   if(localStorage.getItem('user') == null) {
+//     router.push('/')
+//   }
+//   console.log(localStorage.getItem('user'))
 // })
 
 export default router
