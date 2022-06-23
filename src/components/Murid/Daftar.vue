@@ -1,5 +1,6 @@
 <style>
-@import'..\assets\dashboard.css';
+/* @import '..\..\assets\dashboard.css'; */
+@import '../../assets/dashboard.css';
 
 #table_header{
     display: inline-flex;

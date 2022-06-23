@@ -13,6 +13,9 @@ export default {
         },
         token(state) {
             return state.token
+        },
+        getCurrentRole(state) {
+            return state.user.role
         }
     },
     mutations: {

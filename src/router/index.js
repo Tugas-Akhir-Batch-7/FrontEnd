@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
 // import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -18,7 +19,7 @@ const router = createRouter({
       name: 'signup',
       component: () => import('../views/SignUpView.vue')
     },
-   
+
     {
       path: '/signup_2',
       name: 'signup_2',
@@ -56,15 +57,23 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
+ 
+  if (!store.getters['auth/user']) {
+    console.log('test')
+  } else {
+    console.log("role sekarang:", store.getters['auth/getCurrentRole'])
+
+  }
   // if(localStorage.getItem('user') == null) router.push('/login')
 
   // next()
   // con
-//   if(localStorage.getItem('user') == null) {
-//     router.push('/')
-//   }
-//   console.log(localStorage.getItem('user'))
-// })
+  // if(localStorage.getItem('user') == null) {
+  //   router.push('/')
+  // }
+  // console.log(localStorage.getItem('user'))
+  next()
+})
 
 export default router
