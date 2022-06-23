@@ -29,6 +29,10 @@
         <br>
         
         <button class="buttons" id="text">Sign Up</button>
+        <br>
+        <br>
+        <button @click="prev" class="buttons" id="text">Back</button>
+
 
         </div>
 
@@ -38,4 +42,20 @@
 
 <script>
 
+export default {
+  methods: {
+    next() {
+      this.$emit("nextStep");
+    },
+    prev() {
+      this.$emit("prevStep");
+    },
+  },
+};
+
 </script>
+
+
+
+// 
+

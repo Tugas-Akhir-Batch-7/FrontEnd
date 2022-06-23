@@ -33,8 +33,8 @@
             </div>
 
         </form>
-
-           <RouterLink to="/signup_2"><button class="buttons" id="text">Next</button></RouterLink>
+            
+           <div><button class="buttons" id="text" @click="next">Next</button></div>
         
         <div id="text">
             <p>Already have an account? <RouterLink to="/login">Sign In</RouterLink></p>
@@ -46,11 +46,22 @@
 </template>
 
 <script>
-
-methods:{
-    
-
-
+export default {
+    // props: ['step-inner'],
+    // data(){
+    //     return {
+    //         step: this.step-inner,
+    //     }
+    // },
+    methods : {
+        next(){
+            this.$emit('nextStep')
+        },
+        prev(){
+            this.$emit('prevStep')
+        }
+    }
 }
+
 
 </script>
