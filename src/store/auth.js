@@ -16,7 +16,10 @@ export default {
         },
         getCurrentRole(state) {
             return state.user.role
-        }
+        },
+        // currentName(state) {
+        //     return state.user.name
+        // }
     },
     mutations: {
         SET_USER(state, value) {state.user = value},
@@ -25,7 +28,7 @@ export default {
     actions: {
       async login({commit}, credential) {
         const user = await AuthService.login(credential)
-        // console.log(user)
+        console.log(user.data)
         commit('SET_USER', user.data)
         commit('SET_TOKEN', user.token)
         // console.log(this.$store.state.target)

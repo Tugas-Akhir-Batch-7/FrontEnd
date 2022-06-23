@@ -38,8 +38,8 @@
       <div v-else class="user_profile">
         <div id="user_pfp"></div>
         <div id="user_name">
-          <p>My Full Name</p>
-          <p>My Batch Info</p>
+          <p>{{ currentName }}</p>
+          <p>{{ currentBatch }}</p>
         </div>
       </div>
     </div>
@@ -50,11 +50,22 @@
 
 <script>
 export default {
-  data() {},
+  data() {
+
+    return {
+      isLoggedIn: false
+    };
+  },
   computed: {
     isLoggedIn() {
       return this.$store.getters["auth/user"] ? true : false;
     },
+    currentName(){
+      return this.$store.getters["auth/user"].name;
+    },
+    currentBatch() {
+      return this.$store.getters["auth/user"].nama_batch;
+    }
   },
   methods: {
     async handleLogout() {
