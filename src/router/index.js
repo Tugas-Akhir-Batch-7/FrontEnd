@@ -10,14 +10,20 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      meta: {
+        requiresAuth: false
+      }
     },
 
     // daftar
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignUpView.vue')
+      component: () => import('../views/SignUpView.vue'),
+      meta: {
+        requiresAuth: false
+      }
     },
 
     {
@@ -58,6 +64,12 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  if(!to.meta.requiresAuth && store.getters['auth/user']){
+    return next({
+      path: '/murid_dashboard'
+    })
+  }
+  // if
  console.log(store.state.auth.user)
   if (!store.getters['auth/user']) {
     console.log('test')
