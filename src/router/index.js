@@ -58,12 +58,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
- 
+ console.log(store.state.auth.user)
   if (!store.getters['auth/user']) {
     console.log('test')
   } else {
     console.log("role sekarang:", store.getters['auth/getCurrentRole'])
-
   }
   // if(localStorage.getItem('user') == null) router.push('/login')
 

@@ -72,8 +72,16 @@ export default {
 
         // ini cara ambil token
         console.log(this.$store.state.auth.token);
-       
-        this.$router.push("/");
+
+        this.$router.push("/murid_dashboard");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleLogout() {
+      try {
+        await this.$store.dispatch("auth/logout");
+        this.$router.push("/login");
       } catch (err) {
         console.log(err);
       }

@@ -29,6 +29,12 @@ export default {
         commit('SET_USER', user.data)
         commit('SET_TOKEN', user.token)
         // console.log(this.$store.state.target)
-      }
+      },
+        async logout({commit}) {
+            console.log('logout')
+            commit('SET_USER', null)
+            commit('SET_TOKEN', null)
+            // await AuthService.logout()
+        }
     },
 }

@@ -52,8 +52,7 @@
         <RouterLink to="/login" class="nav_button"> Jadwal</RouterLink>
         <RouterLink to="/login" class="nav_button"> Profil</RouterLink>
         <RouterLink to="/login" class="nav_button"> Administrasi</RouterLink>
-        <RouterLink to="/login" class="nav_button"> Log Out</RouterLink>
- 
+        <div @click="handleLogout" class="nav_button"> Log Out</div>
 </div>
 
 <!-- content -->
@@ -86,5 +85,16 @@
 </template>
 
 <script>
-
+export default {
+      methods: {
+        async handleLogout() {
+            try {
+                await this.$store.dispatch("auth/logout");
+                this.$router.push("/login");
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+}
 </script>

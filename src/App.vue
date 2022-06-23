@@ -4,7 +4,7 @@
 
 <template>
  
- <header>
+ <header v-if="!isLoggedIn">
 
   <div class="navbar">
 
@@ -31,5 +31,14 @@
 </template>
 
 <script>
+export default {
+    data () {
 
+    },
+    computed: {
+        isLoggedIn() {
+            return (this.$store.getters["auth/user"]) ? true : false
+        }
+    },
+}
 </script>
