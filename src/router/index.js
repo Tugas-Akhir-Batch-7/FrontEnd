@@ -87,6 +87,21 @@ const router = createRouter({
       name: 'sidebarGuru',
       component: () => import('../components/Guru/sidebar.vue')
     },
+    {
+      path: '/admin/',
+      name: 'admin_dashboard',
+      component: () => import('../components/Admin/Dashboard.vue')
+    },
+    {
+      path: '/admin/list-guru',
+      name: 'admin_list_guru',
+      component: () => import('../components/Admin/ListGuru.vue')
+    },
+    {
+      path: '/admin/list-murid',
+      name: 'admin_list_murid',
+      component: () => import('../components/Admin/ListMurid.vue')
+    }
   ]
 })
 

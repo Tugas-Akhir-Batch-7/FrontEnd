@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)">
+          <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)" :key="i.id">
             <td>{{ i.name }}</td>
             <td>{{ i.start_date }}</td>
             <td>{{ i.pay }}</td>
@@ -44,7 +44,7 @@ export default {
       this.token = await this.$store.getters["auth/token"]
 
       axios.defaults.headers.common["token"] = this.token;
-      console.log('test')
+      // console.log('test')
 
       let response = await axios.get("guru/listBatch", {});
       this.listBatch = response.data.data;

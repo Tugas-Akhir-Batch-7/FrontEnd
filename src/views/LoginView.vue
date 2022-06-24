@@ -76,7 +76,9 @@ export default {
           return this.$router.push("/murid_dashboard");
         } else if (role == "guru"){
           return this.$router.push("/guru_dashboard1");
-        } 
+        } else if (role == "admin"){
+          return this.$router.push("/admin/");
+        }
         // this.$router.push("/murid_dashboard");
       } catch (err) {
         console.log(err);
