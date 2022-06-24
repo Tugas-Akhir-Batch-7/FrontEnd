@@ -38,15 +38,16 @@
 import axios from "axios";
 export default {
   data: () => ({
-    token:JSON.parse(localStorage.getItem("user")),
+    token:'',
     listBatch:[],
     listAnggotaBatch:[],
     publicPath:'asda',
   }),
   async mounted() {
     try{
+      this.token = await this.$store.getters["auth/token"]
       //ambil list anggota batch
-      axios.defaults.headers.common['token'] = this.token.token;
+      axios.defaults.headers.common['token'] = this.token;
       let response = await axios.get("guru/listAnggotaBatch/"+this.$route.params.id, {});
       this.listAnggotaBatch = response.data.data
       console.log(this.listAnggotaBatch)

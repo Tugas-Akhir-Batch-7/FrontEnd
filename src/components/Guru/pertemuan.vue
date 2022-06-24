@@ -7,6 +7,7 @@
     <table class="table table-hover">
       <thead>
         <tr>
+          <th scope="col"></th>
           <th scope="col">Name Batch</th>
           <th scope="col">Name Pertemuan</th>
           <th scope="col">Keterangan</th>
@@ -14,7 +15,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="i in listPertemuan" @click="infoMuridBatch(i.id)" class="bg-warning">
+        <tr v-for="(i, key) in listPertemuan" @click="infoMuridBatch(i.id)" :class="{'bg-light':i.name_guru == username}">
+          <td>{{key+1}}</td>
           <td>{{i.name_batch}}</td>
           <td>{{i.name_pertemuan}}</td>
           <td>{{i.keterangan}}</td>
@@ -33,15 +35,17 @@
 import axios from "axios";
 export default {
   data: () => ({
-    token:JSON.parse(localStorage.getItem("user")),
+    token:'',
     listPertemuan:[],
     listMuridBatch:[],
-    publicPath:'asda'
+    username: ''
   }),
   async mounted() {
     try{
+      this.token = await this.$store.getters["auth/token"]
+      this.username = await this.$store.getters["auth/user"].name
       //ambil list batch
-      axios.defaults.headers.common['token'] = this.token.token;
+      axios.defaults.headers.common['token'] = this.token;
       let response = await axios.get("guru/listPertemuan", {});
       this.listPertemuan = response.data.data
     }catch(err){
