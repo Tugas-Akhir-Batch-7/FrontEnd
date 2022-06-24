@@ -1,69 +1,75 @@
 <template>
-<main class="d-flex flex-nowrap">
-  <sidebar/>
-  <div class="d-flex flex-column flex-fill p-3">
-    <!--<p>{{token}}</p>-->
-    <!--<button @click="klick">klick</button>-->
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Name Batch</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">Pay</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)">
-          <td>{{i.name}}</td>
-          <td>{{i.start_date}}</td>
-          <td>{{i.pay}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</main>
-    
+  <main class="d-flex flex-nowrap">
+    <sidebar />
+    <div class="p-3 d-flex flex-column flex-fill">
+      <!--<p>{{token}}</p>-->
+      <!--<button @click="klick">klick</button>-->
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Name Batch</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Pay</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)">
+            <td>{{ i.name }}</td>
+            <td>{{ i.start_date }}</td>
+            <td>{{ i.pay }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
 </template>
 <script setup>
-  import sidebar from './sidebar.vue';
+import sidebar from "./sidebar.vue";
 </script>
 <script>
 import axios from "axios";
+// const tokenStore = 
+
 export default {
   data: () => ({
-    token:JSON.parse(localStorage.getItem("user")),
-    listBatch:[],
-    listMuridBatch:[],
-    publicPath:'asda'
+    // token:JSON.parse(localStorage.getItem("user")),
+    token: "",
+    listBatch: [],
+    listMuridBatch: [],
+    publicPath: "asda",
   }),
   async mounted() {
-    try{
+    try {
       //ambil list batch
-      axios.defaults.headers.common['token'] = this.token.token;
+      this.token = await this.$store.getters["auth/token"]
+
+      axios.defaults.headers.common["token"] = this.token;
+      console.log('test')
+
       let response = await axios.get("guru/listBatch", {});
-      this.listBatch = response.data.data
-    }catch(err){
-        console.log("error")
-        console.log(err)
-      }
+      this.listBatch = response.data.data;
+    } catch (err) {
+      console.log("error");
+      console.log(err);
+    }
   },
-  methods:{
-    async klick(){
-      try{
-        console.log(this.token.token)
-      }catch(err){
-        console.log("error")
-        console.log(err)
+  methods: {
+    async klick() {
+      try {
+        console.log(this.token.token);
+      } catch (err) {
+        console.log("error");
+        console.log(err);
       }
     },
-    async infoMuridBatch(id){
-      try{
-        this.$router.push({ name: 'anggotaBatch', params: { id } })
-      }catch(err){
-        console.log("error")
-        console.log(err)
+    async infoMuridBatch(id) {
+      try {
+        this.$router.push({ name: "anggotaBatch", params: { id } });
+      } catch (err) {
+        console.log("error");
+        console.log(err);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
