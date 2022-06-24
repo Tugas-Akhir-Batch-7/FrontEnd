@@ -69,13 +69,18 @@ const router = createRouter({
     },
     {
       path: '/guru_dashboard1',
-      name: 'sidebarDashboard1',
+      name: 'guru_dashboard1',
       component: () => import('../components/Guru/dashboard1.vue')
     },
     {
       path: '/anggota_batch/:id',
       name: 'anggotaBatch',
       component: () => import('../components/Guru/anggotaBatch.vue')
+    },
+    {
+      path: '/guru/pertemuan',
+      name: 'guru_pertemuan',
+      component: () => import('../components/Guru/pertemuan.vue')
     },
     {
       path: '/guru_sidebar',
