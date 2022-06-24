@@ -43,6 +43,8 @@
         </div>
       </div>
     </div>
+      <RouterLink to="/murid_dashboard">Murid</RouterLink>
+      <RouterLink to="/guru_dashboard1">Guru</RouterLink>
 
     <RouterView />
   </div>

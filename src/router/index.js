@@ -60,6 +60,28 @@ const router = createRouter({
       name: 'dashboard',
       component: () => import('../components/Murid/Daftar.vue')
     },
+
+    //guru
+    {
+      path: '/guru_dashboard',
+      name: 'dashboardGuru',
+      component: () => import('../components/Guru/Dashboard.vue')
+    },
+    {
+      path: '/guru_dashboard1',
+      name: 'sidebarDashboard1',
+      component: () => import('../components/Guru/dashboard1.vue')
+    },
+    {
+      path: '/anggota_batch/:id',
+      name: 'anggotaBatch',
+      component: () => import('../components/Guru/anggotaBatch.vue')
+    },
+    {
+      path: '/guru_sidebar',
+      name: 'sidebarGuru',
+      component: () => import('../components/Guru/sidebar.vue')
+    },
   ]
 })
 
