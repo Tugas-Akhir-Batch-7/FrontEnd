@@ -40,11 +40,12 @@
         <div id="user_name">
           <p>{{ currentName }}</p>
           <p>{{ currentBatch }}</p>
+          <button @click="handleLogout" class="btn btn-secondary">Logout</button>
         </div>
       </div>
     </div>
-      <RouterLink to="/murid_dashboard">Murid</RouterLink>
-      <RouterLink to="/guru_dashboard1">Guru</RouterLink>
+    <!-- <RouterLink to="/murid_dashboard">Murid</RouterLink>
+    <RouterLink to="/guru_dashboard1">Guru</RouterLink> -->
 
     <RouterView />
   </div>
@@ -53,23 +54,30 @@
 <script>
 export default {
   data() {
-
     return {
-      isLoggedIn: false
+      // isLoggedIn: false,
     };
   },
   computed: {
     isLoggedIn() {
       return this.$store.getters["auth/user"] ? true : false;
     },
-    currentName(){
+    currentName() {
       return this.$store.getters["auth/user"].name;
     },
     currentBatch() {
       return this.$store.getters["auth/user"].nama_batch;
-    }
+    },
   },
   methods: {
+    async handleLogout() {
+      try {
+        await this.$store.dispatch("auth/logout");
+        this.$router.push("/login");
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async handleLogout() {
       try {
         await this.$store.dispatch("auth/logout");

@@ -68,12 +68,16 @@ export default {
           email: this.email,
           password: this.password,
         };
-        this.$store.dispatch("auth/login", credentials);
-
+        await this.$store.dispatch("auth/login", credentials);
+        const role = await this.$store.getters["auth/user"].role
         // ini cara ambil token
-        console.log(this.$store.state.auth.token);
-
-        this.$router.push("/murid_dashboard");
+        // console.log(this.$store.state.auth.token);
+        if(await role == "murid"){
+          return this.$router.push("/murid_dashboard");
+        } else if (role == "guru"){
+          return this.$router.push("/guru_dashboard1");
+        } 
+        // this.$router.push("/murid_dashboard");
       } catch (err) {
         console.log(err);
       }
