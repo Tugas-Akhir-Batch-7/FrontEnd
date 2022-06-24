@@ -21,6 +21,7 @@
   <div class="navbar">
 
       <RouterLink to="/murid_dashboard">Murid</RouterLink>
+      <RouterLink to="/guru_dashboard1">Guru</RouterLink>
 
   </div>
 </header>

@@ -1,6 +1,7 @@
 <template>
     <div class="background">
         <div class="window">
+    <button @click="klick">{{count}}</button>
 
             <div id="signup_icon">
                 <img src="https://via.placeholder.com/150" alt="" srcset="">
