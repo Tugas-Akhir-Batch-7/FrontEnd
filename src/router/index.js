@@ -64,18 +64,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(!to.meta.requiresAuth && store.getters['auth/user']){
-    return next({
-      path: '/murid_dashboard'
-    })
-  }
+  // console.log(store.getters['auth/user']  )
+  // console.log('coba ')
+  // if(!to.meta.requiresAuth && store.getters['auth/user']){
+  //   return next({
+  //     path: '/murid_dashboard'
+  //   })
+  // }
   // if
- console.log(store.state.auth.user)
-  if (!store.getters['auth/user']) {
-    console.log('test')
-  } else {
-    console.log("role sekarang:", store.getters['auth/getCurrentRole'])
-  }
+//  console.log(store.state.auth.user)
+  // if (!store.getters['auth/user']) {
+    // console.log('test')
+  // } else {
+  //   console.log("role sekarang:", store.getters['auth/getCurrentRole'])
+  // }
   // if(localStorage.getItem('user') == null) router.push('/login')
 
   // next()
