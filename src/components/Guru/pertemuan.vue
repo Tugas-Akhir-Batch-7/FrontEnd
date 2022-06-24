@@ -8,15 +8,17 @@
       <thead>
         <tr>
           <th scope="col">Name Batch</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">Pay</th>
+          <th scope="col">Name Pertemuan</th>
+          <th scope="col">Keterangan</th>
+          <th scope="col">Date</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)">
-          <td>{{i.name}}</td>
-          <td>{{i.start_date}}</td>
-          <td>{{i.pay}}</td>
+        <tr v-for="i in listPertemuan" @click="infoMuridBatch(i.id)" class="bg-warning">
+          <td>{{i.name_batch}}</td>
+          <td>{{i.name_pertemuan}}</td>
+          <td>{{i.keterangan}}</td>
+          <td>{{i.date}}</td>
         </tr>
       </tbody>
     </table>
@@ -32,7 +34,7 @@ import axios from "axios";
 export default {
   data: () => ({
     token:JSON.parse(localStorage.getItem("user")),
-    listBatch:[],
+    listPertemuan:[],
     listMuridBatch:[],
     publicPath:'asda'
   }),
@@ -40,8 +42,8 @@ export default {
     try{
       //ambil list batch
       axios.defaults.headers.common['token'] = this.token.token;
-      let response = await axios.get("guru/listBatch", {});
-      this.listBatch = response.data.data
+      let response = await axios.get("guru/listPertemuan", {});
+      this.listPertemuan = response.data.data
     }catch(err){
         console.log("error")
         console.log(err)
