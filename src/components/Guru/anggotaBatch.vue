@@ -70,7 +70,7 @@ export default {
         console.log(id)
         console.log(idList)
         //ambil list anggota batch
-        axios.defaults.headers.common['token'] = this.token.token;
+        axios.defaults.headers.common['token'] = this.token;
         let response = await axios.get("guru/accAnggotaBatch/"+id, {});
         console.log(response)
         this.listAnggotaBatch[idList].status = 'terdaftar'

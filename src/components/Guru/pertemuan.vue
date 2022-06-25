@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(i, key) in listPertemuan" @click="infoMuridBatch(i.id)" :class="{'bg-light':i.name_guru == username}">
+        <tr v-for="(i, key) in listPertemuan" @click="detailPertemuan(i.id_pertemuan)" :class="{'bg-light':i.name_guru == username}">
           <td>{{key+1}}</td>
           <td>{{i.name_batch}}</td>
           <td>{{i.name_pertemuan}}</td>
@@ -54,17 +54,10 @@ export default {
       }
   },
   methods:{
-    async klick(){
+    async detailPertemuan(id){
       try{
-        console.log(this.token.token)
-      }catch(err){
-        console.log("error")
-        console.log(err)
-      }
-    },
-    async infoMuridBatch(id){
-      try{
-        this.$router.push({ name: 'anggotaBatch', params: { id } })
+        console.log(id)
+        this.$router.push({ name: 'detailPertemuan', params: { id } })
       }catch(err){
         console.log("error")
         console.log(err)
