@@ -46,7 +46,7 @@ export default {
       this.token = await this.$store.getters["auth/token"]
 
       axios.defaults.headers.common["token"] = this.token;
-      console.log('test')
+      // console.log('test')
 
       let response = await axios.get("guru/listBatch", {});
       this.listBatch = response.data.data;

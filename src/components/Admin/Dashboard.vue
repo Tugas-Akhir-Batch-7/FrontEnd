@@ -1,55 +1,52 @@
 <style>
-@import'..\assets\dashboard.css';
-
+@import "../../assets/dashboard.css";
 </style>
 
 <template>
-
-<div class="header">
-
-    <!-- company logo -->
-    <div class="company_space">
-
-        <div id="header_logo">
-            <img src="https://via.placeholder.com/100" alt="">
-        </div>
-
-        <div id="company_name">
-            <p>Bebas</p>
-        </div>
-    </div>
-    
-
-    
-    
-    <!-- user profile -->
-        <div class="user_profile">
-        <div id="user_pfp">
-
-        </div>
-        <div id="user_name">
-            <p>My Full Name</p>
-            <p>My Batch Info</p>
-        </div>
-    
-    </div>
-    
-</div>
-<!-- navbar -->
-<div class="navigation">
-        <RouterLink id="nav_button"  to="/login">Tugas</RouterLink>
-        <RouterLink id="nav_button"  to="/login">Jadwal</RouterLink>
-        <RouterLink id="nav_button"  to="/login">Profil</RouterLink>
-        <RouterLink id="nav_button"  to="/login">Administrasi</RouterLink>
-        <RouterLink id="nav_button"  to="/login">Log Out</RouterLink>
-</div>
-
-<!-- sidebar -->
-<div class="sidebar">
-
-</div>
+  <div>
+    <main class="d-flex flex-nowrap">
+      <sidebar />
+      <div class="p-3 d-flex flex-column flex-fill">
+        DASHBOARD ADMIN
+        <!--<p>{{token}}</p>-->
+        <!--<button @click="klick">klick</button>-->
+        <!-- <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Name Batch</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">Pay</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="i in listBatch"
+              @click="infoMuridBatch(i.id)"
+              :key="i.id"
+            >
+              <td>{{ i.name }}</td>
+              <td>{{ i.start_date }}</td>
+              <td>{{ i.pay }}</td>
+            </tr>
+          </tbody>
+        </table> -->
+      </div>
+    </main>
+    <!-- sidebar -->
+    <!-- <div class="sidebar"></div> -->
+  </div>
+  <!-- navbar -->
 </template>
 
 <script>
-
+import sidebar from "@/components/Admin/sidebar.vue";
+export default {
+  components: {
+    sidebar,
+  },
+  onMounted() {
+    
+    // this.getListBatch();
+  },
+};
 </script>
