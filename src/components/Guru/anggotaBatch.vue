@@ -21,7 +21,7 @@
           <td>{{value.status}}</td>
           <td>{{value.address}}</td>
           <td v-if="value.status == 'mendaftar'" @click="accMurid(value.id_murid, key)">
-            <button type="button" class="btn btn-success m-0">accept</button>
+            <button type="button" class="btn btn-sm btn-success m-0">accept</button>
           </td>
           <td v-else></td>
         </tr>

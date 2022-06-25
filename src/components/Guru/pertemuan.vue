@@ -15,12 +15,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(i, key) in listPertemuan" @click="detailPertemuan(i.id_pertemuan)" :class="{'bg-light':i.name_guru == username}">
-          <td>{{key+1}}</td>
-          <td>{{i.name_batch}}</td>
-          <td>{{i.name_pertemuan}}</td>
-          <td>{{i.keterangan}}</td>
-          <td>{{i.date}}</td>
+        <tr v-for="(key, i) in listPertemuan" @click="detailPertemuan(key.id_pertemuan)" :class="{'bg-light':key.name_guru == username}">
+          <td style="width:5%; text-align:center">{{i+1}}</td>
+          <td>{{key.name_batch}}</td>
+          <td>{{key.name_pertemuan}}</td>
+          <td>{{key.keterangan}}</td>
+          <td>{{key.date}}</td>
         </tr>
       </tbody>
     </table>

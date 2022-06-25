@@ -7,16 +7,18 @@
       <table class="table table-hover">
         <thead>
           <tr>
+            <th scope="col"></th>
             <th scope="col">Name Batch</th>
             <th scope="col">Start Date</th>
             <th scope="col">Pay</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)">
-            <td>{{ i.name }}</td>
-            <td>{{ i.start_date }}</td>
-            <td>{{ i.pay }}</td>
+          <tr v-for="(value, key) in listBatch"  @click="infoMuridBatch(value.id)">
+            <td style="width:5%; text-align:center">{{key+1}}</td>
+            <td>{{value.name}}</td>
+            <td>{{value.start_date}}</td>
+            <td>{{value.pay}}</td>
           </tr>
         </tbody>
       </table>
