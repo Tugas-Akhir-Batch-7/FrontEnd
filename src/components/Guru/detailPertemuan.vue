@@ -39,8 +39,8 @@
           <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="displayAddTugasP = true">Add</button>
           <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Edit</button>
           <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
-          <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="resetTugas()">Reset</button>
-          <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editMode, 'd-none':!editMode}" @click="saveAbsen()">Save</button>
+          <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="refreshTugas()">Reset</button>
+          <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editMode, 'd-none':!editMode}" @click="saveTugas()">Save</button>
         </div>
       </div>
     </div>
@@ -50,15 +50,22 @@
           <th scope="col"></th>
           <th scope="col">Name</th>
           <th scope="col">Description</th>
+          <th scope="col" v-if="editMode"></th>
+          <th scope="col" v-if="editMode"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) in listTugas">
+        <tr v-for="(value, key) in listTugas" :class="{'table-danger':editMode && listDeleteTugas.includes(value.id)}">
           <td style="width:5%; text-align:center">{{key+1}}</td>
-          <td class="w-25" v-if="editMode"><input v-model="listTugas[key].name" class="form-control form-control-sm" type="text"></td>
+          <!--name-->
+          <td class="w-25" v-if="editMode && listEditTugas[key]"><input v-model="listEditTugas[key].name" class="form-control form-control-sm" type="text"></td>
           <td class="w-25" v-else>{{value.name}}</td>
-          <td v-if="editMode"><input v-model="listTugas[key].description" class="form-control form-control-sm" type="text"></td>
+          <!--description-->
+          <td v-if="editMode && listEditTugas[key]"><input v-model="listEditTugas[key].description" class="form-control form-control-sm" type="text"></td>
           <td v-else>{{value.description}}</td>
+          <!--delete-->
+          <td style="text-align:center" v-if="editMode && !listDeleteTugas.includes(value.id)" @click="listDeleteTugas.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="text-align:center" v-if="editMode && listDeleteTugas.includes(value.id)" @click="listDeleteTugas.splice(listDeleteTugas.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
         </tr>
       </tbody>
     </table>
@@ -110,7 +117,10 @@ export default {
     token:'',
     editMode:false,
     listBatch:[],
+    listAbsen:[],
     listTugas:[],
+    listEditTugas:[],
+    listDeleteTugas:[],
     listTugasBaru:[
       {name:'', description:''},
       {name:'qwe', description:''},
@@ -127,6 +137,7 @@ export default {
       axios.defaults.headers.common['token'] = this.token;
       this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
       this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+      this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
     }catch(err){
         console.log("error")
         console.log(err)
@@ -160,6 +171,57 @@ export default {
         console.log(err)
       }
     },
+    // async saveTugas(){
+    //   try{
+    //     console.log(this.listEditTugas)
+    //     console.log(this.listTugas)
+    //     // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+    //     // this.listUpdate = {}
+    //   }catch(err){
+    //     console.log("error")
+    //     console.log(err)
+    //   }
+    // },
+    async deteleTugas(id, i){
+      try{
+        console.log(id)
+        console.log(i)
+        // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+        // this.listUpdate = {}
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
+    async refreshTugas(){
+      try{
+        this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        this.listDeleteTugas = []
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
+    async saveTugas(){
+      try{
+        //delete tugas
+        console.log(this.listDeleteTugas)
+        for(let i = 0; i < this.listDeleteTugas.length; i++){
+          console.log(this.listDeleteTugas[i])
+          await axios.delete("guru/deleteTugas/"+this.listDeleteTugas[i], {})
+        }
+
+        this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        this.listDeleteTugas = []
+        // await axios.post("guru/prosesAbsensi/"+this.$route.params.id, this.listUpdate)
+        // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
     async refreshAbsen(){
       try{
         this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
@@ -180,14 +242,13 @@ export default {
     },
     async absensi(i){
       try{
-        // console.log(this.listAbsen[i].id_absen)
         // console.log(!this.listAbsen[i].id_absen)
         // console.log( this.listAbsen[i].id_absen ? false : true)
         this.listUpdate[this.listAbsen[i].id_murid] = this.listAbsen[i].id_absen ? 'x':'y'
         this.listAbsen[i].id_absen = this.listAbsen[i].id_absen ? false : true
-        console.log(this.listAbsen[i].id_absen)
-        console.log(this.listUpdate)
-        console.log(this.listAbsen)
+        // console.log(this.listAbsen[i].id_absen)
+        // console.log(this.listUpdate)
+        // console.log(this.listAbsen)
       }catch(err){
         console.log("error")
         console.log(err)
