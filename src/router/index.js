@@ -88,6 +88,16 @@ const router = createRouter({
       component: () => import('../components/Guru/detailPertemuan.vue')
     },
     {
+      path: '/score_tugas/:id',
+      name: 'scoreTugas',
+      component: () => import('../components/Guru/scoreTugas.vue')
+    },
+    {
+      path: '/score_ujian/:id',
+      name: 'scoreUjian',
+      component: () => import('../components/Guru/scoreUjian.vue')
+    },
+    {
       path: '/guru_sidebar',
       name: 'sidebarGuru',
       component: () => import('../components/Guru/sidebar.vue')

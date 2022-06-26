@@ -22,6 +22,18 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="listAbsen.length == 0">
+          <td colspan="5">
+            <div class="text-center">
+              <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="!listAbsen">
+          <td colspan="10" class="text-center">Data Tidak Tersedia</td>
+        </tr>
         <tr v-for="(value, key) in listAbsen" @click="absensi(key)">
           <td style="width:5%; text-align:center">{{key+1}}</td>
           <td>{{value.name}}</td>
@@ -51,21 +63,32 @@
           <th scope="col">Name</th>
           <th scope="col">Description</th>
           <th scope="col" v-if="editMode"></th>
-          <th scope="col" v-if="editMode"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) in listTugas" :class="{'table-danger':editMode && listDeleteTugas.includes(value.id)}">
+        <tr v-if="listTugas.length == 0">
+          <td colspan="3">
+            <div class="text-center">
+              <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="!listTugas">
+          <td colspan="10" class="text-center">Data Tidak Tersedia</td>
+        </tr>
+        <tr v-for="(value, key) in listTugas" :class="{'table-danger':editMode && listDeleteTugas.includes(value.id)}" @click="scoreTugas(value.id)">
           <td style="width:5%; text-align:center">{{key+1}}</td>
           <!--name-->
-          <td class="w-25" v-if="editMode && listEditTugas[key]"><input v-model="listEditTugas[key].name" class="form-control form-control-sm" type="text"></td>
+          <td  class="w-25" v-if="editMode && listEditTugas[key]"><input v-model="listEditTugas[key].name" class="form-control form-control-sm" type="text"></td>
           <td class="w-25" v-else>{{value.name}}</td>
           <!--description-->
           <td v-if="editMode && listEditTugas[key]"><input v-model="listEditTugas[key].description" class="form-control form-control-sm" type="text"></td>
           <td v-else>{{value.description}}</td>
           <!--delete-->
-          <td style="text-align:center" v-if="editMode && !listDeleteTugas.includes(value.id)" @click="listDeleteTugas.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
-          <td style="text-align:center" v-if="editMode && listDeleteTugas.includes(value.id)" @click="listDeleteTugas.splice(listDeleteTugas.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && !listDeleteTugas.includes(value.id)" @click="listDeleteTugas.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listDeleteTugas.includes(value.id)" @click="listDeleteTugas.splice(listDeleteTugas.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
         </tr>
       </tbody>
     </table>
@@ -75,7 +98,7 @@
 <!--modal add tugas-->
 <div :class="{'d-block':displayAddTugasP, 'd-none':!displayAddTugasP}" class="min-vw-100 min-vh-100 position-fixed top-0" style="">
   <div class="min-vw-100 min-vh-100 bg-black opacity-50 position-absolute" style="z-index:-1" @click="displayAddTugasP = false"></div>
-  <div class="min-vw-80 bg-light p-3" style="height:80vh;margin:5% 10%;border-radius:10px">
+  <div class="min-vw-80 bg-light p-3 overflow-auto" style="height:80vh;margin:5% 10%;border-radius:10px">
     <div class="nav-tabs d-flex justify-content-between">
       <h3 class="nav-link active bg-light text-warning">Add Tugas</h3>
       <div class="d-flex align-items-center">
@@ -136,7 +159,9 @@ export default {
       //ambil list anggota batch
       axios.defaults.headers.common['token'] = this.token;
       this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+      if(this.listAbsen.length == 0) this.listAbsen = false
       this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+      if(this.listTugas.length == 0) this.listTugas = false
       this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
     }catch(err){
         console.log("error")
@@ -153,6 +178,15 @@ export default {
         console.log(err)
       }
     },
+    async scoreTugas(id){
+      try{
+        console.log(id)
+        this.editMode ? true : this.$router.push({ name: 'scoreTugas', params: { id } })
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
     async saveAddTugas(){
       try{
         let addTugas = {tugasName:[], tugasDescription:[]}
@@ -164,30 +198,9 @@ export default {
         }
         if(addTugas.tugasName.length) addTugas = (await axios.post("guru/addTugas/"+this.$route.params.id, addTugas)).data.data
         this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        if(this.listTugas.length == 0) this.listTugas = false
         this.displayAddTugasP = false
         console.log(addTugas)
-      }catch(err){
-        console.log("error")
-        console.log(err)
-      }
-    },
-    // async saveTugas(){
-    //   try{
-    //     console.log(this.listEditTugas)
-    //     console.log(this.listTugas)
-    //     // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
-    //     // this.listUpdate = {}
-    //   }catch(err){
-    //     console.log("error")
-    //     console.log(err)
-    //   }
-    // },
-    async deteleTugas(id, i){
-      try{
-        console.log(id)
-        console.log(i)
-        // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
-        // this.listUpdate = {}
       }catch(err){
         console.log("error")
         console.log(err)
@@ -197,6 +210,7 @@ export default {
       try{
         this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
         this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        if(this.listTugas.length == 0) this.listTugas = false
         this.listDeleteTugas = []
       }catch(err){
         console.log("error")
@@ -206,14 +220,21 @@ export default {
     async saveTugas(){
       try{
         //delete tugas
-        console.log(this.listDeleteTugas)
         for(let i = 0; i < this.listDeleteTugas.length; i++){
-          console.log(this.listDeleteTugas[i])
           await axios.delete("guru/deleteTugas/"+this.listDeleteTugas[i], {})
         }
-
+        //edit tugas
+        for(let i = 0; i < this.listEditTugas.length; i++){
+          if(this.listEditTugas[i].name != this.listTugas[i].name || this.listEditTugas[i].description != this.listTugas[i].description){
+            console.log(this.listEditTugas[i])
+            await axios.put("guru/updateTugas/"+this.listTugas[i].id, {
+              name: this.listEditTugas[i].name, description: this.listEditTugas[i].description
+            })
+          }
+        }
         this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
         this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        if(this.listTugas.length == 0) this.listTugas = false
         this.listDeleteTugas = []
         // await axios.post("guru/prosesAbsensi/"+this.$route.params.id, this.listUpdate)
         // this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
@@ -225,6 +246,7 @@ export default {
     async refreshAbsen(){
       try{
         this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+        if(this.listAbsen.length == 0) this.listAbsen = false
         this.listUpdate = {}
       }catch(err){
         console.log("error")
@@ -235,6 +257,7 @@ export default {
       try{
         await axios.post("guru/prosesAbsensi/"+this.$route.params.id, this.listUpdate)
         this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
+        if(this.listAbsen.length == 0) this.listAbsen = false
       }catch(err){
         console.log("error")
         console.log(err)
