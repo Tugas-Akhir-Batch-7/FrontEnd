@@ -29,6 +29,30 @@ class AdminService {
             console.log(error)
         }
     }
+
+    async getTagihanList() {
+        try {
+            const response = await axios.get('admin/list-tagihan',
+                { headers: await authHeader() })
+            // console.log(response.data)
+            return response.data
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getPembayaranList() {
+        try {
+            const response = await axios.get('admin/list-pembayaran',
+                { headers: await authHeader() })
+            // console.log(response.data)
+            return response.data
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default new AdminService()
