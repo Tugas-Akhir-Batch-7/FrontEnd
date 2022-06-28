@@ -2,26 +2,101 @@
   <main class="d-flex flex-nowrap">
     <sidebar />
     <div class="p-3 d-flex flex-column flex-fill">
-      <!--<p>{{token}}</p>-->
-      <!--<button @click="klick">klick</button>-->
+      <!--Batch-->
+      <div class="nav-tabs d-flex justify-content-between">
+        <h3 class="nav-link active bg-light text-warning">Batch</h3>
+        <div class="d-flex align-items-center">
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="displayAddBatch = true">Add</button>
+            <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Edit</button>
+            <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
+            <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="refreshBatch()">Reset</button>
+            <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editMode, 'd-none':!editMode}" @click="saveEditBatch()">Save</button>
+          </div>
+        </div>
+      </div>
       <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">Name Batch</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">Pay</th>
+            <th scope="col"></th>
+            <th class="w-50" scope="col">Name Batch</th>
+            <th class="w-25" scope="col">Start Date</th>
+            <th class="w-25 text-center" scope="col">Pay</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="i in listBatch" @click="infoMuridBatch(i.id)" :key="i.id">
-            <td>{{ i.name }}</td>
-            <td>{{ i.start_date }}</td>
-            <td>{{ i.pay }}</td>
+        <tr v-if="listBatch.length == 0">
+          <td colspan="5">
+            <div class="text-center">
+              <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </td>
+        </tr><tr v-if="!listBatch">
+          <td colspan="10" class="text-center">Data Tidak Tersedia</td>
+        </tr>
+          <tr v-for="(value, key) in listBatch" :class="{'table-danger':editMode && listDeleteBatch.includes(value.id)}" @click="infoMuridBatch(value.id)">
+            <td style="width:5%; text-align:center">{{key+1}}</td>
+            <!--name-->
+            <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].name" class="form-control form-control-sm" type="text"></td>
+            <td v-else>{{value.name}}</td>
+            <!--name-->
+            <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].date" class="form-control form-control-sm" type="date"></td>
+            <td v-else>{{new Date(value.start_date).toISOString().substring(0, 10)}}</td>
+            <!--name-->
+            <td class="w-25" v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].pay" class="form-control form-control-sm text-center" type="number"></td>
+            <td class="text-center w-25" v-else>{{value.pay}}</td>
+          <!--delete-->
+          <td style="width:5%;text-align:center" v-if="editMode && !listDeleteBatch.includes(value.id)" @click="listDeleteBatch.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listDeleteBatch.includes(value.id)" @click="listDeleteBatch.splice(listDeleteBatch.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
           </tr>
         </tbody>
       </table>
     </div>
   </main>
+  
+<!--modal add Batch-->
+<div :class="{'d-block':displayAddBatch, 'd-none':!displayAddBatch}" class="min-vw-100 min-vh-100 position-fixed top-0" style="">
+  <div class="min-vw-100 min-vh-100 bg-black opacity-50 position-absolute" style="z-index:-1" @click="displayAddBatch = false"></div>
+  <div class="min-vw-80 bg-light p-3 overflow-auto" style="height:80vh;margin:5% 10%;border-radius:10px">
+    <div class="nav-tabs d-flex justify-content-between">
+      <h3 class="nav-link active bg-light text-warning">Add Ujian</h3>
+      <div class="d-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+          <button type="button" class="btn-sm btn btn-outline-success" @click="saveAddBatch()">Save</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" @click="listBatchBaru.push({name:'',pay:1000000,date:(new Date().toISOString().substring(0, 10))})">+</button>
+          <button type="button" class="btn-sm btn btn-outline-danger" @click="displayAddBatch = false">x</button>
+        </div>
+      </div>
+    </div>
+    <table class="table ">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th class="w-50" scope="col">Name</th>
+            <th class="w-25" scope="col">Start Date</th>
+            <th class="w-25" scope="col">Pay</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(value, key) in listBatchBaru">
+            <td style="width:5%; text-align:center">{{key+1}}</td>
+            <td><input v-model="listBatchBaru[key].name" class="form-control form-control-sm" type="text"></td>
+            <td><input v-model="listBatchBaru[key].date" class="form-control form-control-sm" type="date"></td>
+            <td><input v-model="listBatchBaru[key].pay" class="form-control form-control-sm" type="number"></td>
+            <td style="width:5%; text-align:center" @click="listBatchBaru.splice(key, 1)">x</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
+
+<!--modal message-->
+<div v-if="displayMessage" class="min-vw-100 min-vh-100 position-fixed top-0 text-center" style="">
+  <div :class="{'alert-danger': !messageStatus, 'alert-success':messageStatus}" class="alert d-none d-lg-block">{{message}}</div>
+</div>
 </template>
 <script setup>
 import sidebar from "./sidebar.vue";
@@ -32,22 +107,33 @@ import axios from "axios";
 
 export default {
   data: () => ({
-    // token:JSON.parse(localStorage.getItem("user")),
-    token: "",
+    editMode: false,
     listBatch: [],
-    listMuridBatch: [],
-    publicPath: "asda",
+    listEditBatch: [],
+    listDeleteBatch: [],
+    listBatchBaru: [
+      {name: "qwe", date: "", pay: ""},
+      {name: "", date: new Date().toISOString().substring(0, 10), pay: ""},
+      {name: "", date: "", pay: 1230000},
+      {name: "asd", date: new Date().toISOString().substring(0, 10), pay: 3210000},
+    ],
+    editMode: false,
+    displayAddBatch: false,
+    //message
+    message: 'terjadi error',
+    messageStatus: true,
+    displayMessage: false,
   }),
   async mounted() {
     try {
+      axios.defaults.headers.common["token"] = await this.$store.getters["auth/token"]
       //ambil list batch
-      this.token = await this.$store.getters["auth/token"]
-
-      axios.defaults.headers.common["token"] = this.token;
-      // console.log('test')
-
-      let response = await axios.get("guru/listBatch", {});
-      this.listBatch = response.data.data;
+      this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
+      if(this.listBatch.length == 0) this.listBatch = false
+      console.log(this.listBatch);
+      //get list edit Batch
+      this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
+      if(this.listBatch.length == 0) this.listBatch = false
     } catch (err) {
       console.log("error");
       console.log(err);
@@ -64,12 +150,96 @@ export default {
     },
     async infoMuridBatch(id) {
       try {
-        this.$router.push({ name: "anggotaBatch", params: { id } });
+        if(!this.editMode)this.$router.push({ name: "anggotaBatch", params: { id } });
       } catch (err) {
         console.log("error");
         console.log(err);
       }
     },
+    async refreshBatch(){
+      try{
+        //get list Batch
+        this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listBatch.length == 0) this.listBatch = false
+        //get list edit Batch
+        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listBatch.length == 0) this.listBatch = false
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
+    async saveAddBatch(){
+      try{
+        // let addUjian = {tugasName:[], tugasDescription:[]}
+        for(let i = 0; this.listBatchBaru.length; i){
+          if(this.listBatchBaru[i].name && this.listBatchBaru[i].date && this.listBatchBaru[i].pay){
+            let addBatch = {}
+            addBatch.name = this.listBatchBaru[i].name || null
+            addBatch.startDate = this.listBatchBaru[i].date || null
+            addBatch.pay = this.listBatchBaru[i].pay || null
+            console.log(addBatch)
+            console.log(await axios.post("guru/addBatch/", addBatch))
+          }
+          this.listBatchBaru.splice(0,1)
+        }
+        //get list Batch
+        this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listBatch.length == 0) this.listBatch = false
+        console.log(this.listBatch)
+        //get list edit Batch
+        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listEditBatch.length == 0) this.listEditBatch = false
+        console.log(this.listEditBatch)
+        this.displayAddBatch = false
+        this.messageF(`berhasil menambahkan batch`, true)
+      }catch(err){
+        if(err.response.data.error.original.routine == "_bt_check_unique") this.messageF(`batch ${this.listBatchBaru[0].name} sudah ada`, false)
+        console.log("error")
+        console.log(err)
+      }
+    },
+    async saveEditBatch(){
+      try{
+        //delete tugas
+        for(let i = 0; i < this.listDeleteBatch.length; i++){
+          await axios.delete("guru/deleteBatch/"+this.listDeleteBatch[i], {})
+        }
+        //edit tugas
+        for(let i = 0; i < this.listEditBatch.length; i++){
+          if(this.listEditBatch[i].name != this.listBatch[i].name || this.listEditBatch[i].date != this.listBatch[i].date || this.listEditBatch[i].pay != this.listBatch[i].pay){
+            console.log(this.listEditBatch[i])
+            await axios.put("guru/updateBatch/"+this.listBatch[i].id, {
+              name: this.listEditBatch[i].name, 
+              start_date: this.listEditBatch[i].date,
+              pay: this.listEditBatch[i].pay
+            })
+          }
+        }
+        //get list Batch
+        this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listBatch.length == 0) this.listBatch = false
+        console.log(this.listBatch)
+        //get list edit Batch
+        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
+        if(this.listEditBatch.length == 0) this.listEditBatch = false
+        console.log(this.listEditBatch)
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
+    messageF(text, s){
+      console.log('jalan')
+      this.displayMessage = true
+      this.messageStatus = s
+      this.message = text || 'terjadi error'
+      setTimeout(()=>{
+        console.log('jalan 3')
+        this.displayMessage = false
+        this.message = `terjadi error`
+      }, 3000)
+    }
   },
 };
 </script>

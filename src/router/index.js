@@ -81,6 +81,26 @@ const router = createRouter({
       path: '/guru/pertemuan',
       name: 'guru_pertemuan',
       component: () => import('../components/Guru/pertemuan.vue')
+    }, 
+    {
+      path: '/detail_pertemuan/:id',
+      name: 'detailPertemuan',
+      component: () => import('../components/Guru/detailPertemuan.vue')
+    },
+    {
+      path: '/score_tugas/:id',
+      name: 'scoreTugas',
+      component: () => import('../components/Guru/scoreTugas.vue')
+    },
+    {
+      path: '/guru/list_ujian',
+      name: 'listUjian',
+      component: () => import('../components/Guru/listUjian.vue')
+    },
+    {
+      path: '/score_ujian/:id',
+      name: 'scoreUjian',
+      component: () => import('../components/Guru/scoreUjian.vue')
     },
     {
       path: '/guru_sidebar',

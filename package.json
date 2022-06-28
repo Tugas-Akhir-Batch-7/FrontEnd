@@ -16,6 +16,7 @@
     "secure-ls": "^1.2.6",
     "vue": "^3.2.36",
     "vue-router": "^4.0.15",
+    "vue3-simple-alert": "^1.0.4",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0"
   },
