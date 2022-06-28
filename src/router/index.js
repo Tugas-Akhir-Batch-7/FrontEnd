@@ -93,6 +93,11 @@ const router = createRouter({
       component: () => import('../components/Guru/scoreTugas.vue')
     },
     {
+      path: '/guru/list_ujian',
+      name: 'listUjian',
+      component: () => import('../components/Guru/listUjian.vue')
+    },
+    {
       path: '/score_ujian/:id',
       name: 'scoreUjian',
       component: () => import('../components/Guru/scoreUjian.vue')

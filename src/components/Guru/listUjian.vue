@@ -2,48 +2,6 @@
 <main class="d-flex flex-nowrap">
   <sidebar/>
   <div class="d-flex flex-column flex-fill p-3">
-    <!--Anggota Batch-->
-    <div class="nav-tabs d-flex justify-content-between">
-      <h3 class="nav-link active bg-light text-warning">Aggota Batch</h3>
-    </div>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">Username</th>
-          <th scope="col">Email</th>
-          <th scope="col">Status</th>
-          <th scope="col">Address</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="listAnggotaBatch.length == 0">
-          <td colspan="10">
-            <div class="text-center">
-              <div class="spinner-border text-warning" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr v-if="!listAnggotaBatch">
-          <td colspan="10" class="text-center">Data Tidak Tersedia</td>
-        </tr>
-        <tr v-for="(value, key) in listAnggotaBatch">
-          <td>{{key+1}}</td>
-          <td>{{value.name}}</td>
-          <td>{{value.email}}</td>
-          <td>{{value.status}}</td>
-          <td>{{value.address}}</td>
-          <td v-if="value.status == 'mendaftar'" @click="accMurid(value.id_murid, key)">
-            <button type="button" class="btn btn-sm btn-success m-0">accept</button>
-          </td>
-          <td v-else></td>
-        </tr>
-      </tbody>
-    </table>
-    
     <!--ujian-->
     <div class="nav-tabs d-flex justify-content-between">
       <h3 class="nav-link active bg-light text-warning">Ujian  </h3>
@@ -61,6 +19,7 @@
       <thead>
         <tr>
           <th scope="col"></th>
+          <th scope="col">Batch</th>
           <th scope="col">Name</th>
           <th scope="col">Pengawas</th>
           <th scope="col">Time</th>
@@ -83,6 +42,8 @@
         </tr>
         <tr v-for="(value, key) in listUjian" :class="{'table-danger':editMode && listDeleteUjian.includes(value.id)}" @click="scoreUjian(value.id)">
           <td style="width:5%; text-align:center">{{key+1}}</td>
+          <!--name batch-->
+          <td>{{value.name_batch}}</td>
           <!--name-->
           <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].name" class="form-control form-control-sm" type="text"></td>
           <td v-else>{{value.name}}</td>
@@ -122,6 +83,7 @@
         <thead>
           <tr>
             <th scope="col"></th>
+            <th scope="col">Name Batch</th>
             <th scope="col">Name</th>
             <th scope="col">Pengawas</th>
             <th scope="col">Time</th>
@@ -132,6 +94,18 @@
         <tbody>
           <tr v-for="(value, key) in listUjianBaru">
             <td style="width:5%; text-align:center">{{key+1}}</td>
+            <td class="position-relative w-25">
+              <select v-model="listUjianBaru[key].nameBatch" class="form-select form-select-sm" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+                <option selected disabled value=""></option>
+                <option v-for="(value1, key1) in listBatch">{{value1.name}}</option>
+              </select>
+              <!--<input v-model="listUjianBaru[key].nameBatch" @keyup="addUjianBatch" @focus="value.modeAddBatch=true" @blur="value.modeAddBatch=false" class="form-control form-control-sm" style="z-index:2" type="text">
+              <div class="list-group position-absolute" :class="{'d-none':!value.modeAddBatch, 'd-block':value.modeAddBatch}" style="z-index:3">
+                <span v-for="(value1, key1) in listBatch">
+                  <span v-if="!listUjianBaru[key].nameBatch || value1.name.toLowerCase().includes(listUjianBaru[key].nameBatch.toLowerCase())" @click="listUjianBaru[key].nameBatch = value1.name" class="list-group-item list-group-item-action">{{value1.name}}</span>
+                </span>
+              </div>-->
+            </td>
             <td><input v-model="listUjianBaru[key].name" class="form-control form-control-sm" type="text"></td>
             <td><input v-model="listUjianBaru[key].pengawas" class="form-control form-control-sm" type="text"></td>
             <td><input v-model="listUjianBaru[key].time" class="form-control form-control-sm" type="time"></td>
@@ -152,7 +126,6 @@ export default {
   data: () => ({
     //batch
     listBatch:[],
-    listAnggotaBatch:[],
     //ujian
     listUjian:[],
     listEditUjian:[],
@@ -165,45 +138,52 @@ export default {
       {name:'qwe', pengawas:'qwe', time:'02:00:00', date:'2015-01-02T11:42'}
     ],
     displayAddUjian: false,
+    modeAddBatch: false,
     editMode: false,
   }),
   async mounted() {
     try{
       this.token = await this.$store.getters["auth/token"]
-      //get list anggota batch
       axios.defaults.headers.common['token'] = this.token;
-      this.listAnggotaBatch = (await axios.get("guru/listAnggotaBatch/"+this.$route.params.id, {})).data.data
-      if(this.listAnggotaBatch.length == 0) this.listAnggotaBatch = false
-      console.log(this.listAnggotaBatch)
       //get list ujian
-      this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+      this.listUjian = (await axios.get("guru/listUjianGuru", {})).data.data
       if(this.listUjian.length == 0) this.listUjian = false
       console.log(this.listUjian)
       //get list edit ujian
-      this.listEditUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+      this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
       if(this.listEditUjian.length == 0) this.listEditUjian = false
       console.log(this.listEditUjian)
-      console.log(new Date().toISOString().substring(0, 10))
+      //get list batch
+      this.listBatch = (await axios.get("guru/listBatch", {})).data.data
+      if(this.listBatch.length == 0) this.listBatch = false
+      console.log(this.listBatch)
+
+      // console.log(new Date())
+      // console.log(new Date().valueOf())
+      // console.log(new Date().valueOf() + 1000*60*60*24)
+      // console.log(new Date(new Date().valueOf() + 1000*60*60*31).toISOString().substring(0, 16))
+      // console.log(parseInt(new Date()) + 1000*60*60*24)
+      // console.log(new Date().toISOString().substring(0, 16))
+      // console.log(new Date().toLocaleString().replace('/','-').replace(' ','T').replace('.',':'))
+      
     }catch(err){
         console.log("error")
         console.log(err)
       }
   },
   methods:{
-    async klick(){
+    async klick(e){
       try{
-        console.log(this.token.token)
+        console.log(e)
+        console.log("klick")
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
-    async accMurid(id, idList){
+    async addUjianBatch(){
       try{
-        //ambil list anggota batch
-        axios.defaults.headers.common['token'] = this.token;
-        let response = await axios.get("guru/accAnggotaBatch/"+id, {});
-        this.listAnggotaBatch[idList].status = 'terdaftar'
+        console.log(this.token.token)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -212,25 +192,34 @@ export default {
     async saveAddUjian(){
       try{
         // let addUjian = {tugasName:[], tugasDescription:[]}
+        let id = null
         for(let i = 0; i < this.listUjianBaru.length; i++){
-          if(this.listUjianBaru[i].name && this.listUjianBaru[i].pengawas){
+          if(this.listUjianBaru[i].nameBatch && this.listUjianBaru[i].name && this.listUjianBaru[i].pengawas){
             let addUjian = {}
+            id = null
+            for(let o = 0; o < this.listBatch.length; o++){
+              if(this.listUjianBaru[i].nameBatch == this.listBatch[o].name){
+               id = this.listBatch[o].id
+              }
+            }
+            if(!id) continue
             addUjian.name = this.listUjianBaru[i].name || null
             addUjian.pengawas = this.listUjianBaru[i].pengawas || null
             addUjian.time = this.listUjianBaru[i].time || null
             addUjian.date = this.listUjianBaru[i].date || null
             console.log(addUjian)
-            console.log(await axios.post("guru/addUjian/"+this.$route.params.id, addUjian))
+            console.log(await axios.post("guru/addUjian/"+id, addUjian))
           }
         }
         //get list ujian
-        this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listUjian.length == 0) this.listUjian = false
-        this.displayAddUjian = false
+        console.log(this.listUjian)
         //get list edit ujian
-        this.listEditUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listEditUjian.length == 0) this.listEditUjian = false
         console.log(this.listEditUjian)
+        this.displayAddUjian = false
       }catch(err){
         console.log("error")
         console.log(err)
@@ -256,11 +245,11 @@ export default {
           }
         }
         //get list ujian
-        this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listUjian.length == 0) this.listUjian = false
-        this.displayAddUjian = false
+        console.log(this.listUjian)
         //get list edit ujian
-        this.listEditUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listEditUjian.length == 0) this.listEditUjian = false
         console.log(this.listEditUjian)
       }catch(err){
@@ -271,11 +260,11 @@ export default {
     async refreshUjian(){
       try{
         //get list ujian
-        this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listUjian.length == 0) this.listUjian = false
-        this.displayAddUjian = false
+        console.log(this.listUjian)
         //get list edit ujian
-        this.listEditUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
+        this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listEditUjian.length == 0) this.listEditUjian = false
         console.log(this.listEditUjian)
       }catch(err){

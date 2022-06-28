@@ -7,11 +7,7 @@
   <ul class="nav nav-pills flex-column mb-auto ">
       <RouterLink class="nav-link link-dark" to="/guru_dashboard1">Batch</RouterLink>
       <RouterLink class="nav-link link-dark" to="/guru/pertemuan">Pertemuan</RouterLink>
-      <a href="#" class="nav-link link-dark">Home</a>
-      <a href="#" class="nav-link link-dark">Dashboard</a>
-      <a href="#" class="nav-link link-dark">Orders</a>
-      <a href="#" class="nav-link link-dark">Products</a>
-      <a href="#" class="nav-link link-dark">Customers</a>
+      <RouterLink class="nav-link link-dark" to="/guru/list_ujian">Ujian</RouterLink>
   </ul>
 </div>
 
