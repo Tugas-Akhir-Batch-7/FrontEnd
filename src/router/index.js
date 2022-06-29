@@ -121,6 +121,15 @@ const router = createRouter({
       path: '/admin/list-murid',
       name: 'admin_list_murid',
       component: () => import('../components/Admin/ListMurid.vue')
+    },
+    {
+      path: '/admin/list-tagihan',
+      name: 'admin_list_tagihan',
+      component: () => import('../components/Admin/ListTagihan.vue')
+    }, {
+      path: '/admin/list-pembayaran',
+      name: 'admin_list_pembayaran',
+      component: () => import('../components/Admin/ListPembayaran.vue')
     }
   ]
 })

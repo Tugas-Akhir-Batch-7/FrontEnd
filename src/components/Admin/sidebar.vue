@@ -9,8 +9,10 @@
       <!-- <RouterLink class="nav-link link-dark" to="/guru/pertemuan">Pertemuan</RouterLink> -->
       <RouterLink to="/admin/list-guru" class="nav-link link-dark">Guru</RouterLink>
       <RouterLink to="/admin/list-murid" class="nav-link link-dark">Murid</RouterLink>
-      <a href="#" class="nav-link link-dark">Tagihan</a>
-      <a href="#" class="nav-link link-dark">Pembayaran</a>
+      <RouterLink to="/admin/list-tagihan" class="nav-link link-dark">Tagihan</RouterLink>
+      <RouterLink to="/admin/list-pembayaran" class="nav-link link-dark">Pembayaran</RouterLink>
+      <!-- <a href="#" class="nav-link link-dark">Tagihan</a> -->
+      <!-- <a href="#" class="nav-link link-dark">Pembayaran</a> -->
       <!-- <a href="#" class="nav-link link-dark">Customers</a> -->
   </ul>
 </div>
