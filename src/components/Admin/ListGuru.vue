@@ -3,14 +3,15 @@
 </style>
 
 <template>
-  <div>
-    <main class="d-flex flex-nowrap">
-      <sidebar />
+ 
       <div class="p-3 d-flex flex-column flex-fill">
         <h2 class="mb-4">List Guru</h2>
         <br />
         <!--<p>{{token}}</p>-->
         <!--<button @click="klick">klick</button>-->
+        <!-- <div>
+          <button class="btn btn-primary px-5">Add</button>
+        </div> -->
         <table class="table table-hover">
           <thead>
             <tr>
@@ -32,11 +33,7 @@
           </tbody>
         </table>
       </div>
-    </main>
-    <!-- sidebar -->
-    <!-- <div class="sidebar"></div> -->
-  </div>
-  <!-- navbar -->
+   
 </template>
 
 <script>

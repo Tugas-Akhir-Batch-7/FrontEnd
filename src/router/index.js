@@ -2,8 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
 // import HomeView from '../views/HomeView.vue'
 
+import ListGuru from '../components/Admin/ListGuru.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  linkExactActiveClass: 'active',
   routes: [
 
     // login
@@ -25,6 +28,7 @@ const router = createRouter({
         requiresAuth: false
       }
     },
+
 
     {
       path: '/signup_2',
@@ -81,7 +85,7 @@ const router = createRouter({
       path: '/guru/pertemuan',
       name: 'guru_pertemuan',
       component: () => import('../components/Guru/pertemuan.vue')
-    }, 
+    },
     {
       path: '/detail_pertemuan/:id',
       name: 'detailPertemuan',
@@ -110,27 +114,40 @@ const router = createRouter({
     {
       path: '/admin/',
       name: 'admin_dashboard',
-      component: () => import('../components/Admin/Dashboard.vue')
+      component: () => import('../views/AdminView.vue'),
+      children: [
+        {
+          path: 'list-guru',
+          name: 'admin_list_guru',
+          component: () => import('../components/Admin/ListGuru.vue')
+          // component: () => ListGuru
+        },
+        {
+          path: 'list-murid',
+          name: 'admin_list_murid',
+          component: () => import('../components/Admin/ListMurid.vue')
+        },
+        {
+          path: 'list-tagihan',
+          name: 'admin_list_tagihan',
+          component: () => import('../components/Admin/ListTagihan.vue')
+        },
+        {
+          path: 'list-pembayaran',
+          name: 'admin_list_pembayaran',
+          component: () => import('../components/Admin/ListPembayaran.vue')
+        },
+        {
+          path: 'input-tagihan',
+          name: 'admin_input_tagihan',
+          component: () => import('../components/Admin/input/InputTagihan.vue')
+        }
+
+      ]
     },
-    {
-      path: '/admin/list-guru',
-      name: 'admin_list_guru',
-      component: () => import('../components/Admin/ListGuru.vue')
-    },
-    {
-      path: '/admin/list-murid',
-      name: 'admin_list_murid',
-      component: () => import('../components/Admin/ListMurid.vue')
-    },
-    {
-      path: '/admin/list-tagihan',
-      name: 'admin_list_tagihan',
-      component: () => import('../components/Admin/ListTagihan.vue')
-    }, {
-      path: '/admin/list-pembayaran',
-      name: 'admin_list_pembayaran',
-      component: () => import('../components/Admin/ListPembayaran.vue')
-    }
+
+
+ 
   ]
 })
 
@@ -143,9 +160,9 @@ router.beforeEach((to, from, next) => {
   //   })
   // }
   // if
-//  console.log(store.state.auth.user)
+  //  console.log(store.state.auth.user)
   // if (!store.getters['auth/user']) {
-    // console.log('test')
+  // console.log('test')
   // } else {
   //   console.log("role sekarang:", store.getters['auth/getCurrentRole'])
   // }

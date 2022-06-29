@@ -3,9 +3,7 @@
 </style>
 
 <template>
-  <div>
-    <main class="d-flex flex-nowrap">
-      <sidebar />
+  
       <div class="p-3 d-flex flex-column flex-fill">
         <h2 class="mb-4">List Guru</h2>
         <br />
@@ -35,10 +33,6 @@
           </tbody>
         </table>
       </div>
-    </main>
-    <!-- sidebar -->
-    <!-- <div class="sidebar"></div> -->
-  </div>
   <!-- navbar -->
 </template>
 
