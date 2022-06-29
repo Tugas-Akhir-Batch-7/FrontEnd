@@ -20,7 +20,7 @@
         <tr>
           <th scope="col"></th>
           <th scope="col">Batch</th>
-          <th scope="col">Name</th>
+          <th scope="col">Name Ujian</th>
           <th scope="col">Pengawas</th>
           <th scope="col">Time</th>
           <th scope="col">Date</th>
@@ -82,39 +82,46 @@
     <table class="table ">
         <thead>
           <tr>
-            <th scope="col"></th>
-            <th scope="col">Name Batch</th>
-            <th scope="col">Name</th>
-            <th scope="col">Pengawas</th>
-            <th scope="col">Time</th>
-            <th scope="col">Date</th>
-            <th scope="col"></th>
+            <th style="width:5%" scope="col"></th>
+            <th style="width:20%" scope="col">Name Batch</th>
+            <th style="width:20%" scope="col">Name Ujian</th>
+            <th style="width:20%" scope="col">Pengawas</th>
+            <th style="width:10%" scope="col">Time</th>
+            <th style="width:20%" scope="col">Date</th>
+            <th style="width:5%" scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(value, key) in listUjianBaru">
-            <td style="width:5%; text-align:center">{{key+1}}</td>
-            <td class="position-relative w-25">
-              <select v-model="listUjianBaru[key].nameBatch" class="form-select form-select-sm" id="validationServer04" aria-describedby="validationServer04Feedback" required>
+            <td class="text-center">{{key+1}}</td>
+            <td class="position-relative">
+              <!--<select v-model="listUjianBaru[key].nameBatch" class="form-select form-select-sm" id="validationServer04" aria-describedby="validationServer04Feedback" required>
                 <option selected disabled value=""></option>
                 <option v-for="(value1, key1) in listBatch">{{value1.name}}</option>
-              </select>
-              <!--<input v-model="listUjianBaru[key].nameBatch" @keyup="addUjianBatch" @focus="value.modeAddBatch=true" @blur="value.modeAddBatch=false" class="form-control form-control-sm" style="z-index:2" type="text">
-              <div class="list-group position-absolute" :class="{'d-none':!value.modeAddBatch, 'd-block':value.modeAddBatch}" style="z-index:3">
-                <span v-for="(value1, key1) in listBatch">
-                  <span v-if="!listUjianBaru[key].nameBatch || value1.name.toLowerCase().includes(listUjianBaru[key].nameBatch.toLowerCase())" @click="listUjianBaru[key].nameBatch = value1.name" class="list-group-item list-group-item-action">{{value1.name}}</span>
-                </span>
-              </div>-->
+              </select>-->
+              <input v-model="listUjianBaru[key].nameBatch" @focus="value.modeAddBatch=true" @blur="modeAddBatchF(key)" class="form-control form-control-sm" style="z-index:2" type="text">
+              <div class="list-group position-absolute overflow-auto" :class="{'d-none':!value.modeAddBatch, 'd-block':value.modeAddBatch}" style="z-index:3">
+                <div  style="height:30vh; width:12vw">
+                  <span v-for="(value1, key1) in listBatch">
+                    <span v-if="!listUjianBaru[key].nameBatch || value1.name.toLowerCase().includes(listUjianBaru[key].nameBatch.toLowerCase())" @click="listUjianBaru[key].nameBatch = value1.name" class="list-group-item list-group-item-action">{{value1.name}}</span>
+                  </span>
+                </div>
+              </div>
             </td>
             <td><input v-model="listUjianBaru[key].name" class="form-control form-control-sm" type="text"></td>
             <td><input v-model="listUjianBaru[key].pengawas" class="form-control form-control-sm" type="text"></td>
             <td><input v-model="listUjianBaru[key].time" class="form-control form-control-sm" type="time"></td>
             <td><input v-model="listUjianBaru[key].date" class="form-control form-control-sm" type="datetime-local"></td>
-            <td style="width:5%; text-align:center" @click="listUjianBaru.splice(key, 1)">x</td>
+            <td class="text-center" @click="listUjianBaru.splice(key, 1)">x</td>
           </tr>
         </tbody>
       </table>
   </div>
+</div>
+
+<!--modal message-->
+<div v-if="displayMessage" class="min-vw-100 position-fixed top-0 text-center" style="">
+  <div :class="{'alert-danger': !messageStatus, 'alert-success':messageStatus}" class="alert d-none d-lg-block">{{message}}</div>
 </div>
 </template>
 <script setup>
@@ -140,6 +147,10 @@ export default {
     displayAddUjian: false,
     modeAddBatch: false,
     editMode: false,
+    //message
+    message: 'terjadi error',
+    messageStatus: true,
+    displayMessage: false,
   }),
   async mounted() {
     try{
@@ -152,38 +163,20 @@ export default {
       //get list edit ujian
       this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
       if(this.listEditUjian.length == 0) this.listEditUjian = false
-      console.log(this.listEditUjian)
       //get list batch
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data
-      if(this.listBatch.length == 0) this.listBatch = false
-      console.log(this.listBatch)
-
-      // console.log(new Date())
-      // console.log(new Date().valueOf())
-      // console.log(new Date().valueOf() + 1000*60*60*24)
-      // console.log(new Date(new Date().valueOf() + 1000*60*60*31).toISOString().substring(0, 16))
-      // console.log(parseInt(new Date()) + 1000*60*60*24)
-      // console.log(new Date().toISOString().substring(0, 16))
-      // console.log(new Date().toLocaleString().replace('/','-').replace(' ','T').replace('.',':'))
-      
+      if(this.listBatch.length == 0) this.listBatch = false      
     }catch(err){
         console.log("error")
         console.log(err)
       }
   },
   methods:{
-    async klick(e){
+    async modeAddBatchF(i){
       try{
-        console.log(e)
-        console.log("klick")
-      }catch(err){
-        console.log("error")
-        console.log(err)
-      }
-    },
-    async addUjianBatch(){
-      try{
-        console.log(this.token.token)
+        setTimeout(()=>{
+          this.listUjianBaru[i].modeAddBatch=false
+        }, 200)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -193,7 +186,7 @@ export default {
       try{
         // let addUjian = {tugasName:[], tugasDescription:[]}
         let id = null
-        for(let i = 0; i < this.listUjianBaru.length; i++){
+        for(let i = 0; this.listUjianBaru.length; i){
           if(this.listUjianBaru[i].nameBatch && this.listUjianBaru[i].name && this.listUjianBaru[i].pengawas){
             let addUjian = {}
             id = null
@@ -202,24 +195,26 @@ export default {
                id = this.listBatch[o].id
               }
             }
-            if(!id) continue
+            if(!id) { //jika nama batch yang diinputkan tidak tersedia di nama batch
+              this.messageF(`batch ${this.listUjianBaru[i].nameBatch} tidak tersedia`, false)
+              throw "batch tidak tersedia"
+            }
             addUjian.name = this.listUjianBaru[i].name || null
             addUjian.pengawas = this.listUjianBaru[i].pengawas || null
             addUjian.time = this.listUjianBaru[i].time || null
             addUjian.date = this.listUjianBaru[i].date || null
-            console.log(addUjian)
-            console.log(await axios.post("guru/addUjian/"+id, addUjian))
+            await axios.post("guru/addUjian/"+id, addUjian)
           }
+          this.listUjianBaru.splice(0,1)
         }
         //get list ujian
         this.listUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listUjian.length == 0) this.listUjian = false
-        console.log(this.listUjian)
         //get list edit ujian
         this.listEditUjian = (await axios.get("guru/listUjianGuru", {})).data.data
         if(this.listEditUjian.length == 0) this.listEditUjian = false
-        console.log(this.listEditUjian)
         this.displayAddUjian = false
+        this.messageF(`berhasil menambahkan ujian`, true)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -281,6 +276,17 @@ export default {
         console.log(err)
       }
     },
+    messageF(text, s){
+      console.log('jalan')
+      this.displayMessage = true
+      this.messageStatus = s
+      this.message = text || 'terjadi error'
+      setTimeout(()=>{
+        console.log('jalan 3')
+        this.displayMessage = false
+        this.message = `terjadi error`
+      }, 3000)
+    }
   }
 }
 </script>
