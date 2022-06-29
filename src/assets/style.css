@@ -3,17 +3,30 @@
 
 /* Universal */
 
+a { text-decoration: none; }
 
-
-body{
-
-    font-family: 'Poppins', sans-serif;
-    color: black;
-    margin: 0px;
+.background
+{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 650px;
+  height: 750px;
+  background-color: rgba(222, 222, 222, 1);
+  border-radius: 25px;
 
 }
 
-.buttons{
+body{
+    margin: 0px;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+}
+
+button{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,6 +38,7 @@ body{
     border-radius: 25px;
     border-width: 1px;
     border-color: black;
+    border: none;
 
 }
 
@@ -34,19 +48,20 @@ body{
     
 }
 
+input {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    padding: 5px 0;
+    margin: 10px 0 5px 0;
+    width: 100%;
+  }
+
+
 /* Dashboard */
 .header{
     width: 100vw; background-color: #BABABA;
-}
-
-.background{
-    display: flex;
-
-    width: 650px;
-    height: 750px;
-
-    background-color: rgba(222, 222, 222, 1);
-    border-radius: 25px;
 }
 
 
@@ -79,6 +94,8 @@ body{
     height: 40px;
     margin: 2%;
 
+    font-family: 'Poppins', sans-serif;
+    color: black;
     text-indent: 5%;
 
     background-color: whitesmoke;
@@ -130,6 +147,9 @@ body{
 
     font-family: 'Poppins', sans-serif;
     color: black;
+
+    text-decoration: none;
+
 }
 
 input:focus::placeholder {

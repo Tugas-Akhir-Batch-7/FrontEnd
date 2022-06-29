@@ -6,6 +6,7 @@
     width:33.3%;
     height: 10%;
     background-color: rgba(0, 0, 0, 0.5); 
+    color: white;
 
     justify-content: center;
     align-items: center;

@@ -1,0 +1,31 @@
+{
+    "user": [
+        {
+            "id" : 1,
+            "role" : "admin",
+            "nama" : "siA",
+            "email" : "ilham72alkautsar@gmail.com",
+            "password" : "zaq123edc",
+            "kontak" : "12345678",
+            "alamat" : "Semarang"
+        },
+        {
+            "id" : 2,
+            "role" : "guru",
+            "nama" : "siB",
+            "email" : "ilham72alkautsar@gmail.com",
+            "password" : "zaq123edc",
+            "kontak" : "12345678",
+            "alamat" : "Semarang"
+        },
+        {
+            "id" : 3,
+            "role" : "murid",
+            "nama" : "siC",
+            "email" : "ilham72alkautsar@gmail.com",
+            "password" : "zaq123edc",
+            "kontak" : "12345678",
+            "alamat" : "Semarang"
+        }
+    ]
+}
