@@ -5,9 +5,24 @@ class TagihanService {
     // getAllTagihan() {
     //     return axios.get("http://localhost:8080/tagihan");
     // }
-    // getTagihanById(id) {
-    //     return axios.get("http://localhost:8080/tagihan/" + id);
-    // }
+    async getAllTagihan() {
+        try {
+            let response = await axios.get("admin/list-tagihan", { headers: await authHeader() });
+            return response.data.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    async getTagihanById(id) {
+        try {
+            const response = await axios.get(`admin/detail-tagihan/${id}`, { headers: await authHeader() });
+            console.log(response.data.data)
+            return response.data.data
+        } catch (err) {
+            console.log(err)
+        }
+        // return axios.get("http://localhost:8080/tagihan/" + id);
+    }
     async createTagihan(tagihan) {
         try {
             console.log(tagihan)

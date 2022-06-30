@@ -8,7 +8,7 @@
     <br />
     <!--<p>{{token}}</p>-->
     <!--<button @click="klick">klick</button>-->
-    <div>
+    <div class="mb-4">
       <button @click="routerPushToInput" class="btn btn-primary px-5">
         Input Tagihan
       </button>
@@ -25,6 +25,7 @@
         </tr>
       </thead>
       <tbody>
+        <!-- {{ listData }} -->
         <tr v-for="(i, index) in listData" :key="i.id">
           <td>{{ index + 1 }}</td>
           <td>{{ i.name }}</td>
@@ -32,9 +33,11 @@
           <td>{{ i.dp }}</td>
           <td v-if="i.is_lunas">Lunas</td>
           <td v-else>Belum Lunas</td>
-          <td><button>Tets</button></td>
+          <td><router-link :to="`/admin/detail-tagihan/${i.id}`" class="btn btn-dark">Detail</router-link></td>
           <!-- <td>{{ i.is_lunas}}</td> -->
           <!-- <td>{{ i.pay }}</td> -->
+
+        
         </tr>
       </tbody>
     </table>
@@ -50,11 +53,20 @@ export default {
   },
   data() {
     return {
-      listData: [],
+      // listData: [],
     };
+  },
+  computed: {
+    listData() {
+      return this.$store.getters['tagihan/listTagihan'];
+    }
+  },
+  beforeMount(){
+    this.$store.dispatch('tagihan/fetchTagihan');
   },
   async mounted() {
     try {
+      // console.log(this.listData);
       // const token = await this.$store.getters["auth/token"];
       // axios.defaults.headers.common["token"] = this.token;
 
@@ -63,8 +75,8 @@ export default {
       //    Authorization: 'Bearer ' + token
       //   }
       // });
-      const dataGet = await AdminService.getTagihanList();
-      this.listData = dataGet.data;
+      // const dataGet = await AdminService.getTagihanList();
+      // this.listData = dataGet.data;
       // this.listData = response.data.data;
     } catch (err) {
       console.log("error");

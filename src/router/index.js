@@ -141,6 +141,11 @@ const router = createRouter({
           path: 'input-tagihan',
           name: 'admin_input_tagihan',
           component: () => import('../components/Admin/input/InputTagihan.vue')
+        },
+        {
+          path: 'detail-tagihan/:id',
+          name: 'admin_detail_tagihan',
+          component: () => import('../components/Admin/DetailTagihan.vue')
         }
 
       ]

@@ -1,5 +1,5 @@
 <template>
-  <div class="container p-2 px-4">
+  <div class="container p-4">
     <div class="row">
       <div class="col-8">
         <h2>Input Tagihan</h2>
@@ -89,19 +89,19 @@ export default {
     };
   },
   computed: {
-    listMuridMendaftar() {
+     listMuridMendaftar() {
       return this.$store.getters["murid/listMurid"];
     },
   },
-  async beforeMount() {
+  async beforeCreate() {
     // console.log(this.$store.getters["auth/user"].role);
     await this.$store.dispatch("murid/fetchMuridMendaftar");
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       try {
-        this.$store.dispatch("tagihan/createTagihan", this.form);
-        this.$router.push("/admin/list-tagihan");
+        await this.$store.dispatch("tagihan/createTagihan", this.form);
+        await this.$router.push("/admin/list-tagihan");
       } catch(error) {
 
       }

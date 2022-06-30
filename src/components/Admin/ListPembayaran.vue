@@ -29,9 +29,9 @@
           <td>{{ i.batch }}</td>
           <td>{{ i.amount }}</td>
           <td>{{ i.date }}</td>
-          <td v-if="i.is_lunas">Lunas</td>
-          <td v-else>Belum Lunas</td>
-          <td><Button>Tets</Button></td>
+          <!-- <td v-if="i.is_lunas">Lunas</td>
+          <td v-else>Belum Lunas</td> -->
+          <td><button>Tets</button></td>
           <!-- <td>{{ i.is_lunas}}</td> -->
           <!-- <td>{{ i.pay }}</td> -->
         </tr>
