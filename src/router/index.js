@@ -209,7 +209,7 @@ router.beforeEach((to, from, next) => {
   const default_guru = 'guru_dashboard1'
   const default_admin = 'admin'
   // console.log(Object.keys(to.meta))
-  console.log(!to.meta.requiresAuth)
+  // console.log(!to.meta.requiresAuth)
 
   // if ada meta.requiresAuth
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -221,11 +221,11 @@ router.beforeEach((to, from, next) => {
     //     }
     //   })
     // }
-    
+
     // jiga loggedin
     if (store.getters['auth/isLoggedIn']) {
       const role = store.getters['auth/user'].role
-      console.log("if pertama loggedin")
+      // console.log("if pertama loggedin")
       if (to.meta.isMurid && role === 'murid') {
         next()
         return
@@ -238,7 +238,7 @@ router.beforeEach((to, from, next) => {
         return
       } 
       else {
-        console.log('masuk else')
+        // console.log('masuk else')
         if (role === 'admin') {
           next(`/${default_admin}`)
           // next()
@@ -264,11 +264,11 @@ router.beforeEach((to, from, next) => {
     return
 
   } else {
-    console.log('masuk else')
+    // console.log('masuk else')
     if (store.getters['auth/isLoggedIn'] && !to.meta.requiresAuth) {
       console.log('masuk if loggedin')
       const role = store.getters['auth/user'].role
-      console.log(role)
+      // console.log(role)
       if (role === 'admin') {
         next(`/${default_admin}`)
         // next()
