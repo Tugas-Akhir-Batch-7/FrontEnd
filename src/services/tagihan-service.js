@@ -23,6 +23,15 @@ class TagihanService {
         }
         // return axios.get("http://localhost:8080/tagihan/" + id);
     }
+    async getTagihanAndTerbayar() {
+        try {
+            const response = await axios.get("admin/list-tagihan-and-terbayar", { headers: await authHeader() });
+            console.log(response.data.data.tagihan)
+            return response.data.data.tagihan
+        } catch (err) {
+            console.log(err)
+        }
+    }
     async createTagihan(tagihan) {
         try {
             console.log(tagihan)
@@ -39,6 +48,8 @@ class TagihanService {
         }
         // return axios.post("", tagihan);
     }
+
+
     // updateTagihan(id, tagihan) {
     //     return axios.put("http://localhost:8080/tagihan/" + id, tagihan);
     // }

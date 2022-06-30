@@ -9,7 +9,7 @@
     <!--<p>{{token}}</p>-->
     <!--<button @click="klick">klick</button>-->
     <div class="mb-4">
-      <button class="btn btn-primary px-5">Input Pembayaran</button>
+      <router-link to="/admin/input-pembayaran" class="btn btn-primary px-5">Input Pembayaran</router-link>
     </div>
     <table class="table table-hover">
       <thead>

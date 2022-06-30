@@ -16,6 +16,25 @@ class PembayaranService {
         }
         // return axios.get("http://localhost:8080/pembayaran/" + id)
     }
+    async createPembayaran(pembayaran) {
+        try {
+            console.log('ini pembayaran')
+            console.log(pembayaran)
+            console.log('ini pembayaran')
+
+            const response = await axios.post(`admin/create-pembayaran/${pembayaran.id_tagihan}`, {
+                amount: pembayaran.bayar,
+                // id_user: pembayaran.id_user,
+                // status: pembayaran.status,
+                // total_bayar: pembayaran.total_bayar,
+            },
+                { headers: await authHeader() });
+            console.log(response.data)
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     // addPembayaran(pembayaran) {
     //     return axios.post("http://localhost:8080/pembayaran", pembayaran)

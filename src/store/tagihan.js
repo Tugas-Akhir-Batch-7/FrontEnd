@@ -37,6 +37,11 @@ export default {
         async fetchTagihanById({ commit }, id) {
             const tagihanDetail = await TagihanService.getTagihanById(id)
             commit('SET_DETAIL_TAGIHAN', tagihanDetail)
+        },
+        async fetchTagihanAndTerbayar({ commit }) {
+            const tagihan = await TagihanService.getTagihanAndTerbayar()
+            commit('SET_TAGIHAN', tagihan)
+
         }
     }
 }

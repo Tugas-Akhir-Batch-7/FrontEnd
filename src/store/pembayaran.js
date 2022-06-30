@@ -27,6 +27,10 @@ export default  {
             // console.log('fetch pembayaran')
             // console.log(commit)
             // commit('SET_PEMBAYARAN', pembayaran)
+        },
+        async createPembayaran({}, pembayaran) {
+            await PembayaranService.createPembayaran(pembayaran)
         }
+        
     }
 }

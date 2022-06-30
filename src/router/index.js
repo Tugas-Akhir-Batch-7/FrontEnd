@@ -191,6 +191,11 @@ const router = createRouter({
           name: 'admin_list_pembayaran',
           component: () => import('../components/Admin/ListPembayaran.vue')
         },
+        {
+          path: 'input-pembayaran',
+          name: 'admin_input_pembayaran',
+          component: () => import('../components/Admin/input/InputPembayaran.vue')
+        },
 
 
       ]
