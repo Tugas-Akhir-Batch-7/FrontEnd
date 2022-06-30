@@ -8,6 +8,9 @@ export default {
         token: null
     },
     getters: {
+        isLoggedIn(state) {
+            return state.user !== null
+        },
         user(state) {
             return state.user
         },

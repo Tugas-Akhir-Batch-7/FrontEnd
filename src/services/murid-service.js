@@ -17,7 +17,7 @@ class MuridService {
             // console.log(await authHeader())
             const response = await axios.get(`admin/murid?status=${status}`,
                 { headers: await authHeader() })
-            console.log(response.data)
+            // console.log(response.data)
             return response.data.data
         } catch (error) {
             console.log(error)
