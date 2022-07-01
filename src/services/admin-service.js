@@ -18,7 +18,7 @@ class AdminService {
 
     async getListByRole(role) {
         try {
-            console.log(await authHeader())
+            // console.log(await authHeader())
             const response = await axios.get(`admin/list-by-role?role=${role}`,
                 { headers: await authHeader() })
             // console.log(response.data)

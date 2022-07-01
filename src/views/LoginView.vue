@@ -1,49 +1,51 @@
 <template>
-  <div class="background">
-    <div class="window">
-      <div id="signup_icon">
-        <img src="https://via.placeholder.com/150" alt="" srcset="" />
-      </div>
-
-      <div id="title">Bebas</div>
-
-      <form style="justify-content: center" @submit.prevent="login">
-        <div>
-          <input
-            class="fields"
-            type="email"
-            name="email"
-            id="text"
-            placeholder="Your E-mail"
-            v-model="email"
-          />
+  <div class="d-flex mt-3 items-center justify-content-center mx-auto">
+    <div class="background">
+      <div class="window">
+        <div id="signup_icon">
+          <img src="https://via.placeholder.com/150" alt="" srcset="" />
         </div>
 
-        <div>
-          <input
-            class="fields"
-            type="password"
-            name="password"
-            id="text"
-            placeholder="Password"
-            v-model="password"
-          />
+        <div id="title">Bebas</div>
+
+        <form style="justify-content: center" @submit.prevent="login">
+          <div>
+            <input
+              class="fields"
+              type="email"
+              name="email"
+              id="text"
+              placeholder="Your E-mail"
+              v-model="email"
+            />
+          </div>
+
+          <div>
+            <input
+              class="fields"
+              type="password"
+              name="password"
+              id="text"
+              placeholder="Password"
+              v-model="password"
+            />
+          </div>
+        </form>
+
+        <button class="buttons" id="text" @click="handleLogin">Sign In</button>
+
+        <div id="text" style="white-space: nowrap">
+          <p>
+            Forgot your Password? Click
+            <RouterLink to="/forgot_password">here</RouterLink>
+          </p>
         </div>
-      </form>
 
-      <button class="buttons" id="text" @click="handleLogin">Sign In</button>
-
-      <div id="text" style="white-space: nowrap">
-        <p>
-          Forgot your Password? Click
-          <RouterLink to="/forgot_password">here</RouterLink>
-        </p>
-      </div>
-
-      <div id="text" style="white-space: nowrap">
-        <p>
-          Don't have an account? <RouterLink to="/signup">Sign Up</RouterLink>
-        </p>
+        <div id="text" style="white-space: nowrap">
+          <p>
+            Don't have an account? <RouterLink to="/signup">Sign Up</RouterLink>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -69,14 +71,14 @@ export default {
           password: this.password,
         };
         await this.$store.dispatch("auth/login", credentials);
-        const role = await this.$store.getters["auth/user"].role
+        const role = await this.$store.getters["auth/user"].role;
         // ini cara ambil token
         // console.log(this.$store.state.auth.token);
-        if(await role == "murid"){
+        if ((await role) == "murid") {
           return this.$router.push("/murid_dashboard");
-        } else if (role == "guru"){
+        } else if (role == "guru") {
           return this.$router.push("/guru_dashboard1");
-        } else if (role == "admin"){
+        } else if (role == "admin") {
           return this.$router.push("/admin/");
         }
         // this.$router.push("/murid_dashboard");

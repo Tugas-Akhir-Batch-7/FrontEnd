@@ -10,7 +10,7 @@
             <div id="title">Bebas</div>
 
 
-        <form style="justify-content: center;">
+        <form @submit.prevent="completeRegister" style="justify-content: center;">
 
             <div id="text" style="text-align: center;">
                 <p>
@@ -22,16 +22,16 @@
                 </p>
             </div>
 
-            <input id="text" type="text" class="fields" placeholder="Verification Code">
+            <input v-model="otp" id="text" type="text" class="fields" placeholder="Verification Code">
+             <button class="buttons mx-auto" id="text">Sign Up</button>
 
         </form>
 
         <br>
         
-        <button class="buttons" id="text">Sign Up</button>
         <br>
         <br>
-        <button @click="prev" class="buttons" id="text">Back</button>
+        <!-- <button @click="prev" class="buttons" id="text">Back</button> -->
 
 
         </div>
@@ -43,12 +43,24 @@
 <script>
 
 export default {
+  props: {
+    email: String,
+  },
+  data() {
+    return {
+      email: this.email,
+      otp: "",
+    };
+  },
   methods: {
     next() {
       this.$emit("nextStep");
     },
     prev() {
       this.$emit("prevStep");
+    },
+    completeRegister() {
+      this.$emit("completeRegister", this.otp);
     },
   },
 };

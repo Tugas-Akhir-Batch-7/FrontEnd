@@ -8,6 +8,9 @@ export default {
         token: null
     },
     getters: {
+        isLoggedIn(state) {
+            return state.user !== null
+        },
         user(state) {
             return state.user
         },
@@ -22,22 +25,32 @@ export default {
         // }
     },
     mutations: {
-        SET_USER(state, value) {state.user = value},
-        SET_TOKEN(state, value) {state.token = value}
+        SET_USER(state, value) { state.user = value },
+        SET_TOKEN(state, value) { state.token = value }
     },
     actions: {
-      async login({commit}, credential) {
-        const user = await AuthService.login(credential)
-        console.log(user.data)
-        commit('SET_USER', user.data)
-        commit('SET_TOKEN', user.token)
-        // console.log(this.$store.state.target)
-      },
-        async logout({commit}) {
+        async login({ commit }, credential) {
+            const user = await AuthService.login(credential)
+            // console.log(user.data)
+            commit('SET_USER', user.data)
+            commit('SET_TOKEN', user.token)
+            // console.log(this.$store.state.target)
+        },
+        async logout({ commit }) {
             console.log('logout')
             commit('SET_USER', null)
             commit('SET_TOKEN', null)
             // await AuthService.logout()
+        },
+        async registerOtp({ commit }, form) {
+            const user = await AuthService.registerOtp(form)
+            console.log(user)
+            // commit('SET_USER', user)
+            // commit('SET_TOKEN', user.token)
+        },
+        async register({ commit }, form) {
+            const user  = await AuthService.register(form)
+            console.log(user)
         }
     },
 }

@@ -3,45 +3,45 @@
 </style>
 
 <template>
-  <div>
-    <main class="d-flex flex-nowrap">
-      <sidebar />
-      <div class="p-3 d-flex flex-column flex-fill">
-        <h2 class="mb-4">List Tagihan</h2>
-        <br />
-        <!--<p>{{token}}</p>-->
-        <!--<button @click="klick">klick</button>-->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">No</th>
-              <th scope="col">Name</th>
-              <th scope="col">Total Tagihan</th>
-              <th scope="col">DP</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(i, index) in listData" :key="i.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.name }}</td>
-              <td>{{ i.total_bill }}</td>
-              <td>{{ i.dp }}</td>
-              <td v-if="i.is_lunas">Lunas</td>
-              <td v-else>Belum Lunas</td>
-              <td><Button>Tets</Button></td>
-              <!-- <td>{{ i.is_lunas}}</td> -->
-              <!-- <td>{{ i.pay }}</td> -->
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </main>
-    <!-- sidebar -->
-    <!-- <div class="sidebar"></div> -->
+  <div class="p-3 d-flex flex-column flex-fill">
+    <h2 class="mb-4">List Tagihan</h2>
+    <br />
+    <!--<p>{{token}}</p>-->
+    <!--<button @click="klick">klick</button>-->
+    <div class="mb-4">
+      <button @click="routerPushToInput" class="btn btn-primary px-5">
+        Input Tagihan
+      </button>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Name</th>
+          <th scope="col">Total Tagihan</th>
+          <th scope="col">DP</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- {{ listData }} -->
+        <tr v-for="(i, index) in listData" :key="i.id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ i.name }}</td>
+          <td>{{ i.total_bill }}</td>
+          <td>{{ i.dp }}</td>
+          <td v-if="i.is_lunas">Lunas</td>
+          <td v-else>Belum Lunas</td>
+          <td><router-link :to="`/admin/detail-tagihan/${i.id}`" class="btn btn-dark">Detail</router-link></td>
+          <!-- <td>{{ i.is_lunas}}</td> -->
+          <!-- <td>{{ i.pay }}</td> -->
+
+        
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <!-- navbar -->
 </template>
 
 <script>
@@ -53,11 +53,20 @@ export default {
   },
   data() {
     return {
-      listData: [],
+      // listData: [],
     };
+  },
+  computed: {
+    listData() {
+      return this.$store.getters['tagihan/listTagihan'];
+    }
+  },
+  beforeMount(){
+    this.$store.dispatch('tagihan/fetchTagihan');
   },
   async mounted() {
     try {
+      // console.log(this.listData);
       // const token = await this.$store.getters["auth/token"];
       // axios.defaults.headers.common["token"] = this.token;
 
@@ -66,13 +75,19 @@ export default {
       //    Authorization: 'Bearer ' + token
       //   }
       // });
-      const dataGet = await AdminService.getTagihanList();
-      this.listData = dataGet.data;
+      // const dataGet = await AdminService.getTagihanList();
+      // this.listData = dataGet.data;
       // this.listData = response.data.data;
     } catch (err) {
       console.log("error");
       console.log(err);
     }
+  },
+  methods: {
+    routerPushToInput() {
+    //   console.log("klick");
+      this.$router.push("/admin/input-tagihan");
+    },
   },
 };
 </script>
