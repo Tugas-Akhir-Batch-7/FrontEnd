@@ -48,7 +48,7 @@ const router = createRouter({
 
     // lupa password
     {
-      path: '/forgot_password',
+      path: '/forgot_password', 
       name: 'forgotpwd',
       component: () => import('../components/PasswordRecovery/Step1.vue')
     },
@@ -62,11 +62,20 @@ const router = createRouter({
     {
       path: '/murid_dashboard',
       name: 'dashboard',
+<<<<<<< HEAD
+      component: () => import('../components/Murid/dashboard.vue')
+    },
+    {
+      path: '/murid/pertemuan',
+      name: 'murid_pertemuan',
+      component: () => import('../components/Murid/pertemuan.vue')
+=======
       component: () => import('../components/Murid/Daftar.vue'),
       meta: {
         requiresAuth: true,
         isMurid: true
       },
+>>>>>>> e2fd1a3878dff3a9cbd1b4fe9e378c40aa1f7a09
     },
 
     //guru
