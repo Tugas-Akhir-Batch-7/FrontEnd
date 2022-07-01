@@ -160,6 +160,11 @@ const router = createRouter({
         isAdmin: true
       },
       children: [
+        { 
+          path: "profile",
+          name: "admin_profile",
+          component: () => import('../components/Admin/Profile.vue'),
+        },
         {
           path: 'list-guru',
           name: 'admin_list_guru',
