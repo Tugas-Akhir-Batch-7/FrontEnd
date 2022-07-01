@@ -6,7 +6,7 @@ import ListGuru from '../components/Admin/ListGuru.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  linkExactActiveClass: 'active',
+  linkExactActiveClass: 'active bg-warning',
   routes: [
 
     // login
