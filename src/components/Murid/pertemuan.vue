@@ -35,35 +35,21 @@
         </h2>
         <div v-if="new Date(value.date) <= new Date()" v-bind:id="'panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')" class="accordion-collapse collapse" v-bind:aria-labelledby="'panelsStayOpen-heading'+numberToText.convertToText(key+1).replace(' ','')">
           <div class="accordion-body">
-            <div class="d-flex">
-              <div class="" style="width:48%; margin:1%">
-                <div class="shadow-sm p-1 mb-2 bg-body rounded">
-                  <h5 class="navbar-brand text-warning text-center">Tugas</h5>
-                </div>
-                <div class="list-group" syle="" v-for="(valueTugas, keyTugas) in value.tugas">
-                  <p style="margin:0px" class="list-group-item list-group-item-action list-group-item-warning d-flex justify-content-between">
-                    {{valueTugas.name}}
-                    <button class="btn btn-sm btn-light" type="button" @click="displayAddTugas(valueTugas.id)">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
-                        <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z"/>
-                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                      </svg>
-                    </button>
-                  </p>
-                  <p v-for="(valueTugasSubmit, keyTugasSubmit) in listSubmitTugas[valueTugas.id]" style="margin:0px" class="list-group-item list-group-item-action list-group-item-light d-flex justify-content-between">
-                    <p style="margin:0px">{{valueTugasSubmit.submit_link}}</p>
-                    <p style="margin:0px">{{valueTugasSubmit.score || '-'}}</p>
-                  </p>
-                </div>
+            <div class="">
+              <div v-if="value.materi === true" class="text-center" style="margin:0px 1% 2% 1%">
+                Tidak Memiliki Akses Ke Materi
               </div>
-              <div class="" style="width:48%; margin:1%">
+              <div v-else-if="Array.isArray(value.materi) && value.materi.length == 0" class="text-center" style="margin:0px 1% 2% 1%">
+                tidak ada Materi
+              </div>
+              <div class="" style="margin:0px 1% 2% 1%" v-else>
                 <div class="shadow-sm p-1 mb-2 bg-body rounded">
                   <h5 class="navbar-brand text-warning text-center">Materi</h5>
                 </div>
-                <div class="card mb-1" style="max-width: 50vw;" v-for="(valueMateri, keyMateri) in value.file">
+                <div class="card mb-1" style="" v-for="(valueMateri, keyMateri) in value.materi">
                   <div class="d-flex">
                     <div class="w-25" v-if="/jpg|png|jpeg/i.test(/[^\.]+$/i.exec(valueMateri.file)[0])">
-                      <img v-bind:src="'http://localhost:5000/upload/'+valueMateri.file" class="img-fluid rounded-start" v-bind:alt="valueMateri.file.replace(/^\d*-/i, '')">
+                      <img v-bind:src="'http://localhost:5000/upload/'+valueMateri.file" class="img-fluid rounded-start p-1" v-bind:alt="valueMateri.file.replace(/^\d*-/i, '')">
                     </div>
                     <div class="w-100 d-flex">
                       <div class="card-body p-2">
@@ -80,6 +66,57 @@
                   </div>
                 </div>
               </div>
+              <div v-if="Array.isArray(value.tugas) && value.tugas.length == 0" class="text-center" style="margin:0px 1% 2% 1%">
+                tidak ada tugas
+              </div>
+              <div class="" style="margin:0px 1% 2% 1%" v-else>
+                <div class="shadow-sm p-1 mb-2 bg-body rounded">
+                  <h5 class="navbar-brand text-warning text-center">Tugas</h5>
+                </div>
+                <table class="table table-hover">
+                  <thead>
+                    <tr class=" text-center">
+                      <th scope="col">
+                        <button class="btn btn-sm btn-outline-warning" type="button" @click="refreshTugas(key)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                          </svg>
+                        </button>
+                      </th>
+                      <th scope="col">Tugas</th>
+                      <th scope="col">Keterangan</th>
+                      <th scope="col"></th>
+                      <th scope="col">Submit Link</th>
+                      <th scope="col">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(valueTugas, keyTugas) in value.tugas">
+                      <td style="width:3%" class="text-center">{{keyTugas+1}}</td>
+                      <td style="width:25%" class="">{{valueTugas.name}}</td>
+                      <td style="width:41%" class="">{{valueTugas.description}}</td>
+                      <td style="width:3%" class="">
+                        <button v-if="valueTugas.editMode" class="btn btn-sm btn-outline-danger" type="button" @click="updateSubmitTugas(key, keyTugas)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-check" viewBox="0 0 16 16">
+                            <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                          </svg>
+                        </button>
+                        <button v-else class="btn btn-sm btn-outline-warning" type="button" @click="valueTugas.score ?true:listPertemuan[key].tugas[keyTugas].editMode = true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-diff" viewBox="0 0 16 16">
+                            <path d="M8 5a.5.5 0 0 1 .5.5V7H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V8H6a.5.5 0 0 1 0-1h1.5V5.5A.5.5 0 0 1 8 5zm-2.5 6.5A.5.5 0 0 1 6 11h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                          </svg>
+                        </button>
+                      </td>
+                      <td style="width:25%" class="" v-if="valueTugas.editMode"><input v-model="listPertemuan[key].tugas[keyTugas].submit_link" class="form-control form-control-sm" type="text"></td>
+                      <td style="width:25%" class="" v-else>{{valueTugas.submit_link}}</td>
+                      <td style="width:3%" class="text-center">{{valueTugas.score || '-'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -87,40 +124,6 @@
     </div>
   </div>
 </main>
-
-
-<!--modal add Tugas / file pertemuan-->
-<div :class="{'d-block':displayAddTugasP, 'd-none':!displayAddTugasP}" class="min-vw-100 min-vh-100 position-fixed top-0" style="">
-  <div class="min-vw-100 min-vh-100 bg-black opacity-50 position-absolute" style="z-index:-1" @click="displayAddTugasP = false"></div>
-  <div class="min-vw-80 bg-light p-3 overflow-auto" style="height:80vh;margin:5% 10%;border-radius:10px">
-    <div class="nav-tabs d-flex justify-content-between">
-      <h3 class="nav-link active bg-light text-warning">Add Tugas Submit</h3>
-      <div class="d-flex align-items-center">
-        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn-sm btn btn-outline-success" @click="saveAddTugas()">Save</button>
-          <button type="button" class="btn-sm btn btn-outline-primary" @click="listTugasBaru[displayAddTugasP].push({link:''})">+</button>
-          <button type="button" class="btn-sm btn btn-outline-danger" @click="displayAddTugasP = false">x</button>
-        </div>
-      </div>
-    </div>
-    <table class="table">
-        <thead>
-          <tr>
-            <th style="width:5%" scope="col"></th>
-            <th style="" scope="col">Link</th>
-            <th style="width:5%" scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(value, key) in listTugasBaru[displayAddTugasP]">
-            <td class="text-center">{{key+1}}</td>
-            <td><input v-model="listTugasBaru[displayAddTugasP][key].link" class="form-control form-control-sm" type="text"></td>
-            <td class="text-center" @click="listTugasBaru[displayAddTugasP].splice(key, 1)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-</div>
 
 <!--modal message-->
 <div v-if="displayMessage" class="min-vw-100 position-fixed top-0 text-center" style="">
@@ -157,35 +160,28 @@ export default {
       document.head.appendChild(recaptchaScript)
       axios.defaults.headers.common['token'] = await this.$store.getters["auth/token"]
       //list anggota batch
-      this.listPertemuan = (await axios.get("murid/dataAbsenMateri/", {})).data.data
+      this.listPertemuan = (await axios.get("murid/dataPertemuan/", {})).data.data
       if(this.listPertemuan.length == 0) this.listPertemuan = false
 
       //perulangan list pertemuan
       for(let i = 0; i < this.listPertemuan.length; i++){
-        if(new Date(this.listPertemuan[i].date) <= new Date()){ //pertemuan sudah dimulai
-          if(this.listPertemuan[i].id_murid){ //tidak hadir dalam pertemuan
+        //jika pertemuan sudah dimulai
+        if(new Date(this.listPertemuan[i].date) <= new Date()){ 
+          let absen = 'tidak hadir'
+          this.listPertemuan[i].status = "tidak hadir"
+          //status kehadiran
+          if(this.listPertemuan[i].absen){ //tidak hadir dalam pertemuan
+            absen = 'hadir'
             this.listPertemuan[i].status = "hadir"
-          }else{ //tidak hadir dalam pertemuan
-            this.listPertemuan[i].status = "tidak hadir"
           }
-          // console.log(this.listPertemuan[i].tugas)
-          if(this.listPertemuan[i].tugas.length){
-            for(let o = 0; o < this.listPertemuan[i].tugas.length; o++){
-              //list submit tugas
-              // console.log(this.listPertemuan[i].tugas[o])
-              if(this.listPertemuan[i].tugas[o].id) {
-                console.log(this.listPertemuan[i].tugas[o].id)
-                this.listSubmitTugas[this.listPertemuan[i].tugas[o].id] = (await axios.get("murid/listTugasSubmit/"+[this.listPertemuan[i].tugas[o].id])).data.data
-              }
-            }
-          }
+          let detailPertemuan = (await axios.post("murid/detailPertemuan/"+[this.listPertemuan[i].id], {absen})).data.data
+          this.listPertemuan[i].materi = detailPertemuan.materi
+          this.listPertemuan[i].tugas = detailPertemuan.tugas
         }else{//pertemuan belum mulai
           this.listPertemuan[i].status = "akan datang"
         }
       }
       console.log(this.listPertemuan)
-      console.log(this.listSubmitTugas)
-      console.log(numberToText.convertToText(25).replace(' ',''))
     }catch(err){
         console.log("error")
         console.log(err)
@@ -193,45 +189,29 @@ export default {
   },
   methods:{
     //tugas
-    async displayAddTugas(id){
+    async updateSubmitTugas(idPertemuan, idTugas, ket){
       try{
-        this.displayAddTugasP = id
-        this.listTugasBaru[id] ? true : this.listTugasBaru[id] = [{link: ''}]
-      }catch(err){
-        console.log("error")
-        console.log(err)
-      }
-    },
-    async saveAddTugas(){
-      try{
-        // let addTugas = [] 
-        let id = this.displayAddTugasP
-        for(let i = 0; this.listTugasBaru[id].length; i){
-          if(this.listTugasBaru[id][i].link){
-            // addTugas.push(this.listTugasBaru[id][i].link)
-            //kirim backend
-            await axios.post("murid/addTugas/"+id, {link:this.listTugasBaru[id][i].link})
-          }
-          this.listTugasBaru[id].splice(0,1)
-        }
-        //refresh
-        this.refreshTugas(`berhasil mengirim tugas submit`, true)
-      }catch(err){
-        this.messageF(`gagal mengirim tugas submit`, false)
-        console.log("error")
-        console.log(err)
-      }
-    },
-    async refreshTugas(ket, status){
-      try{
-        //list anggota batch
-        this.listSubmitTugas[this.displayAddTugasP] = (await axios.get("murid/listTugasSubmit/"+[this.displayAddTugasP])).data.data
-        if(this.listSubmitTugas.length == 0) this.listSubmitTugas = false
-        //nonaktifkan display add materi
-        this.displayAddTugasP = false
+        //kirim data
+        let detailPertemuan = (await axios.post("murid/updateTugas/"+this.listPertemuan[idPertemuan].tugas[idTugas].id_tugas, 
+          {link:this.listPertemuan[idPertemuan].tugas[idTugas].submit_link})).data.data
+        //edit mode off
+        this.listPertemuan[idPertemuan].tugas[idTugas].editMode = false
         //ket
         if(ket) this.messageF(ket, status)
-        else this.messageF(`refresh materi`, true)
+        else this.messageF(`berhasil menupdate link submit `+this.listPertemuan[idPertemuan].tugas[idTugas].submit_link, true)
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
+    async refreshTugas(idPertemuan, ket){
+      try{
+        //refresh tugas
+        let detailPertemuan = (await axios.post("murid/detailPertemuan/"+this.listPertemuan[idPertemuan].id, {})).data.data
+        this.listPertemuan[idPertemuan].tugas = detailPertemuan.tugas
+        //ket
+        if(ket) this.messageF(ket, status)
+        else this.messageF(`Refresh Tugas`, true)
       }catch(err){
         console.log("error")
         console.log(err)

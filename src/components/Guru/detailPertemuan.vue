@@ -334,7 +334,7 @@ export default {
         for(let i = 0; i < this.listTugasBaru.length; i++){
           if(this.listTugasBaru[i].name){
             addTugas.tugasName.push(this.listTugasBaru[i].name)
-            addTugas. tugasDescription.push(this.listTugasBaru[i].description)
+            addTugas.tugasDescription.push(this.listTugasBaru[i].description)
           }
         }
         //kirim backend

@@ -62,20 +62,21 @@ const router = createRouter({
     {
       path: '/murid_dashboard',
       name: 'dashboard',
-<<<<<<< HEAD
-      component: () => import('../components/Murid/dashboard.vue')
-    },
-    {
-      path: '/murid/pertemuan',
-      name: 'murid_pertemuan',
-      component: () => import('../components/Murid/pertemuan.vue')
-=======
-      component: () => import('../components/Murid/Daftar.vue'),
+      component: () => import('../components/Murid/dashboard.vue'),
       meta: {
         requiresAuth: true,
         isMurid: true
       },
->>>>>>> e2fd1a3878dff3a9cbd1b4fe9e378c40aa1f7a09
+    },
+    {
+      path: '/murid/pertemuan',
+      name: 'murid_pertemuan',
+      component: () => import('../components/Murid/pertemuan.vue'),
+      // component: () => import('../components/Murid/Daftar.vue'),
+      meta: {
+        requiresAuth: true,
+        isMurid: true
+      },
     },
 
     //guru
