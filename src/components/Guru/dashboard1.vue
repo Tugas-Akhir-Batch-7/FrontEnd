@@ -133,6 +133,7 @@ export default {
   }),
   async mounted() {
     try {
+      console.log( await this.$store.getters)
       axios.defaults.headers.common["token"] = await this.$store.getters["auth/token"]
       //ambil list batch
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data;

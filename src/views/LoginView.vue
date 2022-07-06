@@ -33,6 +33,7 @@
         </form>
 
         <button class="buttons" id="text" @click="handleLogin">Sign In</button>
+        <a class="buttons" id="text" href="http://localhost:5000/auth/google">Google</a>
 
         <div id="text" style="white-space: nowrap">
           <p>
@@ -60,6 +61,29 @@ export default {
     email: "",
     password: "",
   }),
+  async mounted() {
+    try {
+      //jika login menggunakan google
+      if(this.$route.query.data){
+        //ubah query menjadi json
+        const data = JSON.parse(decodeURIComponent(this.$route.query.data))
+        //simpan data ke desktop
+        await this.$store.dispatch("auth/loginGoogle", data);
+        //redirect halaman
+        if ((data.data.role) == "murid") {
+          return this.$router.push("/murid_dashboard");
+        } else if (data.data.role == "guru") {
+          return this.$router.push("/guru_dashboard1");
+        } else if (data.data.role == "admin") {
+          return this.$router.push("/admin/");
+        }
+
+      }
+    } catch (err) {
+      console.log("error");
+      console.log(err);
+    }
+  },
   methods: {
     async handleLogin() {
       // console
@@ -82,6 +106,15 @@ export default {
           return this.$router.push("/admin/");
         }
         // this.$router.push("/murid_dashboard");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async google() {
+      try {
+        // http://localhost:3000/auth/google
+        // await axios.get("auth/google")
+        // await this.$store.dispatch("auth/google");
       } catch (err) {
         console.log(err);
       }

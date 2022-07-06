@@ -103,15 +103,15 @@
 <script>
 // import moment from "moment";
 export default {
-  // props: ['step-inner'],
+  props: ['name', 'email'],
   data() {
     return {
       // step: this.step-inner,
       // file1: "",
       // src1: "",
       form: {
-        name: "",
-        email: "",
+        name: this.name,
+        email: this.email,
         password: "",
         confirm_password: "",
         birthdate: "",
@@ -119,6 +119,8 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.name)
+    // console.log(this.email)
     // this.step = this.step-inner;
     // const test = moment 
     // var years = this.$moment().diff('1981-01-01', 'years');

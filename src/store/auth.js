@@ -36,6 +36,12 @@ export default {
             commit('SET_TOKEN', user.token)
             // console.log(this.$store.state.target)
         },
+        async loginGoogle({ commit }, credential) {
+            // console.log(user.data)
+            commit('SET_USER', credential.data)
+            commit('SET_TOKEN', credential.token)
+            // console.log(this.$store.state.target)
+        },
         async logout({ commit }) {
             console.log('logout')
             commit('SET_USER', null)
