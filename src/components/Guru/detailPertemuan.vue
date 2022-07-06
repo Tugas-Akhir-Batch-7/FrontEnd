@@ -461,7 +461,6 @@ export default {
         console.log(err)
       }
     },
-
     messageF(text, s){
       this.displayMessage = true
       this.messageStatus = s
