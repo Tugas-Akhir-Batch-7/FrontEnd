@@ -6,7 +6,7 @@ import ListGuru from '../components/Admin/ListGuru.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  linkExactActiveClass: 'active',
+  linkExactActiveClass: 'active bg-warning',
   routes: [
 
     // login
@@ -162,6 +162,30 @@ const router = createRouter({
       },
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: {
+        requiresAuth: true,
+        allRole: true
+      },
+      children: [
+        {
+          path: 'edit',
+          name: 'profile_edit',
+          component: () => import('../components/ProfileEdit.vue'),
+        },
+        {
+          path: '',
+          name: 'profile_view',
+          component: () => import('../components/ProfileComponent.vue'),
+        },
+        
+      ],
+      
+    },
+   
+    {
       path: '/admin/',
       name: 'admin_dashboard',
       component: () => import('../views/AdminView.vue'),
@@ -211,13 +235,17 @@ const router = createRouter({
           name: 'admin_input_pembayaran',
           component: () => import('../components/Admin/input/InputPembayaran.vue')
         },
+        // {
+        //   path: 'profile',
+        //   name: 'admin_profile',
+        //   component: () => import('../components/Admin/ProfileComponent.vue')
+
+        // }
 
 
       ]
     },
-
-
-
+   
   ]
 })
 
@@ -246,6 +274,10 @@ router.beforeEach((to, from, next) => {
     if (store.getters['auth/isLoggedIn']) {
       const role = store.getters['auth/user'].role
       // console.log("if pertama loggedin")
+      if(to.meta.allRole) {
+        next()
+        return
+      }
       if (to.meta.isMurid && role === 'murid') {
         next()
         return
