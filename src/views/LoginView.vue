@@ -33,7 +33,9 @@
         </form>
 
         <button class="buttons" id="text" @click="handleLogin">Sign In</button>
-        <a class="buttons" id="text" href="http://localhost:5000/auth/google">Google</a>
+        <button class="buttons" style="margin-top:5px" id="text">
+          <a style="text-decoration:none; color:black" href="http://localhost:5000/auth/google">Google</a>
+        </button>
 
         <div id="text" style="white-space: nowrap">
           <p>

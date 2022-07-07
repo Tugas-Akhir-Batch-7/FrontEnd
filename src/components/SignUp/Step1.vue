@@ -110,8 +110,8 @@ export default {
       // file1: "",
       // src1: "",
       form: {
-        name: this.name,
-        email: this.email,
+        name: "",
+        email: "",
         password: "",
         confirm_password: "",
         birthdate: "",
@@ -119,8 +119,8 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.name)
-    // console.log(this.email)
+    if(this.name && this.name != 'undefined') this.form.name = this.name
+    if(this.email && this.email != 'undefined') this.form.email = this.email
     // this.step = this.step-inner;
     // const test = moment 
     // var years = this.$moment().diff('1981-01-01', 'years');
