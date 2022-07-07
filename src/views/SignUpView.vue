@@ -7,6 +7,8 @@
           @prevStep="prev"
           @nextStep="next"
           @saveForm="saveForm"
+          v-bind:name="data.name"
+          v-bind:email="data.email"
           v-if="step === 1"
         />
         <SignUpVue2
@@ -50,6 +52,11 @@ export default {
   data() {
     return {
       step: 1,
+      data:{
+        name: decodeURIComponent(this.$route.query.name), 
+        email: decodeURIComponent(this.$route.query.email), 
+        profile: decodeURIComponent(this.$route.query.picture)
+      },
       form: {
         name: "",
         email: "",
@@ -65,6 +72,18 @@ export default {
         birthday: "12/12/1996"
       },
     };
+  },
+  async mounted() {
+    try {
+      this.data.name = decodeURIComponent(this.$route.query.name)
+      this.data.email = decodeURIComponent(this.$route.query.email)
+      this.data.profile = decodeURIComponent(this.$route.query.picture)
+      console.log(this.data)
+      // console.log(decodeURIComponent(this.$route.query.email))
+    } catch (err) {
+      console.log("error");
+      console.log(err);
+    }
   },
   methods: {
     next() {

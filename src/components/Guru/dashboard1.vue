@@ -7,18 +7,19 @@
         <h3 class="nav-link active bg-light text-warning">Batch</h3>
         <div class="d-flex align-items-center">
           <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-            <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="displayAddBatch = true">Add</button>
-            <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Edit</button>
-            <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
+            <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editMode, 'd-none':editMode}" @click="displayAddBatch = true">Add</button>
+            <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Edit</button>
+            <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
             <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="refreshBatch()">Reset</button>
             <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editMode, 'd-none':!editMode}" @click="saveEditBatch()">Save</button>
           </div>
         </div>
       </div>
-      <table class="table table-hover">
+      <table class="table table-hover align-middle">
         <thead>
           <tr>
             <th scope="col"></th>
+            <th v-if="!editMode" scope="col"></th>
             <th class="w-50" scope="col">Name Batch</th>
             <th class="w-25" scope="col">Start Date</th>
             <th class="w-25 text-center" scope="col">Pay</th>
@@ -36,8 +37,16 @@
         </tr><tr v-if="!listBatch">
           <td colspan="10" class="text-center">Data Tidak Tersedia</td>
         </tr>
-          <tr v-for="(value, key) in listBatch" :class="{'table-danger':editMode && listDeleteBatch.includes(value.id)}" @click="infoMuridBatch(value.id)">
+          <tr v-for="(value, key) in listBatch" :class="{'table-danger':editMode && listDeleteBatch.includes(value.id)}">
             <td style="width:5%; text-align:center">{{key+1}}</td>
+            <td v-if="!editMode" style="width:5%; text-align:center">
+              <button class="btn btn-sm btn-outline-warning" type="button" @click="infoMuridBatch(value.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
+                  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                  <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+              </button>
+            </td>
             <!--name-->
             <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].name" class="form-control form-control-sm" type="text"></td>
             <td v-else>{{value.name}}</td>
@@ -61,11 +70,11 @@
   <div class="min-vw-100 min-vh-100 bg-black opacity-50 position-absolute" style="z-index:-1" @click="displayAddBatch = false"></div>
   <div class="min-vw-80 bg-light p-3 overflow-auto" style="height:80vh;margin:5% 10%;border-radius:10px">
     <div class="nav-tabs d-flex justify-content-between">
-      <h3 class="nav-link active bg-light text-warning">Add Ujian</h3>
+      <h3 class="nav-link active bg-light text-warning">Add Batch</h3>
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
           <button type="button" class="btn-sm btn btn-outline-success" @click="saveAddBatch()">Save</button>
-          <button type="button" class="btn-sm btn btn-outline-primary" @click="listBatchBaru.push({name:'',pay:1000000,date:(new Date().toISOString().substring(0, 10))})">+</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" @click="listBatchBaru.push({name:'',pay:1000000,date:(new Date(new Date().valueOf() + 1000*60*60*24*28+31).toISOString().substring(0, 10))})">+</button>
           <button type="button" class="btn-sm btn btn-outline-danger" @click="displayAddBatch = false">x</button>
         </div>
       </div>
@@ -94,7 +103,7 @@
 </div>
 
 <!--modal message-->
-<div v-if="displayMessage" class="min-vw-100 min-vh-100 position-fixed top-0 text-center" style="">
+<div v-if="displayMessage" class="min-vw-100 position-fixed top-0 text-center" style="">
   <div :class="{'alert-danger': !messageStatus, 'alert-success':messageStatus}" class="alert d-none d-lg-block">{{message}}</div>
 </div>
 </template>
@@ -109,13 +118,11 @@ export default {
   data: () => ({
     editMode: false,
     listBatch: [],
+    listBatchC: [],
     listEditBatch: [],
     listDeleteBatch: [],
     listBatchBaru: [
-      {name: "qwe", date: "", pay: ""},
-      {name: "", date: new Date().toISOString().substring(0, 10), pay: ""},
-      {name: "", date: "", pay: 1230000},
-      {name: "asd", date: new Date().toISOString().substring(0, 10), pay: 3210000},
+      {name: "", date: (new Date(new Date().valueOf() + 1000*60*60*24*28+31).toISOString().substring(0, 10)), pay: 1000000},
     ],
     editMode: false,
     displayAddBatch: false,
@@ -126,28 +133,20 @@ export default {
   }),
   async mounted() {
     try {
+      console.log( await this.$store.getters)
       axios.defaults.headers.common["token"] = await this.$store.getters["auth/token"]
       //ambil list batch
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
       if(this.listBatch.length == 0) this.listBatch = false
+      //clone list batch
+      this.listEditBatch = JSON.parse(JSON.stringify(this.listBatch))
       console.log(this.listBatch);
-      //get list edit Batch
-      this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
-      if(this.listBatch.length == 0) this.listBatch = false
     } catch (err) {
       console.log("error");
       console.log(err);
     }
   },
   methods: {
-    async klick() {
-      try {
-        console.log(this.token.token);
-      } catch (err) {
-        console.log("error");
-        console.log(err);
-      }
-    },
     async infoMuridBatch(id) {
       try {
         if(!this.editMode)this.$router.push({ name: "anggotaBatch", params: { id } });
@@ -156,14 +155,15 @@ export default {
         console.log(err);
       }
     },
-    async refreshBatch(){
+    async refreshBatch(ket, status){
       try{
         //get list Batch
         this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
         if(this.listBatch.length == 0) this.listBatch = false
-        //get list edit Batch
-        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
-        if(this.listBatch.length == 0) this.listBatch = false
+        this.listEditBatch = JSON.parse(JSON.stringify(this.listBatch))
+        //ket
+        if(ket) this.messageF(ket, status)
+        else this.messageF(`Refresh Batch`, true)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -171,28 +171,24 @@ export default {
     },
     async saveAddBatch(){
       try{
-        // let addUjian = {tugasName:[], tugasDescription:[]}
         for(let i = 0; this.listBatchBaru.length; i){
-          if(this.listBatchBaru[i].name && this.listBatchBaru[i].date && this.listBatchBaru[i].pay){
-            let addBatch = {}
-            addBatch.name = this.listBatchBaru[i].name || null
-            addBatch.startDate = this.listBatchBaru[i].date || null
-            addBatch.pay = this.listBatchBaru[i].pay || null
-            console.log(addBatch)
-            console.log(await axios.post("guru/addBatch/", addBatch))
+          if(new Date(this.listBatchBaru[i].date) <= new Date()){
+            this.messageF(`Date Tidak Valid`, false)
+            throw 'Date Tidak Valid'
+          }else if(this.listBatchBaru[i].name && this.listBatchBaru[i].date && this.listBatchBaru[i].pay){
+            await axios.post("guru/addBatch/", {
+              name: this.listBatchBaru[i].name,
+              startDate: this.listBatchBaru[i].date,
+              pay: this.listBatchBaru[i].pay,
+            })
+          }else{
+            this.messageF(`Lengkapi Semua Data`, false)
+            throw 'lengkapi semua data'
           }
           this.listBatchBaru.splice(0,1)
         }
-        //get list Batch
-        this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
-        if(this.listBatch.length == 0) this.listBatch = false
-        console.log(this.listBatch)
-        //get list edit Batch
-        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
-        if(this.listEditBatch.length == 0) this.listEditBatch = false
-        console.log(this.listEditBatch)
         this.displayAddBatch = false
-        this.messageF(`berhasil menambahkan batch`, true)
+        this.refreshBatch(`Berhasil Menambahkan Batch`, true)
       }catch(err){
         if(err.response.data.error.original.routine == "_bt_check_unique") this.messageF(`batch ${this.listBatchBaru[0].name} sudah ada`, false)
         console.log("error")
@@ -208,34 +204,29 @@ export default {
         //edit tugas
         for(let i = 0; i < this.listEditBatch.length; i++){
           if(this.listEditBatch[i].name != this.listBatch[i].name || this.listEditBatch[i].date != this.listBatch[i].date || this.listEditBatch[i].pay != this.listBatch[i].pay){
-            console.log(this.listEditBatch[i])
+            if(new Date(this.listEditBatch[i].date) <= new Date()){
+              this.messageF(`Date Tidak Valid`, false)
+              throw 'Date Tidak Valid'
+            }
             await axios.put("guru/updateBatch/"+this.listBatch[i].id, {
               name: this.listEditBatch[i].name, 
-              start_date: this.listEditBatch[i].date,
+              startDate: this.listEditBatch[i].date,
               pay: this.listEditBatch[i].pay
             })
           }
         }
-        //get list Batch
-        this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
-        if(this.listBatch.length == 0) this.listBatch = false
-        console.log(this.listBatch)
-        //get list edit Batch
-        this.listEditBatch = (await axios.get("guru/listBatch", {})).data.data;
-        if(this.listEditBatch.length == 0) this.listEditBatch = false
-        console.log(this.listEditBatch)
+        this.editMode = false
+        this.refreshBatch(`Berhasil Mengupdate Batch`, true)
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
     messageF(text, s){
-      console.log('jalan')
       this.displayMessage = true
       this.messageStatus = s
       this.message = text || 'terjadi error'
       setTimeout(()=>{
-        console.log('jalan 3')
         this.displayMessage = false
         this.message = `terjadi error`
       }, 3000)

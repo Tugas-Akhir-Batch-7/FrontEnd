@@ -7,12 +7,12 @@
       <h3 class="nav-link active bg-light text-warning">Absensi</h3>
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn-sm btn btn-outline-danger" @click="refreshAbsen()">Refresh</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" @click="refreshAbsen()">Refresh</button>
           <button type="button" class="btn-sm btn btn-outline-success" @click="saveAbsen()">Save</button>
         </div>
       </div>
     </div>
-    <table class="table table-hover" style="margin-bottom:2em">
+    <table class="table table-hover align-middle" style="margin-bottom:2em">
       <thead>
         <tr>
           <th scope="col"></th>
@@ -48,18 +48,19 @@
       <h3 class="nav-link active bg-light text-warning">Tugas</h3>
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editModeTugas, 'd-none':editModeTugas}" @click="displayAddTugasP = true">Add</button>
-          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editModeTugas, 'd-none':editModeTugas}" @click="editModeTugas=true">Edit</button>
-          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editModeTugas, 'd-none':!editModeTugas}" @click="editModeTugas=false">Back</button>
+          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editModeTugas, 'd-none':editModeTugas}" @click="displayAddTugasP = true">Add</button>
+          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editModeTugas, 'd-none':editModeTugas}" @click="editModeTugas=true">Edit</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':editModeTugas, 'd-none':!editModeTugas}" @click="editModeTugas=false">Back</button>
           <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editModeTugas, 'd-none':!editModeTugas}" @click="refreshTugas()">Reset</button>
           <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editModeTugas, 'd-none':!editModeTugas}" @click="saveTugas()">Save</button>
         </div>
       </div>
     </div>
-    <table class="table table-hover" style="margin-bottom:2em">
+    <table class="table table-hover align-middle" style="margin-bottom:2em">
       <thead>
         <tr>
           <th scope="col"></th>
+          <th v-if="!editModeTugas" scope="col"></th>
           <th scope="col">Name</th>
           <th scope="col">Description</th>
           <th scope="col" v-if="editModeTugas"></th>
@@ -78,8 +79,16 @@
         <tr v-if="!listTugas">
           <td colspan="10" class="text-center">Data Tidak Tersedia</td>
         </tr>
-        <tr v-for="(value, key) in listTugas" :class="{'table-danger':editModeTugas && listDeleteTugas.includes(value.id)}" @click="scoreTugas(value.id)">
+        <tr v-for="(value, key) in listTugas" :class="{'table-danger':editModeTugas && listDeleteTugas.includes(value.id)}">
           <td style="width:5%; text-align:center">{{key+1}}</td>
+          <td v-if="!editModeTugas" style="width:5%; text-align:center">
+            <button class="btn btn-sm btn-outline-warning" type="button" @click="scoreTugas(value.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
+                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </button>
+          </td>
           <!--name-->
           <td  class="w-25" v-if="editModeTugas && listEditTugas[key]"><input v-model="listEditTugas[key].name" class="form-control form-control-sm" type="text"></td>
           <td class="w-25" v-else>{{value.name}}</td>
@@ -98,15 +107,15 @@
       <h3 class="nav-link active bg-light text-warning">Materi</h3>
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editModeMateri, 'd-none':editModeMateri}" @click="displayAddMateriP = true">Add</button>
-          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editModeMateri, 'd-none':editModeMateri}" @click="editModeMateri=true">Edit</button>
-          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editModeMateri, 'd-none':!editModeMateri}" @click="editModeMateri=false">Back</button>
+          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editModeMateri, 'd-none':editModeMateri}" @click="displayAddMateriP = true">Add</button>
+          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editModeMateri, 'd-none':editModeMateri}" @click="editModeMateri=true">Edit</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':editModeMateri, 'd-none':!editModeMateri}" @click="editModeMateri=false">Back</button>
           <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editModeMateri, 'd-none':!editModeMateri}" @click="refreshMateri()">Reset</button>
           <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editModeMateri, 'd-none':!editModeMateri}" @click="saveMateri()">Save</button>
         </div>
       </div>
     </div>
-    <table class="table table-hover" style="margin-bottom:2em">
+    <table class="table table-hover align-middle" style="margin-bottom:2em">
       <thead>
         <tr>
           <th scope="col"></th>
@@ -191,12 +200,12 @@
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
           <button type="button" class="btn-sm btn btn-outline-success" @click="saveAddMateri()">Save</button>
-          <button type="button" class="btn-sm btn btn-outline-primary" @click="listMateriBaru.push({name:'',description:''})">+</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" @click="listMateriBaru.push({file:'', ket:''})">+</button>
           <button type="button" class="btn-sm btn btn-outline-danger" @click="displayAddMateriP = false">x</button>
         </div>
       </div>
     </div>
-    <table class="table">
+    <table class="table align-middle">
         <thead>
           <tr>
             <th style="" scope="col"></th>
@@ -238,9 +247,6 @@ export default {
     listDeleteTugas:[],
     listTugasBaru:[
       {name:'', description:''},
-      {name:'qwe', description:''},
-      {name:'', description:'asd'},
-      {name:'zxc', description:'qaz'},
     ],
     editModeTugas:false,
     displayAddTugasP:false,
@@ -250,9 +256,6 @@ export default {
     listDeleteMateri:[],
     listMateriBaru:[
       {file:'', ket:''},
-      {file:'', ket:''},
-      {file:'', ket:'asd'},
-      {file:'', ket:'qaz'},
     ],
     editModeMateri:false,
     displayAddMateriP:false,
@@ -261,21 +264,24 @@ export default {
   }),
   async mounted() {
     try{
+      //setup
       axios.defaults.headers.common['token'] = await this.$store.getters["auth/token"]
-      //list anggota batch
+
+      //list absen
       this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
       if(this.listAbsen.length == 0) this.listAbsen = false
+
       //list tugas
       this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
       if(this.listTugas.length == 0) this.listTugas = false
-      this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+      //clone list tugas
+      this.listEditTugas = JSON.parse(JSON.stringify(this.listTugas))
+
       //list materi
       this.listMateri = (await axios.get("guru/listFilePertemuan/"+this.$route.params.id, {})).data.data
       if(this.listMateri.length == 0) this.listMateri = false
-      this.listEditMateri = (await axios.get("guru/listFilePertemuan/"+this.$route.params.id, {})).data.data
-
-      console.log(this.listTugas)
-      console.log(this.listMateri)
+      //clone list tugas
+      this.listEditMateri = JSON.parse(JSON.stringify(this.listMateri))
     }catch(err){
         console.log("error")
         console.log(err)
@@ -301,7 +307,6 @@ export default {
         await axios.post("guru/prosesAbsensi/"+this.$route.params.id, this.listUpdate)
         this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
         if(this.listAbsen.length == 0) this.listAbsen = false
-        
         //refresh
         this.refreshAbsen(`berhasil mengupdate absen`, true)
       }catch(err){
@@ -331,11 +336,15 @@ export default {
     async saveAddTugas(){
       try{
         let addTugas = {tugasName:[], tugasDescription:[]}
-        for(let i = 0; i < this.listTugasBaru.length; i++){
-          if(this.listTugasBaru[i].name){
-            addTugas.tugasName.push(this.listTugasBaru[i].name)
-            addTugas. tugasDescription.push(this.listTugasBaru[i].description)
+        while(this.listTugasBaru.length){
+          if(this.listTugasBaru[0].name){
+            addTugas.tugasName.push(this.listTugasBaru[0].name)
+            addTugas.tugasDescription.push(this.listTugasBaru[0].description || ' ')
+          }else{
+            this.messageF(`Isi Nama Tugas`, false)
+            throw 'lengkapi semua data'
           }
+          this.listTugasBaru.splice(0,1)
         }
         //kirim backend
         if(addTugas.tugasName.length) addTugas = (await axios.post("guru/addTugas/"+this.$route.params.id, addTugas)).data.data
@@ -343,23 +352,7 @@ export default {
         this.displayAddTugasP = false
         //refresh
         this.refreshTugas(`berhasil menambahkan tugas`, true)
-      }catch(err){
-        this.messageF(`gagal menambahkan tugas`, false)
-        console.log("error")
-        console.log(err)
-      }
-    },
-    async refreshTugas(ket, status){
-      try{
-        this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
-        if(this.listTugas.length == 0) this.listTugas = false
-        this.listEditTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
-        if(this.listEditTugas.length == 0) this.listEditTugas = false
-        this.listDeleteTugas = []
-        
-        //ket
-        if(ket) this.messageF(ket, status)
-        else this.messageF(`refresh tugas`, true)
+        this.listTugasBaru.push({name:'',description:''})
       }catch(err){
         console.log("error")
         console.log(err)
@@ -375,11 +368,17 @@ export default {
         for(let i = 0; i < this.listEditTugas.length; i++){
           if(this.listEditTugas[i].name != this.listTugas[i].name || this.listEditTugas[i].description != this.listTugas[i].description){
             console.log(this.listEditTugas[i])
+            if(!this.listEditTugas[i].name){
+              this.messageF(`Nama Tugas Tidak Valid`, false)
+              throw 'lengkapi semua data'
+            }
             await axios.put("guru/updateTugas/"+this.listTugas[i].id, {
               name: this.listEditTugas[i].name, description: this.listEditTugas[i].description
             })
           }
         }
+        //display
+        this.editModeTugas = false
         //refresh
         this.refreshTugas(`berhasil mengupdate tugas`, true)
       }catch(err){
@@ -387,16 +386,35 @@ export default {
         console.log("error")
         console.log(err)
       }
-    },    
+    },
+    async refreshTugas(ket, status){
+      try{
+        this.listTugas = (await axios.get("guru/listTugas/"+this.$route.params.id, {})).data.data
+        if(this.listTugas.length == 0) this.listTugas = false
+        //clone list tugas
+        this.listEditTugas = JSON.parse(JSON.stringify(this.listTugas))
+        //reset delete
+        this.listDeleteTugas = []        
+        //ket
+        if(ket) this.messageF(ket, status)
+        else this.messageF(`refresh tugas`, true)
+      }catch(err){
+        console.log("error")
+        console.log(err)
+      }
+    },
 
     //materi
     async saveAddMateri(){
       try{
         let addMateri = new FormData() 
-        for(let i = 0; this.listMateriBaru.length; i){
-          if(this.listMateriBaru[i].file){
-            addMateri.append('file', this.listMateriBaru[i].file)
-            addMateri.append('ketFile', this.listMateriBaru[i].ket || ' ')
+        while(this.listMateriBaru.length){
+          if(this.listMateriBaru[0].file){
+            addMateri.append('file', this.listMateriBaru[0].file)
+            addMateri.append('ketFile', this.listMateriBaru[0].ket || ' ')
+          }else{
+            this.messageF(`Masukkan File`, false)
+            throw 'Masukkan File'
           }
           this.listMateriBaru.splice(0,1)
         }
@@ -406,8 +424,8 @@ export default {
         this.displayAddMateriP = false
         //refresh
         this.refreshMateri(`berhasil menambahkan materi`, true)
+        this.listMateriBaru.push({file:'', ket:''})
       }catch(err){
-        this.messageF(`gagal menambahkan materi`, false)
         console.log("error")
         console.log(err)
       }
@@ -431,8 +449,8 @@ export default {
         //list materi
         this.listMateri = (await axios.get("guru/listFilePertemuan/"+this.$route.params.id, {})).data.data
         if(this.listMateri.length == 0) this.listMateri = false
-        this.listEditMateri = (await axios.get("guru/listFilePertemuan/"+this.$route.params.id, {})).data.data
-        if(this.listEditMateri.length == 0) this.listEditMateri = false
+        //clone list materi
+        this.listEditMateri = JSON.parse(JSON.stringify(this.listMateri))
         //ket
         if(ket) this.messageF(ket, status)
         else this.messageF(`refresh materi`, true)
@@ -461,7 +479,6 @@ export default {
         console.log(err)
       }
     },
-
     messageF(text, s){
       this.displayMessage = true
       this.messageStatus = s

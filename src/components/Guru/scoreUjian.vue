@@ -2,19 +2,51 @@
 <main class="d-flex flex-nowrap">
   <sidebar/>
   <div class="d-flex flex-column flex-fill p-3">
+    <div class="card" style="margin-bottom:3%">
+      <h3 class="card-header text-warning">Detail</h3>
+      <div class="card-body">
+        <table class="table table-borderless align-middle" v-if="ujianSatuan.name">
+          <tr>
+            <td style="width:10%">Name Ujian</td>
+            <td style="width:2%">:</td>
+            <td style="">{{ujianSatuan.name}}</td>
+          </tr>
+          <tr>
+            <td>Pengawas</td>
+            <td>:</td>
+            <td>{{ujianSatuan.pengawas}}</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td>:</td>
+            <td>{{ujianSatuan.time}}</td>
+          </tr>
+          <tr>
+            <td>Start Date</td>
+            <td>:</td>
+            <td>{{new Date(ujianSatuan.date).toUTCString()}}</td>
+          </tr>
+        </table>
+        <div v-else class="text-center w-100">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--tugas-->
     <div class="nav-tabs d-flex justify-content-between">
       <h3 class="nav-link active bg-light text-warning">Score Ujian</h3>
       <div class="d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Add Score</button>
-          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
-          <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="refreshUjian()">Reset</button>
+          <button type="button" class="btn-sm btn btn-outline-warning" :class="{'d-block':!editMode, 'd-none':editMode}" @click="editMode=true">Add Score</button>
+          <button type="button" class="btn-sm btn btn-outline-primary" :class="{'d-block':editMode, 'd-none':!editMode}" @click="editMode=false">Back</button>
+          <button type="button" class="btn-sm btn btn-outline-danger" :class="{'d-block':editMode, 'd-none':!editMode}" @click="refreshUjianSubmit()">Reset</button>
           <button type="button" class="btn-sm btn btn-outline-success" :class="{'d-block':editMode, 'd-none':!editMode}" @click="saveAddAcore()">Save</button>
         </div>
       </div>
     </div>
-    <table class="table table-hover" style="margin-bottom:2em">
+    <table class="table table-hover align-middle" style="margin-bottom:2em">
       <thead>
         <tr>
           <th scope="col"></th>
@@ -49,6 +81,10 @@
     </table>
   </div>
 </main>
+<!--modal message-->
+<div v-if="displayMessage" class="min-vw-100 position-fixed top-0 text-center" style="">
+  <div :class="{'alert-danger': !messageStatus, 'alert-success':messageStatus}" class="alert d-none d-lg-block">{{message}}</div>
+</div>
 </template>
 <script setup>
   import sidebar from './sidebar.vue';
@@ -59,17 +95,25 @@ export default {
   data: () => ({
     token:'',
     editMode:false,
+    ujianSatuan: {},
     listUjianSubmit:[],
     listUjianSubmitAdd:[],
+    //message
+    displayMessage:false,
   }),
   async mounted() {
     try{
+      //setup
       this.token = await this.$store.getters["auth/token"]
-      //ambil list anggota batch
       axios.defaults.headers.common['token'] = this.token;
+
+      //ambil data ujian
+      this.ujianSatuan = (await axios.get("guru/ujianSatuan/"+this.$route.params.id, {})).data.data
+
+      //ambil list ujian submit
       this.listUjianSubmit = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
       if(this.listUjianSubmit.length == 0) this.listUjianSubmit = false
-      this.listUjianSubmitAdd = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
+      this.listUjianSubmitAdd = JSON.parse(JSON.stringify(this.listUjianSubmit))
     }catch(err){
         console.log("error")
         console.log(err)
@@ -79,19 +123,19 @@ export default {
     async cekScore(i){
       try{
         this.listUjianSubmitAdd[i].score > 100 ? this.listUjianSubmitAdd[i].score = 100 : this.listUjianSubmitAdd[i].score = Number.parseInt(this.listUjianSubmitAdd[i].score)
-        console.log( Number.isSafeInteger(this.listUjianSubmitAdd[i].score) )
-        console.log( Number.parseInt(this.listUjianSubmitAdd[i].score) )
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
-    async refreshUjian(){
+    async refreshUjianSubmit(ket, status){
       try{
-        console.log("jalan")
         this.listUjianSubmit = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
-        this.listUjianSubmitAdd = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
         if(this.listUjianSubmit.length == 0) this.listUjianSubmit = false
+        this.listUjianSubmitAdd = JSON.parse(JSON.stringify(this.listUjianSubmit))
+        //ket
+        if(ket) this.messageF(ket, status)
+        else this.messageF(`Refresh Batch`, true)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -102,21 +146,26 @@ export default {
         //edit tugas
         for(let i = 0; i < this.listUjianSubmit.length; i++){
           if(this.listUjianSubmit[i].score != this.listUjianSubmitAdd[i].score){
-            console.log(this.listUjianSubmit[i])
-            console.log({[this.listUjianSubmitAdd[i].id]: this.listUjianSubmitAdd[i].score})
-            console.log(await axios.post("guru/addScoreUjian/"+this.listUjianSubmitAdd[i].id_ujian, {
+            await axios.post("guru/addScoreUjian/"+this.listUjianSubmitAdd[i].id_ujian, {
               [this.listUjianSubmitAdd[i].id]: this.listUjianSubmitAdd[i].score
-            }))
+            })
           }
         }
-        this.listUjianSubmit = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
-        this.listUjianSubmitAdd = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
-        if(this.listUjianSubmit.length == 0) this.listUjianSubmit = false
+        this.refreshUjianSubmit(`Berhasil Mengupdate Score Ujian Submit`, true)
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
+    messageF(text, s){
+      this.displayMessage = true
+      this.messageStatus = s
+      this.message = text || 'terjadi error'
+      setTimeout(()=>{
+        this.displayMessage = false
+        this.message = `terjadi error`
+      }, 3000)
+    }
   }
 }
 </script>
