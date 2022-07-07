@@ -50,9 +50,9 @@
             <!--name-->
             <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].name" class="form-control form-control-sm" type="text"></td>
             <td v-else>{{value.name}}</td>
-            <!--name-->
+            <!--date-->
             <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].date" class="form-control form-control-sm" type="date"></td>
-            <td v-else>{{new Date(value.start_date).toISOString().substring(0, 10)}}</td>
+            <td v-else class="">{{value.dateLocal}}</td>
             <!--name-->
             <td class="w-25" v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].pay" class="form-control form-control-sm text-center" type="number"></td>
             <td class="text-center w-25" v-else>{{value.pay}}</td>
@@ -112,8 +112,8 @@ import sidebar from "./sidebar.vue";
 </script>
 <script>
 import axios from "axios";
-// const tokenStore = 
-
+import moment from 'moment';
+moment().format();
 export default {
   data: () => ({
     editMode: false,
@@ -133,14 +133,18 @@ export default {
   }),
   async mounted() {
     try {
-      console.log( await this.$store.getters)
       axios.defaults.headers.common["token"] = await this.$store.getters["auth/token"]
       //ambil list batch
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
       if(this.listBatch.length == 0) this.listBatch = false
+      // console.log(this.listBatch)
+      for(let i = 0; i < this.listBatch.length; i++){
+        this.listBatch[i].dateLocal = moment(this.listBatch[i].date).format('DD MMMM YYYY')
+        this.listBatch[i].date = moment(this.listBatch[i].date).format('YYYY-MM-DD')
+      }
+      // console.log(this.listBatch)
       //clone list batch
       this.listEditBatch = JSON.parse(JSON.stringify(this.listBatch))
-      console.log(this.listBatch);
     } catch (err) {
       console.log("error");
       console.log(err);
@@ -160,6 +164,10 @@ export default {
         //get list Batch
         this.listBatch = (await axios.get("guru/listBatch", {})).data.data;
         if(this.listBatch.length == 0) this.listBatch = false
+        for(let i = 0; i < this.listBatch.length; i++){
+          this.listBatch[i].dateLocal = moment(this.listBatch[i].date).format('DD MMMM YYYY')
+          this.listBatch[i].date = moment(this.listBatch[i].date).format('YYYY-MM-DD')
+        }
         this.listEditBatch = JSON.parse(JSON.stringify(this.listBatch))
         //ket
         if(ket) this.messageF(ket, status)
@@ -189,6 +197,7 @@ export default {
         }
         this.displayAddBatch = false
         this.refreshBatch(`Berhasil Menambahkan Batch`, true)
+        this.listBatchBaru.push({name:'',pay:1000000,date:(new Date(new Date().valueOf() + 1000*60*60*24*28+31).toISOString().substring(0, 10))})
       }catch(err){
         if(err.response.data.error.original.routine == "_bt_check_unique") this.messageF(`batch ${this.listBatchBaru[0].name} sudah ada`, false)
         console.log("error")

@@ -28,7 +28,7 @@
             }" 
           >
             <div class="col d-flex flex-column position-static">
-              <div class="mb-1 text-muted">{{(new Date(value.date)).toDateString()}}</div>
+              <div class="mb-1 text-muted">{{value.date1}}</div>
               <p class="card-text mb-auto">{{value.name}} - {{value.ket}}</p>
             </div>
           </div>
@@ -146,6 +146,8 @@
 import axios from "axios";
 import FormData from "form-data";
 import numberToText from "number-to-text/converters/en-us";
+import moment from 'moment';
+moment().format();
 // import from ('number-to-text/converters/en-us')
 export default {
   data: () => ({
@@ -171,11 +173,12 @@ export default {
 
       //list anggota batch
       this.listPertemuan = (await axios.get("murid/dataPertemuan/", {})).data.data
-      this.listPertemuanC = JSON.parse(JSON.stringify(this.listPertemuan))
       if(this.listPertemuan.length == 0) this.listPertemuan = false
-
-      console.log(this.listPertemuan)
-      console.log(this.listPertemuanC)
+      for(let i = 0; i < this.listPertemuan.length; i++){
+        this.listPertemuan[i].date1 = moment(this.listPertemuan[i].date).format('dddd, DD MMMM YYYY, HH:mm')
+      }
+      //clone
+      this.listPertemuanC = JSON.parse(JSON.stringify(this.listPertemuan))
     }catch(err){
         console.log("error")
         console.log(err)

@@ -86,7 +86,9 @@
           <td v-else>{{value.keterangan}}</td>
           <!--date-->
           <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date()"><input v-model="listEditPertemuan[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
-          <td v-else>{{new Date(value.date).toUTCString().substring(0, 25)}}</td>
+          <td v-else>{{value.date}}</td>
+          <!--<td v-else>{{moment(value.date).format('dddd, DD-MMMM-YYYY, HH:mm')}}</td>-->
+          <!--<td v-else>{{new Date(value.date).toUTCString().substring(0, 25)}}</td>-->
           <!--delete-->
           <td style="width:5%;text-align:center" v-if="editMode && !listDeletePertemuan.includes(value.id_pertemuan)" @click="listDeletePertemuan.push(value.id_pertemuan)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
           <td style="width:5%;text-align:center" v-if="editMode && listDeletePertemuan.includes(value.id_pertemuan)" @click="listDeletePertemuan.splice(listDeletePertemuan.indexOf(value.id_pertemuan))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
@@ -169,6 +171,8 @@
 <script>
 import axios from "axios";
 import qs from 'qs';
+import moment from 'moment';
+moment().format();
 export default {
   data: () => ({
     //guru
@@ -204,6 +208,10 @@ export default {
       //list pertemuan
       this.listPertemuan = ( await axios.get("guru/listPertemuan", {})).data.data
       if(this.listPertemuan.length == 0) this.listPertemuan = false
+      for(let i = 0; i < this.listPertemuan.length; i++){
+        this.listPertemuan[i].date = moment(this.listPertemuan[i].date).format('dddd, DD MMMM YYYY, HH:mm')
+        this.listPertemuan[i].datetime = moment(this.listPertemuan[i].date).format('YYYY-MM-DDTHH:mm')
+      }
       //clone list pertemuan
       this.listEditPertemuan = JSON.parse(JSON.stringify(this.listPertemuan))
 
@@ -284,6 +292,7 @@ export default {
         }
         this.displayAddPertemuan = false
         this.refreshPertemuan(`Berhasil Menambahkan Pertemuan`, true)
+        this.listPertemuanBaru.push({name_batch: "", name_pertemuan:"", name_guru: this.username || '', keterangan:"", datetime:(new Date(new Date().valueOf() + 1000*60*60*31).toISOString().substring(0, 16))})
       }catch(err){
         console.log("error")
         console.log(err)
@@ -352,6 +361,10 @@ export default {
         //list pertemuan
         this.listPertemuan = ( await axios.get("guru/listPertemuan", {})).data.data
         if(this.listPertemuan.length == 0) this.listPertemuan = false
+        for(let i = 0; i < this.listPertemuan.length; i++){
+          this.listPertemuan[i].date = moment(this.listPertemuan[i].date).format('dddd, DD MMMM YYYY, HH:mm')
+          this.listPertemuan[i].datetime = moment(this.listPertemuan[i].date).format('YYYY-MM-DDTHH:mm')
+        }
         //clone list pertemuan
         this.listEditPertemuan = JSON.parse(JSON.stringify(this.listPertemuan))
         //ket
