@@ -49,6 +49,10 @@
     </table>
   </div>
 </main>
+<!--modal message-->
+<div v-if="displayMessage" class="min-vw-100 position-fixed top-0 text-center" style="">
+  <div :class="{'alert-danger': !messageStatus, 'alert-success':messageStatus}" class="alert d-none d-lg-block">{{message}}</div>
+</div>
 </template>
 <script setup>
   import sidebar from './sidebar.vue';
@@ -61,15 +65,19 @@ export default {
     editMode:false,
     listTugasSubmit:[],
     listTugasSubmitAdd:[],
+    //message
+    displayMessage:false,
   }),
   async mounted() {
     try{
+      //setup
       this.token = await this.$store.getters["auth/token"]
-      //ambil list anggota batch
       axios.defaults.headers.common['token'] = this.token;
+      //list tugas submit
       this.listTugasSubmit = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
       if(this.listTugasSubmit.length == 0) this.listTugasSubmit = false
-      this.listTugasSubmitAdd = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
+      //clone tugas submit
+      this.listTugasSubmitAdd = JSON.parse(JSON.stringify(this.listTugasSubmit))
     }catch(err){
         console.log("error")
         console.log(err)
@@ -79,18 +87,21 @@ export default {
     async cekScore(i){
       try{
         this.listTugasSubmitAdd[i].score > 100 ? this.listTugasSubmitAdd[i].score = 100 : this.listTugasSubmitAdd[i].score = Number.parseInt(this.listTugasSubmitAdd[i].score)
-        console.log( Number.isSafeInteger(this.listTugasSubmitAdd[i].score) )
-        console.log( Number.parseInt(this.listTugasSubmitAdd[i].score) )
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
-    async refreshTugas(){
+    async refreshTugas(ket, status){
       try{
-        this.listTugasSubmit = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
-        this.listTugasSubmitAdd = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
-        if(this.listTugasSubmit.length == 0) this.listTugasSubmit = false
+      //list tugas submit
+      this.listTugasSubmit = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
+      if(this.listTugasSubmit.length == 0) this.listTugasSubmit = false
+      //clone tugas submit
+      this.listTugasSubmitAdd = JSON.parse(JSON.stringify(this.listTugasSubmit))
+      //ket
+      if(ket) this.messageF(ket, status)
+      else this.messageF(`Refresh Tugas`, true)
       }catch(err){
         console.log("error")
         console.log(err)
@@ -101,20 +112,27 @@ export default {
         //edit tugas
         for(let i = 0; i < this.listTugasSubmit.length; i++){
           if(this.listTugasSubmit[i].score != this.listTugasSubmitAdd[i].score){
-            console.log(this.listTugasSubmit[i])
-            console.log(await axios.post("guru/addScoreTugas/"+this.listTugasSubmitAdd[i].id_tugas, {
+            await axios.post("guru/addScoreTugas/"+this.listTugasSubmitAdd[i].id_tugas, {
               [this.listTugasSubmitAdd[i].id]: this.listTugasSubmitAdd[i].score
-            }))
+            })
           }
         }
-        this.listTugasSubmit = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
-        this.listTugasSubmitAdd = (await axios.get("guru/listTugasSubmit/"+this.$route.params.id, {})).data.data
-        if(this.listTugasSubmit.length == 0) this.listTugasSubmit = false
+        this.refreshTugas(`Berhasil Mengupdate Score Tugas Submit`, true)
+        this.editMode = false
       }catch(err){
         console.log("error")
         console.log(err)
       }
     },
+    messageF(text, s){
+      this.displayMessage = true
+      this.messageStatus = s
+      this.message = text || 'terjadi error'
+      setTimeout(()=>{
+        this.displayMessage = false
+        this.message = `terjadi error`
+      }, 3000)
+    }
   }
 }
 </script>
