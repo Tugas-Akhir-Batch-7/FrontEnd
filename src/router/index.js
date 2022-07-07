@@ -62,20 +62,21 @@ const router = createRouter({
     {
       path: '/murid_dashboard',
       name: 'dashboard',
-<<<<<<< HEAD
-      component: () => import('../components/Murid/dashboard.vue')
-    },
-    {
-      path: '/murid/pertemuan',
-      name: 'murid_pertemuan',
-      component: () => import('../components/Murid/pertemuan.vue')
-=======
-      component: () => import('../components/Murid/Daftar.vue'),
+      component: () => import('../components/Murid/dashboard.vue'),
       meta: {
         requiresAuth: true,
         isMurid: true
       },
->>>>>>> e2fd1a3878dff3a9cbd1b4fe9e378c40aa1f7a09
+    },
+    {
+      path: '/murid/pertemuan',
+      name: 'murid_pertemuan',
+      component: () => import('../components/Murid/pertemuan.vue'),
+      // component: () => import('../components/Murid/Daftar.vue'),
+      meta: {
+        requiresAuth: true,
+        isMurid: true
+      },
     },
 
     //guru
@@ -161,6 +162,30 @@ const router = createRouter({
       },
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: {
+        requiresAuth: true,
+        allRole: true
+      },
+      children: [
+        {
+          path: 'edit',
+          name: 'profile_edit',
+          component: () => import('../components/ProfileEdit.vue'),
+        },
+        {
+          path: '',
+          name: 'profile_view',
+          component: () => import('../components/ProfileComponent.vue'),
+        },
+        
+      ],
+      
+    },
+   
+    {
       path: '/admin/',
       name: 'admin_dashboard',
       component: () => import('../views/AdminView.vue'),
@@ -210,13 +235,17 @@ const router = createRouter({
           name: 'admin_input_pembayaran',
           component: () => import('../components/Admin/input/InputPembayaran.vue')
         },
+        // {
+        //   path: 'profile',
+        //   name: 'admin_profile',
+        //   component: () => import('../components/Admin/ProfileComponent.vue')
+
+        // }
 
 
       ]
     },
-
-
-
+   
   ]
 })
 
@@ -245,6 +274,10 @@ router.beforeEach((to, from, next) => {
     if (store.getters['auth/isLoggedIn']) {
       const role = store.getters['auth/user'].role
       // console.log("if pertama loggedin")
+      if(to.meta.allRole) {
+        next()
+        return
+      }
       if (to.meta.isMurid && role === 'murid') {
         next()
         return

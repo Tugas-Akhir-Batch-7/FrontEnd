@@ -42,6 +42,27 @@ class AuthService {
             console.log(error)
         }
     }
+    async updateProfile(form) {
+        try {
+            const response = await axios.post('/user/profile', form, {
+                headers: await authHeader()
+            })
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getProfile () {
+        try {
+            const response = await axios.get('/user/profile', {
+                headers: await authHeader()
+            })
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default new AuthService()

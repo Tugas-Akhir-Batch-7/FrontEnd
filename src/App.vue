@@ -1,5 +1,11 @@
 <style>
 @import "./assets/style.css";
+
+a.nav-profile {
+  color: #525252;
+  /* font-size: 100px; */
+  text-decoration: none;
+}
 </style>
 
 <template>
@@ -36,9 +42,11 @@
       </div>
       <!-- user profile -->
       <div v-else class="user_profile">
-        <div id="user_pfp"></div>
+        <div id="user_pfp">
+          <!-- <img src="https://via.placeholder.com/100" alt="" /> -->
+        </div>
         <div id="user_name">
-          <p>{{ currentName }}</p>
+          <router-link exact-active-class="" class="nav-profile" to="/profile">{{ currentName }}</router-link>
           <p>{{ currentBatch }}</p>
           <button @click="handleLogout" class="btn btn-secondary">Logout</button>
         </div>
