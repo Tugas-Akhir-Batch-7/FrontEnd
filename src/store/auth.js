@@ -58,16 +58,17 @@ export default {
             const user  = await AuthService.register(form)
             console.log(user)
         },
-        // async updateProfile({ commit, dispatch }, form) {
-        //     const user = await AuthService.updateProfile(form)
-        //     console.log(user)
-        //     dispatch('setProfile', user)
-        // },
-        async setProfile ({ commit }) {
-            const user = await AuthService.getProfile()
-            console.log(user)
-            commit('SET_USER', user.data)
+        async updateProfile({ dispatch }, form) {
+            const user = await AuthService.updateProfile(form)
+            // console.log(user)
+            await dispatch('setProfile', user)
+        },
 
+        async setProfile ({ commit }, user) {
+            // const user = await AuthService.getProfile()
+            // console.log('masuk set profile')
+            // console.log(user)
+            await commit('SET_USER', user.data)
         }
     },
 }

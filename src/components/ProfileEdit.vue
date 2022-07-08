@@ -55,23 +55,20 @@ export default {
       const res = await axios.get("/user/profile", {
         headers: await authHeader(),
       });
-      console.log(res.data);
+      // console.log(res.data);
       Object.assign(profile, res.data.data);
       // this.profile = data.data;
     };
 
     const updateProfile = async () => {
-      const res = await axios.put("/user/profile", profile, {
-        headers: await authHeader(),
-      });
-    //   console.log(res.data);
-      store.dispatch("auth/setProfile")
-      route.push('/profile')
+      await store.dispatch("auth/updateProfile", profile);
+
+      await route.push('/profile')
     //   console.log(res.data);
     };
     onMounted(async () => {
       fetchProfile();
-      console.log(profile);
+      // console.log(profile);
     });
     return {
       profile,

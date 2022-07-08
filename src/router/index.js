@@ -57,6 +57,17 @@ const router = createRouter({
       name: 'forgotpwd2',
       component: () => import('../components/PasswordRecovery/Step2.vue')
     },
+    {
+      path: '/forgot_password3',
+      name: 'forgotpwd3',
+      component: () => import('../components/PasswordRecovery/Step3.vue')
+    },
+
+    {
+      path: '/reset_password',
+      name: 'reset_password',
+      component: () => import('../views/ResetPasswordView.vue')
+    },
 
     //murid
     {

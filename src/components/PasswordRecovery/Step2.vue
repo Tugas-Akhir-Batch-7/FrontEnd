@@ -21,13 +21,14 @@
                 <!-- <label for="email" style="margin-left: 5%;">Enter your email here</label> -->
                 <input class="fields" type="email" name="email" id="text" placeholder="Verification Code">
             </div>
+            
 
         </form>
 
             <br>
 
-            <button class="buttons" id="text">Verify Your Account</button>
-        
+            <router-link to="/forgot_password3" class="buttons" id="text">Verify Your Account</router-link>
+
         </div>
 
     </div>
