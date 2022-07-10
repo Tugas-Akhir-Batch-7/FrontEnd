@@ -10,15 +10,26 @@
     </div>
     
     <!--loading-->
-    <div v-if="listPertemuan.length == 0" class="text-center p-3">
-      <div class="spinner-border text-warning" role="status">
+    <div class="accordion" v-if="listPertemuan.length == 0" v-for="i in [0, 0, 0, 0, 0, 0, 0]">
+      <!--<div class="spinner-border text-warning" role="status">
+    <div v-if="listPertemuan.length == 0" class="accordion text-center p-3">
         <span class="visually-hidden">Loading...</span>
+      </div>-->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <div class="collapsed p-3">
+            <div class="col d-flex flex-column position-static">
+              <div class="mb-2 " style="border-radius: 10px; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">none</div>
+              <p class="card-text mb-auto" style="border-radius: 10px; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">none</p>
+            </div>
+          </div>
+        </h2>
       </div>
     </div>
     <div v-if="!listPertemuan" class="text-center p-3">Data Tidak Tersedia</div>
 
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-      <div v-for="(value, key) in listPertemuan" class="accordion-item">
+    <div class="accordion">
+      <div v-for="(value, key) in listPertemuanView" class="accordion-item">
         <h2 class="accordion-header" v-bind:id="'panelsStayOpen-'+numberToText.convertToText(key+1).replace(' ','')">
           <div class="accordion-button collapsed text-dark bg-opacity-10" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')" aria-expanded="false" v-bind:aria-controls="'#panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')"
             :class="{
@@ -130,6 +141,37 @@
       </div>
       <!--loading-->
     </div>
+    <nav aria-label="Page navigation example" style="margin-top:2%" v-if="listPertemuan.length > 0">
+      <ul class="pagination justify-content-center">
+        <!--<li class="page-item" :class="{'disabled': page==1}">
+          <button class="page-link" @click="navigation('previous')">&lt</button>
+        </li>-->
+        <li class="page-item" v-if="page!=1">
+          <button class="page-link text-warning" @click="navigation('first')">1</button>
+        </li>
+        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page>2">
+          <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
+        </li>
+        <li class="page-item active">
+          <button class="page-link bg-warning border border-warning">{{page}}</button>
+          </li>
+        <li class="page-item" v-if="(page+1)*jumlah < listPertemuan.length">
+          <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
+          </li>
+        <li class="" v-if="(page+1)*jumlah < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page*jumlah < listPertemuan.length">
+          <button class="page-link text-warning" @click="navigation('last')">{{
+            listPertemuan.length % jumlah == 0 ? 
+              (listPertemuan.length / jumlah)  : 
+              ((listPertemuan.length - (listPertemuan.length % jumlah)) / jumlah) + 1
+          }}</button>
+        </li>
+        <!--<li class="page-item" :class="{'disabled': page*jumlah >= listPertemuan.length}">
+          <button class="page-link" @click="navigation('next')">></button>
+        </li>-->
+      </ul>
+    </nav>
   </div>
 </main>
 
@@ -154,6 +196,9 @@ export default {
     //pertemuan
     listPertemuan:[],
     listPertemuanC:[],
+    listPertemuanView:[],
+    page:1,
+    jumlah:10,
     //tugas
     listTugasBaru: {},
     displayAddTugasP:false,
@@ -179,12 +224,40 @@ export default {
       }
       //clone
       this.listPertemuanC = JSON.parse(JSON.stringify(this.listPertemuan))
+      this.listPertemuanView = JSON.parse(JSON.stringify(this.listPertemuan.slice(0, this.jumlah)))
+
     }catch(err){
-        console.log("error")
-        console.log(err)
-      }
+      console.log("error")
+      console.log(err)
+    }
   },
   methods:{
+    //navigation
+    navigation(e){
+      switch(e){
+        case 'previous':
+          this.listPertemuanView = this.listPertemuan.slice((this.page - 2) * this.jumlah,( this.page - 1) * this.jumlah)
+          this.page -= 1
+          break
+        case 'next':
+          this.listPertemuanView = this.listPertemuan.slice(this.page * this.jumlah, this.page * this.jumlah + this.jumlah)
+          this.page += 1
+          break
+        case 'first':
+          this.listPertemuanView = this.listPertemuan.slice(0, this.jumlah)
+          this.page = 1
+          break
+        case 'last':
+          let i = this.listPertemuan.length % this.jumlah == 0 ? 
+            this.listPertemuan.length - this.jumlah: 
+            this.listPertemuan.length - (this.listPertemuan.length % this.jumlah)
+          this.listPertemuanView = this.listPertemuan.slice(i, i + this.jumlah)
+          this.page = (this.listPertemuan.length - (this.listPertemuan.length % this.jumlah)) / this.jumlah + 1
+          break
+        case '':
+          break
+      }
+    },
     //tugas
     async updateSubmitTugas(idPertemuan, idTugas, ket){
       try{

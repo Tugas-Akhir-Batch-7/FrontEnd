@@ -20,20 +20,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="listUjian.length == 0">
-          <td colspan="10">
+        <tr v-if="listUjian.length == 0" v-for="i in [0, 0, 0, 0, 0, 0, 0]">
+          <!--<td colspan="10">
             <div class="text-center">
               <div class="spinner-border text-warning" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
-          </td>
+          </td>-->
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
         </tr>
         <tr v-if="!listUjian">
           <td colspan="10" class="text-center">Data Tidak Tersedia</td>
         </tr>
-        <tr v-for="(value, key) in listUjian">
-          <td style="width:5%; text-align:center">{{key+1}}</td>
+        <tr v-for="(value, key) in listUjianView">
+          <td style="width:5%; text-align:center">{{page*jumlah-jumlah+key+1}}</td>
           <td>{{value.name}}</td>
           <td>{{value.pengawas}}</td>
           <td>{{value.date1}}</td>
@@ -62,6 +70,37 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example" style="margin-top:2%" v-if="listUjian.length > 0">
+      <ul class="pagination justify-content-center">
+        <!--<li class="page-item" :class="{'disabled': page==1}">
+          <button class="page-link" @click="navigation('previous')">&lt</button>
+        </li>-->
+        <li class="page-item" v-if="page!=1">
+          <button class="page-link text-warning" @click="navigation('first')">1</button>
+        </li>
+        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page>2">
+          <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
+        </li>
+        <li class="page-item active">
+          <button class="page-link bg-warning border border-warning">{{page}}</button>
+          </li>
+        <li class="page-item" v-if="(page+1)*jumlah < listUjian.length">
+          <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
+          </li>
+        <li class="" v-if="(page+1)*jumlah < listUjian.length"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page*jumlah < listUjian.length">
+          <button class="page-link text-warning" @click="navigation('last')">{{
+            listUjian.length % jumlah == 0 ? 
+              (listUjian.length / jumlah)  : 
+              ((listUjian.length - (listUjian.length % jumlah)) / jumlah) + 1
+          }}</button>
+        </li>
+        <!--<li class="page-item" :class="{'disabled': page*jumlah >= listPertemuan.length}">
+          <button class="page-link" @click="navigation('next')">></button>
+        </li>-->
+      </ul>
+    </nav>
   </div>
 </main>
 <!--modal message-->
@@ -81,6 +120,9 @@ export default {
   data: () => ({
     //absen
     listUjian:[],
+    listUjianView:[],
+    page:1,
+    jumlah:15,
     editMode: false,
     //message
     displayMessage: false
@@ -94,12 +136,40 @@ export default {
       for(let i = 0; i < this.listUjian.length; i++){
         this.listUjian[i].date1 = moment(this.listUjian[i].date).format('dddd, DD MMMM YYYY, HH:mm')
       }
+      console.log(this.listUjian)
+      this.listUjianView = JSON.parse(JSON.stringify(this.listUjian.slice(0, this.jumlah)))
     }catch(err){
       console.log("error")
       console.log(err)
     }
   },
   methods:{
+    //navigation
+    navigation(e){
+      switch(e){
+        case 'previous':
+          this.listUjianView = this.listUjian.slice((this.page - 2) * this.jumlah,( this.page - 1) * this.jumlah)
+          this.page -= 1
+          break
+        case 'next':
+          this.listUjianView = this.listUjian.slice(this.page * this.jumlah, this.page * this.jumlah + this.jumlah)
+          this.page += 1
+          break
+        case 'first':
+          this.listUjianView = this.listUjian.slice(0, this.jumlah)
+          this.page = 1
+          break
+        case 'last':
+          let i = this.listUjian.length % this.jumlah == 0 ? 
+            this.listUjian.length - this.jumlah: 
+            this.listUjian.length - (this.listUjian.length % this.jumlah)
+          this.listUjianView = this.listUjian.slice(i, i + this.jumlah)
+          this.page = (this.listUjian.length - (this.listUjian.length % this.jumlah)) / this.jumlah + 1
+          break
+        case '':
+          break
+      }
+    },
     async updateSubmitTugas(i){
       try{
         //kirim data
