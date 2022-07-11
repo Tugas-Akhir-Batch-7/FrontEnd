@@ -29,22 +29,29 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="listUjian.length == 0">
-          <td colspan="10">
-            <div class="text-center">
-              <div class="spinner-border text-warning" role="status">
-                <span class="visually-hidden">Loading...</span>
+          <tr v-if="listUjian.length == 0" v-for="i in jumlah">
+            <!--<td colspan="10">
+              <div class="text-center">
+                <div class="spinner-border text-warning" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
+            </td>-->
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          </tr>
         <tr v-if="!listUjian">
           <td colspan="10" class="text-center">Data Tidak Tersedia</td>
         </tr>
-        <tr v-for="(value, key) in listUjian" :class="{'table-danger':editMode && listDeleteUjian.includes(value.id)}">
-          <td style="width:5%; text-align:center">{{key+1}}</td>
-          <td v-if="!editMode" style="width:5%; text-align:center">
-            <button class="btn btn-sm btn-outline-warning" type="button" @click="scoreUjian(value.id)">
+        <tr v-if="listUjian.length" v-for="(value, key) in jumlah" :class="{'table-danger':editMode && listDeleteUjian.includes(value.id)}">
+          <td v-if="listUjian[keyPage() + key]" style="width:5%; text-align:center">{{keyPage() + key + 1}}</td>
+          <td v-if="!editMode && listUjian[keyPage() + key]" style="width:5%; text-align:center">
+            <button class="btn btn-sm btn-outline-warning" type="button" @click="scoreUjian(listUjian[keyPage() + key].id)">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
                 <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
                 <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
@@ -52,25 +59,56 @@
             </button>
           </td>
           <!--name batch-->
-          <td>{{value.name_batch}}</td>
+          <td v-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].name_batch}}</td>
           <!--name-->
-          <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].name" class="form-control form-control-sm" type="text"></td>
-          <td v-else>{{value.name}}</td>
+          <td v-if="editMode && listUjian[keyPage() + key] && listEditUjian[key] && new Date(listUjian[keyPage() + key].date) > new Date()"><input v-model="listEditUjian[key].name" class="form-control form-control-sm" type="text"></td>
+          <td v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].name}}</td>
           <!--pengawas-->
-          <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].pengawas" class="form-control form-control-sm" type="text"></td>
-          <td v-else>{{value.pengawas}}</td>
+          <td v-if="editMode && listUjian[keyPage() + key] && listEditUjian[key] && new Date(listUjian[keyPage() + key].date) > new Date()"><input v-model="listEditUjian[key].pengawas" class="form-control form-control-sm" type="text"></td>
+          <td v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].pengawas}}</td>
           <!--time-->
-          <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].time" class="form-control form-control-sm" type="time"></td>
-          <td class="text-center" v-else>{{value.time}}</td>
+          <td v-if="editMode && listUjian[keyPage() + key] && listEditUjian[key] && new Date(listUjian[keyPage() + key].date) > new Date()"><input v-model="listEditUjian[key].time" class="form-control form-control-sm" type="time"></td>
+          <td class="text-center" v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].time}}</td>
           <!--date-->
-          <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
-          <td class="text-center" v-else>{{value.date1}}</td>
+          <td v-if="editMode && listUjian[keyPage() + key] && listEditUjian[key] && new Date(listUjian[keyPage() + key].date) > new Date()"><input v-model="listEditUjian[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
+          <td class="text-center" v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].date1}}</td>
           <!--delete-->
-          <td style="width:5%;text-align:center" v-if="editMode && !listDeleteUjian.includes(value.id)" @click="listDeleteUjian.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
-          <td style="width:5%;text-align:center" v-if="editMode && listDeleteUjian.includes(value.id)" @click="listDeleteUjian.splice(listDeleteUjian.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listUjian[keyPage() + key] && !listDeleteUjian.includes(listUjian[keyPage() + key].id)" @click="listDeleteUjian.push(listUjian[keyPage() + key].id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listUjian[keyPage() + key] && listDeleteUjian.includes(listUjian[keyPage() + key].id)" @click="listDeleteUjian.splice(listDeleteUjian.indexOf(listUjian[keyPage() + key].id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example" style="margin-top:2%" v-if="listUjian.length > 0">
+      <ul class="pagination justify-content-center">
+        <!--<li class="page-item" :class="{'disabled': page==1}">
+          <button class="page-link" @click="navigation('previous')">&lt</button>
+        </li>-->
+        <li class="page-item" v-if="page!=1">
+          <button class="page-link text-warning" @click="navigation('first')">1</button>
+        </li>
+        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page>2">
+          <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
+        </li>
+        <li class="page-item active">
+          <button class="page-link bg-warning border border-warning">{{page}}</button>
+          </li>
+        <li class="page-item" v-if="(page+1)*jumlah.length < listUjian.length">
+          <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
+          </li>
+        <li class="" v-if="(page+1)*jumlah.length < listUjian.length"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page*jumlah.length < listUjian.length">
+          <button class="page-link text-warning" @click="navigation('last')">{{
+            listUjian.length % jumlah.length == 0 ? 
+              (listUjian.length / jumlah.length)  : 
+              ((listUjian.length - (listUjian.length % jumlah.length)) / jumlah.length) + 1
+          }}</button>
+        </li>
+        <!--<li class="page-item" :class="{'disabled': page*jumlah >= listPertemuan.length}">
+          <button class="page-link" @click="navigation('next')">></button>
+        </li>-->
+      </ul>
+    </nav>
   </div>
 </main>
 
@@ -154,6 +192,8 @@ export default {
     displayAddUjian: false,
     modeAddBatch: false,
     editMode: false,
+    page:1,
+    jumlah:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     //message
     message: 'terjadi error',
     messageStatus: true,
@@ -178,13 +218,41 @@ export default {
       this.listEditUjian = JSON.parse(JSON.stringify(this.listUjian))
       //get list batch
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data
-      if(this.listBatch.length == 0) this.listBatch = false      
+      if(this.listBatch.length == 0) this.listBatch = false
+
+      console.log(this.listUjian)
     }catch(err){
         console.log("error")
         console.log(err)
       }
   },
   methods:{
+    //navigation
+    keyPage(){
+      return this.page * this.jumlah.length - this.jumlah.length
+      // return 1
+    },
+    navigation(e){
+      switch(e){
+        case 'previous':
+          this.page -= 1
+          break
+        case 'next':
+          this.page += 1
+          break
+        case 'first':
+          this.page = 1
+          break
+        case 'last':
+          this.page =  this.listUjian.length % this.jumlah.length == 0 ? 
+            (this.listUjian.length / this.jumlah.length)  : 
+            ((this.listUjian.length - (this.listUjian.length % this.jumlah.length)) / this.jumlah.length) + 1
+          // this.page = (this.listUjian.length - (this.listUjian.length % this.jumlah.length)) / this.jumlah.length + 1
+          break
+        case '':
+          break
+      }
+    },
     async modeAddBatchF(i){
       try{
         setTimeout(()=>{

@@ -30,8 +30,8 @@
 
     <div class="accordion">
       <div v-if="listPertemuan.length" v-for="(value, key) in jumlah" class="accordion-item">
-        <h2 v-if="listPertemuan[keyPage() + key]" class="accordion-header" v-bind:id="'panelsStayOpen-'+numberToText.convertToText(key+1).replace(' ','')">
-          <div class="accordion-button collapsed text-dark bg-opacity-10" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')" aria-expanded="false" v-bind:aria-controls="'#panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')"
+        <h2 v-if="listPertemuan[keyPage() + key]" class="accordion-header" v-bind:id="'panelsStayOpen-'+numberToText.convertToText(keyPage() + key+1).replace(' ','')">
+          <div class="accordion-button collapsed text-dark bg-opacity-10" type="button" data-bs-toggle="collapse" v-bind:data-bs-target="'#panelsStayOpen-collapse'+numberToText.convertToText(keyPage() + key+1).replace(' ','')" aria-expanded="false" v-bind:aria-controls="'#panelsStayOpen-collapse'+numberToText.convertToText(keyPage() + key+1).replace(' ','')"
             :class="{
               'bg-light':new Date(listPertemuan[keyPage() + key].date) >= new Date(),
               'bg-success':listPertemuan[keyPage() + key].absen,
@@ -44,7 +44,7 @@
             </div>
           </div>
         </h2>
-        <div v-if="new Date(listPertemuan[keyPage() + key].date) <= new Date()" v-bind:id="'panelsStayOpen-collapse'+numberToText.convertToText(key+1).replace(' ','')" class="accordion-collapse collapse" v-bind:aria-labelledby="'panelsStayOpen-heading'+numberToText.convertToText(key+1).replace(' ','')">
+        <div v-if="new Date(listPertemuan[keyPage() + key].date) <= new Date()" v-bind:id="'panelsStayOpen-collapse'+numberToText.convertToText(keyPage() + key+1).replace(' ','')" class="accordion-collapse collapse" v-bind:aria-labelledby="'panelsStayOpen-heading'+numberToText.convertToText(keyPage() + key+1).replace(' ','')">
           <div class="accordion-body">
             <div v-if="listPertemuan[keyPage() + key].tugas">
               <div class="">

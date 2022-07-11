@@ -28,26 +28,33 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="listPertemuan.length == 0">
-          <td colspan="10">
+        <tr v-if="listPertemuan.length == 0" v-for="i in jumlah">
+          <!--<td colspan="10">
             <div class="text-center">
               <div class="spinner-border text-warning" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
-          </td>
+          </td>-->
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
         </tr>
-        <tr v-if="!listPertemuan">
+        <tr v-else-if="!listPertemuan">
           <td colspan="15" class="text-center">Data Tidak Tersedia</td>
         </tr>
-        <tr v-for="(value, key) in listPertemuan" :class="{
+        <tr v-else-if="listPertemuan.length" v-for="(value, key) in jumlah" :class="{
           'table-light':value.name_guru == username && new Date(value.date) <= new Date(),
           'table-warning':value.name_guru == username && new Date(value.date) > new Date(),
           'table-danger':editMode && listDeletePertemuan.includes(value.id_pertemuan)
         }">
-          <td style="width:5%; text-align:center">{{key+1}}</td>
-          <td v-if="!editMode" style="width:5%; text-align:center">
-            <button class="btn btn-sm btn-outline-warning" type="button" @click="detailPertemuan(value.id_pertemuan)">
+          <td v-if="listPertemuan[keyPage()+key]" style="width:5%; text-align:center">{{keyPage()+key+1}}</td>
+          <td v-if="!editMode && listPertemuan[keyPage()+key]" style="width:5%; text-align:center">
+            <button class="btn btn-sm btn-outline-warning" type="button" @click="detailPertemuan(listPertemuan[keyPage()+key].id_pertemuan)">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
                 <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
                 <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
@@ -55,9 +62,9 @@
             </button>
           </td>
           <!--name batch-->
-          <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date() && listBatchA.includes(value.name_batch)">
-            <input v-model="listEditPertemuan[key].name_batch" @focus="value.modeEditBatch=true" @blur="modeHover(key, 'edit', 'batch')" class="form-control form-control-sm" style="z-index:2" type="text">
-            <div class="list-group position-absolute overflow-auto" :class="{'d-none':!value.modeEditBatch, 'd-block':value.modeEditBatch}" style="z-index:3 height:100px">
+          <td v-if="editMode && listPertemuan[keyPage()+key] && listEditPertemuan[key] && new Date(listPertemuan[keyPage()+key].date) > new Date() && listBatchA.includes(listPertemuan[keyPage()+key].name_batch)">
+            <input v-model="listEditPertemuan[key].name_batch" @focus="listPertemuan[keyPage()+key].modeEditBatch=true" @blur="modeHover(key, 'edit', 'batch')" class="form-control form-control-sm" style="z-index:2" type="text">
+            <div class="list-group position-absolute overflow-auto" :class="{'d-none':!listPertemuan[keyPage()+key].modeEditBatch, 'd-block':listPertemuan[keyPage()+key].modeEditBatch}" style="z-index:3 height:100px">
               <div  style="height:30vh; width:12vw">
                 <div v-for="(value1, key1) in listBatch">
                   <div v-if="!listEditPertemuan[key].name_batch || value1.name.toLowerCase().includes(listEditPertemuan[key].name_batch.toLowerCase())" @click="listEditPertemuan[key].name_batch = value1.name" class="list-group-item list-group-item-action">{{value1.name}}</div>
@@ -65,14 +72,14 @@
               </div>
             </div>
           </td>
-          <td v-else>{{value.name_batch}}</td>
+          <td v-else-if="listPertemuan[keyPage()+key]">{{listPertemuan[keyPage()+key].name_batch}}</td>
           <!--name pertemuan-->
-          <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date()"><input v-model="listEditPertemuan[key].name_pertemuan" class="form-control form-control-sm" type="text"></td>
-          <td v-else>{{value.name_pertemuan}}</td>
+          <td v-if="editMode && listPertemuan[keyPage()+key] && listEditPertemuan[key] && new Date(listPertemuan[keyPage()+key].date) > new Date()"><input v-model="listEditPertemuan[key].name_pertemuan" class="form-control form-control-sm" type="text"></td>
+          <td v-else-if="listPertemuan[keyPage()+key]">{{listPertemuan[keyPage()+key].name_pertemuan}}</td>
           <!--name guru-->
-          <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date() && listBatchA.includes(value.name_batch)">
-            <input v-model="listEditPertemuan[key].name_guru" @focus="value.modeEditGuru=true" @blur="modeHover(key, 'edit', 'guru')" class="form-control form-control-sm" style="z-index:2" type="text">
-            <div class="list-group position-absolute overflow-auto" :class="{'d-none':!value.modeEditGuru, 'd-block':value.modeEditGuru}" style="z-index:3 height:100px">
+          <td v-if="editMode && listPertemuan[keyPage()+key] && listEditPertemuan[key] && new Date(listPertemuan[keyPage()+key].date) > new Date() && listBatchA.includes(listPertemuan[keyPage()+key].name_batch)">
+            <input v-model="listEditPertemuan[key].name_guru" @focus="listPertemuan[keyPage()+key].modeEditGuru=true" @blur="modeHover(key, 'edit', 'guru')" class="form-control form-control-sm" style="z-index:2" type="text">
+            <div class="list-group position-absolute overflow-auto" :class="{'d-none':!listPertemuan[keyPage()+key].modeEditGuru, 'd-block':listPertemuan[keyPage()+key].modeEditGuru}" style="z-index:3 height:100px">
               <div  style="height:30vh; width:12vw">
                 <div v-for="(value1, key1) in listGuru">
                   <div v-if="!listEditPertemuan[key].name_guru || value1.name.toLowerCase().includes(listEditPertemuan[key].name_guru.toLowerCase())" @click="listEditPertemuan[key].name_guru = value1.name" class="list-group-item list-group-item-action">{{value1.name}}</div>
@@ -80,21 +87,52 @@
               </div>
             </div>
           </td>
-          <td v-else>{{value.name_guru}}</td>
+          <td v-else-if="listPertemuan[keyPage()+key]">{{listPertemuan[keyPage()+key].name_guru}}</td>
           <!--keterangan-->
-          <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date()"><input v-model="listEditPertemuan[key].keterangan" class="form-control form-control-sm" type="text"></td>
-          <td v-else>{{value.keterangan}}</td>
+          <td v-if="editMode && listPertemuan[keyPage()+key] && listEditPertemuan[key] && new Date(listPertemuan[keyPage()+key].date) > new Date()"><input v-model="listEditPertemuan[key].keterangan" class="form-control form-control-sm" type="text"></td>
+          <td v-else-if="listPertemuan[keyPage()+key]">{{listPertemuan[keyPage()+key].keterangan}}</td>
           <!--date-->
-          <td v-if="editMode && listEditPertemuan[key] && new Date(value.date) > new Date()"><input v-model="listEditPertemuan[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
-          <td v-else>{{value.date}}</td>
-          <!--<td v-else>{{moment(value.date).format('dddd, DD-MMMM-YYYY, HH:mm')}}</td>-->
-          <!--<td v-else>{{new Date(value.date).toUTCString().substring(0, 25)}}</td>-->
+          <td v-if="editMode && listPertemuan[keyPage()+key] && listEditPertemuan[key] && new Date(listPertemuan[keyPage()+key].date) > new Date()"><input v-model="listEditPertemuan[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
+          <td v-else-if="listPertemuan[keyPage()+key]">{{listPertemuan[keyPage()+key].date}}</td>
+          <!--<td v-else>{{moment(listPertemuan[keyPage()+key].date).format('dddd, DD-MMMM-YYYY, HH:mm')}}</td>-->
+          <!--<td v-else>{{new Date(listPertemuan[keyPage()+key].date).toUTCString().substring(0, 25)}}</td>-->
           <!--delete-->
-          <td style="width:5%;text-align:center" v-if="editMode && !listDeletePertemuan.includes(value.id_pertemuan)" @click="listDeletePertemuan.push(value.id_pertemuan)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
-          <td style="width:5%;text-align:center" v-if="editMode && listDeletePertemuan.includes(value.id_pertemuan)" @click="listDeletePertemuan.splice(listDeletePertemuan.indexOf(value.id_pertemuan))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listPertemuan[keyPage()+key] && !listDeletePertemuan.includes(listPertemuan[keyPage()+key].id_pertemuan)" @click="listDeletePertemuan.push(listPertemuan[keyPage()+key].id_pertemuan)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listPertemuan[keyPage()+key] && listDeletePertemuan.includes(listPertemuan[keyPage()+key].id_pertemuan)" @click="listDeletePertemuan.splice(listDeletePertemuan.indexOf(listPertemuan[keyPage()+key].id_pertemuan))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example" style="margin-top:2%" v-if="listPertemuan.length > 0">
+      <ul class="pagination justify-content-center">
+        <!--<li class="page-item" :class="{'disabled': page==1}">
+          <button class="page-link" @click="navigation('previous')">&lt</button>
+        </li>-->
+        <li class="page-item" v-if="page!=1">
+          <button class="page-link text-warning" @click="navigation('first')">1</button>
+        </li>
+        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page>2">
+          <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
+        </li>
+        <li class="page-item active">
+          <button class="page-link bg-warning border border-warning">{{page}}</button>
+          </li>
+        <li class="page-item" v-if="(page+1)*jumlah.length < listPertemuan.length">
+          <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
+          </li>
+        <li class="" v-if="(page+1)*jumlah.length < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
+        <li class="page-item" v-if="page*jumlah.length < listPertemuan.length">
+          <button class="page-link text-warning" @click="navigation('last')">{{
+            listPertemuan.length % jumlah.length == 0 ? 
+              (listPertemuan.length / jumlah.length)  : 
+              ((listPertemuan.length - (listPertemuan.length % jumlah.length)) / jumlah.length) + 1
+          }}</button>
+        </li>
+        <!--<li class="page-item" :class="{'disabled': page*jumlah >= listPertemuan.length}">
+          <button class="page-link" @click="navigation('next')">></button>
+        </li>-->
+      </ul>
+      </nav>
   </div>
 </main>
     
@@ -192,6 +230,8 @@ export default {
     ],
     editMode: false,
     displayAddPertemuan: false,
+    page:1,
+    jumlah:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     //message
     message: 'terjadi error',
     messageStatus: true,
@@ -226,12 +266,40 @@ export default {
       if(this.listGuru.length == 0) this.listGuru = false
       //name guru
       this.nameGuru = await this.$store.getters["auth/user"].name
+
+      console.log(this.listPertemuan)
     }catch(err){
         console.log("error")
         console.log(err)
       }
   },
   methods:{
+    //navigation
+    keyPage(){
+      return this.page * this.jumlah.length - this.jumlah.length
+      // return 1
+    },
+    navigation(e){
+      switch(e){
+        case 'previous':
+          this.page -= 1
+          break
+        case 'next':
+          this.page += 1
+          break
+        case 'first':
+          this.page = 1
+          break
+        case 'last':
+          this.page =  this.listPertemuan.length % this.jumlah.length == 0 ? 
+            (this.listPertemuan.length / this.jumlah.length)  : 
+            ((this.listPertemuan.length - (this.listPertemuan.length % this.jumlah.length)) / this.jumlah.length) + 1
+          // this.page = (this.listPertemuan.length - (this.listPertemuan.length % this.jumlah.length)) / this.jumlah.length + 1
+          break
+        case '':
+          break
+      }
+    },
     async saveAddPertemuan(){
       try{
         let idBatch = null
@@ -302,9 +370,11 @@ export default {
       try{
         let idBatch, idGuru
         //delete tugas
+        console.log(this.listDeletePertemuan)
         for(let i = 0; i < this.listDeletePertemuan.length; i++){
-          await axios.delete("guru/deletePertemuan/"+this.listDeletePertemuan[i], {})
+          console.log(await axios.delete("guru/deletePertemuan/"+this.listDeletePertemuan[i]))
         }
+        this.listDeletePertemuan = []
         //edit tugas
         for(let i = 0; i < this.listEditPertemuan.length; i++){
           if(this.listEditPertemuan[i].name_batch != this.listPertemuan[i].name_batch || 
