@@ -14,7 +14,7 @@
           <tr>
             <td>Start Date</td>
             <td>:</td>
-            <td>{{new Date(listBatchSatuan.start_date).toISOString().substring(0, 10)}}</td>
+            <td>{{moment(listBatchSatuan.start_date).format('DD MMMM YYYY')}}</td>
           </tr>
           <tr>
             <td>Pay</td>
@@ -130,7 +130,7 @@
           <td class="text-center" v-else>{{value.time}}</td>
           <!--date-->
           <td v-if="editMode && listEditUjian[key] && new Date(value.date) > new Date()"><input v-model="listEditUjian[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
-          <td class="text-center" v-else>{{new Date(value.date).toUTCString().substring(0,26)}}</td>
+          <td class="text-center" v-else>{{value.date1}}</td>
           <!--delete-->
           <td v-if="editMode && !listDeleteUjian.includes(value.id)" @click="listDeleteUjian.push(value.id)">
             <button type="button" class="btn btn-sm btn-outline-danger">
@@ -202,6 +202,8 @@
 </script>
 <script>
 import axios from "axios";
+import moment from 'moment';
+moment().format();
 export default {
   data: () => ({
     //batch
@@ -234,6 +236,11 @@ export default {
       //get list ujian
       this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
       if(this.listUjian.length == 0) this.listUjian = false
+      for(let i = 0; i < this.listUjian.length; i++){
+        this.listUjian[i].date1 = moment(this.listUjian[i].date).format('dddd, DD MMMM YYYY, HH:mm')
+        this.listUjian[i].date2 = moment(this.listUjian[i].date).format()
+        this.listUjian[i].datetime = moment(this.listUjian[i].date).format('YYYY-MM-DDTHH:mm')
+      }
       //clone list Ujian
       this.listEditUjian = JSON.parse(JSON.stringify(this.listUjian))
     }catch(err){
@@ -275,6 +282,7 @@ export default {
         }
         this.refreshUjian(`berhasil menambahkan Ujian`, true)
         this.displayAddUjian = false
+        this.listUjianBaru.push({name:'',pengawas:'',time:'02:00:00',date:(new Date(new Date().valueOf() + 1000*60*60*31).toISOString().substring(0, 16))})
       }catch(err){
         console.log("error")
         console.log(err)
@@ -315,6 +323,11 @@ export default {
         this.listUjian = (await axios.get("guru/listUjian/"+this.$route.params.id, {})).data.data
         if(this.listUjian.length == 0) this.listUjian = false
         //clone list Ujian
+        for(let i = 0; i < this.listUjian.length; i++){
+          this.listUjian[i].date1 = moment(this.listUjian[i].date).format('dddd, DD MMMM YYYY, HH:mm')
+          this.listUjian[i].date2 = moment(this.listUjian[i].date).format()
+          this.listUjian[i].datetime = moment(this.listUjian[i].date).format('YYYY-MM-DDTHH:mm')
+        }
         this.listEditUjian = JSON.parse(JSON.stringify(this.listUjian))
         //ket
         if(ket) this.messageF(ket, status)

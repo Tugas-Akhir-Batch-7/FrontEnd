@@ -24,7 +24,7 @@
           <tr>
             <td>Start Date</td>
             <td>:</td>
-            <td>{{new Date(ujianSatuan.date).toUTCString()}}</td>
+            <td>{{moment(ujianSatuan.date).format('dddd, DD MMMM YYYY, HH:mm')}}</td>
           </tr>
         </table>
         <div v-else class="text-center w-100">
@@ -91,6 +91,8 @@
 </script>
 <script>
 import axios from "axios";
+import moment from 'moment';
+moment().format();
 export default {
   data: () => ({
     token:'',
@@ -113,6 +115,9 @@ export default {
       //ambil list ujian submit
       this.listUjianSubmit = (await axios.get("guru/listUjianSubmit/"+this.$route.params.id, {})).data.data
       if(this.listUjianSubmit.length == 0) this.listUjianSubmit = false
+      for(let i = 0; i < this.listUjianSubmit.length; i++){
+        this.listUjianSubmit[i].submit_date = moment(this.listUjianSubmit[i].date).format('DD MMMM YYYY, HH:mm')
+      }
       this.listUjianSubmitAdd = JSON.parse(JSON.stringify(this.listUjianSubmit))
     }catch(err){
         console.log("error")
