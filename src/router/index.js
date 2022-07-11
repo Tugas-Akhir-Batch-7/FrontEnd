@@ -49,9 +49,9 @@ const router = createRouter({
 
     //murid
     {
-      path: '/murid_dashboard',
+      path: '/dashboard',
       name: 'dashboard',
-      component: () => import('../components/Murid/Daftar.vue')
+      component: () => import('../views/Dashboard.vue')
     },
   ]
 })
