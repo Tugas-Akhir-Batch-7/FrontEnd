@@ -26,20 +26,26 @@
           </tr>
         </thead>
         <tbody>
-        <tr v-if="listBatch.length == 0">
-          <td colspan="5">
-            <div class="text-center">
-              <div class="spinner-border text-warning" role="status">
-                <span class="visually-hidden">Loading...</span>
+          <tr v-if="listBatch.length == 0" v-for="i in [0, 0, 0, 0, 0, 0, 0, 0]">
+            <!--<td colspan="10">
+              <div class="text-center">
+                <div class="spinner-border text-warning" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr><tr v-if="!listBatch">
-          <td colspan="10" class="text-center">Data Tidak Tersedia</td>
-        </tr>
-          <tr v-for="(value, key) in listBatch" :class="{'table-danger':editMode && listDeleteBatch.includes(value.id)}">
-            <td style="width:5%; text-align:center">{{key+1}}</td>
-            <td v-if="!editMode" style="width:5%; text-align:center">
+            </td>-->
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+            <td style="padding:8px 15px; border: 10px solid white; background-color:rgb(240, 240, 240); color:rgb(240, 240, 240)">-</td>
+          </tr>
+          <tr v-if="!listBatch">
+            <td colspan="10" class="text-center">Data Tidak Tersedia</td>
+          </tr>
+          <tr v-for="(value, key) in jumlah" :class="{'table-danger':editMode && listDeleteBatch.includes(value.id)}" v-if="listBatch.length">
+            <td v-if="listBatch[keyPage() + key]" style="width:5%; text-align:center">{{keyPage() + key+1}}</td>
+            <td v-if="listBatch[keyPage() + key] && !editMode" style="width:5%; text-align:center">
               <button class="btn btn-sm btn-outline-warning" type="button" @click="infoMuridBatch(value.id)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
                   <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
@@ -48,25 +54,56 @@
               </button>
             </td>
             <!--name-->
-            <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].name" class="form-control form-control-sm" type="text"></td>
-            <td v-else>{{value.name}}</td>
+            <td v-if="editMode && listBatch[keyPage() + key] && new Date(listBatch[keyPage() + key].start_date) > new Date()"><input v-model="listEditBatch[keyPage() + key].name" class="form-control form-control-sm" type="text"></td>
+            <td v-else-if="listBatch[keyPage() + key]">{{listBatch[keyPage() + key].name}}</td>
             <!--date-->
-            <td v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].date" class="form-control form-control-sm" type="date"></td>
-            <td v-else class="">{{value.dateLocal}}</td>
+            <td v-if="editMode && listBatch[keyPage() + key] && new Date(listBatch[keyPage() + key].start_date) > new Date()"><input v-model="listEditBatch[keyPage() + key].date" class="form-control form-control-sm" type="date"></td>
+            <td v-else-if="listBatch[keyPage() + key]" class="">{{listBatch[keyPage() + key].dateLocal}}</td>
             <!--name-->
-            <td class="w-25" v-if="editMode && listBatch[key] && new Date(value.start_date) > new Date()"><input v-model="listEditBatch[key].pay" class="form-control form-control-sm text-center" type="number"></td>
-            <td class="text-center w-25" v-else>{{value.pay}}</td>
+            <td class="w-25" v-if="editMode && listBatch[keyPage() + key] && new Date(listBatch[keyPage() + key].start_date) > new Date()"><input v-model="listEditBatch[keyPage() + key].pay" class="form-control form-control-sm text-center" type="number"></td>
+            <td class="text-center w-25" v-else-if="listBatch[keyPage() + key]">{{listBatch[keyPage() + key].pay}}</td>
           <!--delete-->
-          <td style="width:5%;text-align:center" v-if="editMode && !listDeleteBatch.includes(value.id)" @click="listDeleteBatch.push(value.id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
-          <td style="width:5%;text-align:center" v-if="editMode && listDeleteBatch.includes(value.id)" @click="listDeleteBatch.splice(listDeleteBatch.indexOf(value.id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listBatch[keyPage() + key] && !listDeleteBatch.includes(listBatch[keyPage() + key].id)" @click="listDeleteBatch.push(listBatch[keyPage() + key].id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
+          <td style="width:5%;text-align:center" v-if="editMode && listBatch[keyPage() + key] && listDeleteBatch.includes(listBatch[keyPage() + key].id)" @click="listDeleteBatch.splice(listDeleteBatch.indexOf(listBatch[keyPage() + key].id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
           </tr>
         </tbody>
       </table>
+      <nav aria-label="Page navigation example" style="margin-top:2%" v-if="listBatch.length > 0">
+        <ul class="pagination justify-content-center">
+          <!--<li class="page-item" :class="{'disabled': page==1}">
+            <button class="page-link" @click="navigation('previous')">&lt</button>
+          </li>-->
+          <li class="page-item" v-if="page!=1">
+            <button class="page-link text-warning" @click="navigation('first')">1</button>
+          </li>
+          <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+          <li class="page-item" v-if="page>2">
+            <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
+          </li>
+          <li class="page-item active">
+            <button class="page-link bg-warning border border-warning">{{page}}</button>
+            </li>
+          <li class="page-item" v-if="(page+1)*jumlah.length < listBatch.length">
+            <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
+            </li>
+          <li class="" v-if="(page+1)*jumlah.length < listBatch.length"><button class="page-link" style="">. . .</button></li>
+          <li class="page-item" v-if="page*jumlah.length < listBatch.length">
+            <button class="page-link text-warning" @click="navigation('last')">{{
+              listBatch.length % jumlah.length == 0 ? 
+                (listBatch.length / jumlah.length)  : 
+                ((listBatch.length - (listBatch.length % jumlah.length)) / jumlah.length) + 1
+            }}</button>
+          </li>
+          <!--<li class="page-item" :class="{'disabled': page*jumlah >= listPertemuan.length}">
+            <button class="page-link" @click="navigation('next')">></button>
+          </li>-->
+        </ul>
+      </nav>
     </div>
   </main>
   
 <!--modal add Batch-->
-<div :class="{'d-block':displayAddBatch, 'd-none':!displayAddBatch}" class="min-vw-100 min-vh-100 position-fixed top-0" style="">
+<div :class="{'d-block':displayAddBatch, 'd-none':!displayAddBatch}" class="min-vw-100 min-vh-100 position-fixed top-0" style="z-index:1000">
   <div class="min-vw-100 min-vh-100 bg-black opacity-50 position-absolute" style="z-index:-1" @click="displayAddBatch = false"></div>
   <div class="min-vw-80 bg-light p-3 overflow-auto" style="height:80vh;margin:5% 10%;border-radius:10px">
     <div class="nav-tabs d-flex justify-content-between">
@@ -80,25 +117,25 @@
       </div>
     </div>
     <table class="table ">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th class="w-50" scope="col">Name</th>
-            <th class="w-25" scope="col">Start Date</th>
-            <th class="w-25" scope="col">Pay</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(value, key) in listBatchBaru">
-            <td style="width:5%; text-align:center">{{key+1}}</td>
-            <td><input v-model="listBatchBaru[key].name" class="form-control form-control-sm" type="text"></td>
-            <td><input v-model="listBatchBaru[key].date" class="form-control form-control-sm" type="date"></td>
-            <td><input v-model="listBatchBaru[key].pay" class="form-control form-control-sm" type="number"></td>
-            <td style="width:5%; text-align:center" @click="listBatchBaru.splice(key, 1)">x</td>
-          </tr>
-        </tbody>
-      </table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th class="w-50" scope="col">Name</th>
+          <th class="w-25" scope="col">Start Date</th>
+          <th class="w-25" scope="col">Pay</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(value, key) in listBatchBaru">
+          <td style="width:5%; text-align:center">{{key+1}}</td>
+          <td><input v-model="listBatchBaru[key].name" class="form-control form-control-sm" type="text"></td>
+          <td><input v-model="listBatchBaru[key].date" class="form-control form-control-sm" type="date"></td>
+          <td><input v-model="listBatchBaru[key].pay" class="form-control form-control-sm" type="number"></td>
+          <td style="width:5%; text-align:center" @click="listBatchBaru.splice(key, 1)">x</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -126,6 +163,8 @@ export default {
     ],
     editMode: false,
     displayAddBatch: false,
+    page:1,
+    jumlah:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     //message
     message: 'terjadi error',
     messageStatus: true,
@@ -142,7 +181,6 @@ export default {
         this.listBatch[i].dateLocal = moment(this.listBatch[i].date).format('DD MMMM YYYY')
         this.listBatch[i].date = moment(this.listBatch[i].date).format('YYYY-MM-DD')
       }
-      // console.log(this.listBatch)
       //clone list batch
       this.listEditBatch = JSON.parse(JSON.stringify(this.listBatch))
     } catch (err) {
@@ -151,6 +189,32 @@ export default {
     }
   },
   methods: {
+    //navigation
+    keyPage(){
+      return this.page * this.jumlah.length - this.jumlah.length
+      // return 1
+    },
+    navigation(e){
+      switch(e){
+        case 'previous':
+          this.page -= 1
+          break
+        case 'next':
+          this.page += 1
+          break
+        case 'first':
+          this.page = 1
+          break
+        case 'last':
+          this.page =  this.listBatch.length % this.jumlah.length == 0 ? 
+            (this.listBatch.length / this.jumlah.length)  : 
+            ((this.listBatch.length - (this.listBatch.length % this.jumlah.length)) / this.jumlah.length) + 1
+          // this.page = (this.listBatch.length - (this.listBatch.length % this.jumlah.length)) / this.jumlah.length + 1
+          break
+        case '':
+          break
+      }
+    },
     async infoMuridBatch(id) {
       try {
         if(!this.editMode)this.$router.push({ name: "anggotaBatch", params: { id } });
@@ -211,7 +275,7 @@ export default {
           await axios.delete("guru/deleteBatch/"+this.listDeleteBatch[i], {})
         }
         //edit tugas
-        for(let i = 0; i < this.listEditBatch.length; i++){
+        for(let i = 0; i < this.listBatch.length; i++){
           if(this.listEditBatch[i].name != this.listBatch[i].name || this.listEditBatch[i].date != this.listBatch[i].date || this.listEditBatch[i].pay != this.listBatch[i].pay){
             if(new Date(this.listEditBatch[i].date) <= new Date()){
               this.messageF(`Date Tidak Valid`, false)
