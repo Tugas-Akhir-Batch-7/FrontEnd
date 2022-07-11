@@ -12,24 +12,42 @@
       <div class="col-lg-4 px-xl-10">
         <form @submit.prevent="updateProfile">
           <div class="mb-3">
-            <label for="tagihan" class="form-label">Name</label>
+            <label for="name" class="form-label">Name</label>
             <input
               v-model="profile.name"
               type="text"
               class="form-control"
-              id="tagihan"
-              placeholder="Total tagihan akan tergenerate otomatis sesuai murid yang dipilih"
+              id="name"
+              placeholder="Nama Anda"
             />
           </div>
           <div class="mb-3">
-            <label for="tagihan" class="form-label">Email</label>
+            <label for="email" class="form-label">Email</label>
             <input
               v-model="profile.email"
               disabled
               type="text"
               class="form-control"
-              id="tagihan"
+              id="email"
               placeholder="email@email.com"
+            />
+          </div>
+          <div v-if="isMurid">
+            <label for="address" class="form-label">Address</label>
+            <input
+              v-model="profile.profile.address"
+              type="text"
+              class="form-control"
+              id="address"
+              placeholder="Jalan penuh bebatuan"
+            />
+            <label for="address" class="form-label">Contact</label>
+            <input
+              v-model="profile.profile.contact"
+              type="text"
+              class="form-control"
+              id="contact"
+              placeholder="62841242094"
             />
           </div>
           <div class="my-4">
@@ -38,19 +56,24 @@
         </form>
       </div>
     </div>
+  {{isMurid}}
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import authHeader from "../services/auth-header";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import store from "../store";
 import { useRouter } from "vue-router";
 export default {
   setup() {
     let profile = reactive({});
     const route = useRouter()
+
+    const isMurid = computed(() => profile.role === "murid");
+
     const fetchProfile = async () => {
       const res = await axios.get("/user/profile", {
         headers: await authHeader(),
@@ -59,20 +82,25 @@ export default {
       Object.assign(profile, res.data.data);
       // this.profile = data.data;
     };
-
+    
     const updateProfile = async () => {
+      profile.address = profile.profile.address;
+      profile.contact = profile.profile.contact;
       await store.dispatch("auth/updateProfile", profile);
 
       await route.push('/profile')
     //   console.log(res.data);
     };
     onMounted(async () => {
-      fetchProfile();
-      // console.log(profile);
+      await fetchProfile();
+      // console.log(isMurid);
+      // console.log('aziz');
+      // console.log(isMurid);
     });
     return {
       profile,
-      updateProfile
+      updateProfile,
+      isMurid
       // token: this.$store.getters["auth/token"]
     };
   },

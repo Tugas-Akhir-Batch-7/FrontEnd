@@ -3,14 +3,10 @@
     <h2 class="mb-4">Profile</h2>
     <br />
 
-    <div class="row align-items-center">
+    <div class="row align-items-top">
       <div class="col-lg-5 mb-4 mb-lg-0">
         <div class="d-flex justify-content-center">
-          <img
-            :src="profile.photo"
-            alt="..."
-            width="400"
-          />
+          <img :src="profile.photo" alt="..." width="400" />
         </div>
       </div>
       <div class="col-lg-7 px-xl-10">
@@ -23,20 +19,60 @@
             mb-1-9
             rounded
           "
-          style="
-          min-width: 20em "
+          style="min-width: 20em"
         >
-          <h3 class="h2 text-white mb-0">{{profile.name}}</h3>
-          <span class="text-primary">{{profile.role}}</span>
+          <h3 class="h2 text-white mb-0">{{ profile.name }}</h3>
+          <span class="text-primary"
+            >{{ profile.role }}
+            <span v-if="isMurid">({{ profile.batch }})</span></span
+          >
         </div>
         <ul class="list-unstyled mb-1-9">
-         
           <li class="mb-2 mb-xl-3 display-28">
             <span class="display-26 text-secondary me-2 font-weight-600"
               >Email:</span
             >
-            {{profile.email}}
+            {{ profile.email }}
           </li>
+
+          <div v-if="isMurid">
+            <li class="mb-2 mb-xl-3 display-28">
+              <span class="display-26 text-secondary me-2 font-weight-600"
+                >Address:</span
+              >
+              <!-- reactivity object inside object must provide judgement -->
+              <!-- https://stackoverflow.com/questions/68348231/vue3-object-deep-reactivity-works-fine-but-getting-error -->
+              {{ profile.profile && profile.profile.address }}
+            </li>
+
+             <li class="mb-2 mb-xl-3 display-28">
+              <span class="display-26 text-secondary me-2 font-weight-600"
+                >Contact:</span
+              >
+              <!-- reactivity object inside object must provide judgement -->
+              <!-- https://stackoverflow.com/questions/68348231/vue3-object-deep-reactivity-works-fine-but-getting-error -->
+              {{ profile.profile && profile.profile.contact }}
+            </li>
+            <li class="mb-2 mb-xl-3 display-28">
+              <span class="display-26 text-secondary me-2 font-weight-600"
+                >Photo KTP</span
+              >
+              <!-- reactivity object inside object must provide judgement -->
+              <!-- https://stackoverflow.com/questions/68348231/vue3-object-deep-reactivity-works-fine-but-getting-error -->
+              <div>
+                <a 
+                :href="profile.profile && profile.profile.photo_ktp"
+                target="_blank"
+                  ><img
+                    :src="profile.profile && profile.profile.photo_ktp"
+                    alt=""
+                    width="100"
+                  />
+                </a>
+              </div>
+            </li>
+          </div>
+
           <!-- <li class="mb-2 mb-xl-3 display-28">
             <span class="display-26 text-secondary me-2 font-weight-600"
               >Website:</span
@@ -61,28 +97,30 @@
 <script>
 import axios from "axios";
 import authHeader from "../services/auth-header";
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, computed } from "vue";
+// import { computed } from "@vue/reactivity";
 export default {
-
   setup() {
-    let profile = reactive({})
+    let profile = reactive({});
     const fetchProfile = async () => {
       const res = await axios.get("/user/profile", {
-        headers: await authHeader()
+        headers: await authHeader(),
       });
-      console.log(res.data);
+      console.log(res.data.data.profile);
       Object.assign(profile, res.data.data);
       // this.profile = data.data;
     };
-    onMounted( async () => {
+    const isMurid = computed(() => profile.role === "murid");
+    onMounted(async () => {
       fetchProfile();
       console.log(profile);
     });
     return {
-      profile
+      profile,
+      isMurid,
       // token: this.$store.getters["auth/token"]
-    }
-  }
+    };
+  },
 };
 </script>
 
