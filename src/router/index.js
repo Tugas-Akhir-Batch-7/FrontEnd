@@ -48,8 +48,8 @@ const router = createRouter({
 
     // lupa password
     {
-      path: '/forgot_password', 
-      name: 'forgotpwd',
+      path: '/reset_password', 
+      name: 'resetpwd',
       component: () => import('../components/PasswordRecovery/Step1.vue')
     },
     {
@@ -64,8 +64,8 @@ const router = createRouter({
     },
 
     {
-      path: '/reset_password',
-      name: 'reset_password',
+      path: '/forgot_password',
+      name: 'forgot_password',
       component: () => import('../views/ResetPasswordView.vue')
     },
 

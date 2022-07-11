@@ -47,6 +47,7 @@ a.nav-profile {
         </div>
         <div id="user_name">
           <router-link exact-active-class="" class="nav-profile" to="/profile">{{ currentName }}</router-link>
+          <p></p>
           <p>{{ currentBatch }}</p>
           <button @click="handleLogout" class="btn btn-secondary">Logout</button>
         </div>
