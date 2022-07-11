@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { onBeforeMount } from "@vue/runtime-core";
 import SignUpVue from "../components/SignUp/Step1.vue";
 import SignUpVue2 from "../components/SignUp/Step2.vue";
 import SignUpVue3 from "../components/SignUp/Step3.vue";
@@ -52,10 +53,10 @@ export default {
   data() {
     return {
       step: 1,
-      data:{
-        name: decodeURIComponent(this.$route.query.name), 
-        email: decodeURIComponent(this.$route.query.email), 
-        profile: decodeURIComponent(this.$route.query.picture)
+      data: {
+        name: decodeURIComponent(this.$route.query.name),
+        email: decodeURIComponent(this.$route.query.email),
+        profile: decodeURIComponent(this.$route.query.picture),
       },
       form: {
         name: "",
@@ -65,20 +66,27 @@ export default {
         birthdate: "",
         ktp: "",
         profile: "",
+        id_batch: "",
 
         //todo
         address: "test",
         contact: "0823241212",
-        birthday: "12/12/1996"
+        birthday: "12/12/1996",
       },
+      listBatch: [],
     };
   },
   async mounted() {
     try {
-      this.data.name = decodeURIComponent(this.$route.query.name)
-      this.data.email = decodeURIComponent(this.$route.query.email)
-      this.data.profile = decodeURIComponent(this.$route.query.picture)
-      console.log(this.data)
+      // console.log("ini list batch");
+      // const listBatch = await axios.get("/available-batch");
+      // // console.log(listBatch.data.data);
+      // this.listBatch = listBatch.data.data;
+
+      this.data.name = decodeURIComponent(this.$route.query.name);
+      this.data.email = decodeURIComponent(this.$route.query.email);
+      this.data.profile = decodeURIComponent(this.$route.query.picture);
+      console.log(this.data);
       // console.log(decodeURIComponent(this.$route.query.email))
     } catch (err) {
       console.log("error");
@@ -105,18 +113,37 @@ export default {
       // console.log(file);
     },
     async sendForm() {
-      await this.$store.dispatch("auth/registerOtp", this.form);
+      try {
+        await this.$store.dispatch("auth/registerOtp", this.form);
+      } catch (err) {
+        console.log(err);
+      }
+
       // console.log(this.form);
     },
     async completeRegister(otp) {
+      try {
+
+      
       this.form.otp = otp;
       //todo
       this.form.address = "test";
       this.form.contact = "0823241212";
       this.form.birthday = this.form.birthdate;
 
-      await this.$store.dispatch("auth/register", this.form);
+      const status = await this.$store.dispatch("auth/register", this.form);
+      if(status) {
+        this.$router.push('/login')
+      } else {
+        throw('OTP tidak valid')
+      }
+
       // console.log(this.form);
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+      
     },
   },
 };

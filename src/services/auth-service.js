@@ -44,8 +44,8 @@ class AuthService {
     }
     async updateProfile(form) {
         try {
-            console.log('ini form')
-            console.log( form)
+            // console.log('ini form')
+            // console.log( form)
             const response = await axios.put('/user/profile', form, {
                 headers: await authHeader()
             })

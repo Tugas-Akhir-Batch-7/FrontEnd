@@ -55,8 +55,16 @@ export default {
             // commit('SET_TOKEN', user.token)
         },
         async register({ commit }, form) {
-            const user  = await AuthService.register(form)
-            console.log(user)
+            try {
+                const user = await AuthService.register(form)
+                if (!user) {
+                    return false
+                }
+                return user
+
+            } catch (error) {
+                console.log(error)
+            }
         },
         async updateProfile({ dispatch }, form) {
             const user = await AuthService.updateProfile(form)
@@ -64,7 +72,7 @@ export default {
             await dispatch('setProfile', user)
         },
 
-        async setProfile ({ commit }, user) {
+        async setProfile({ commit }, user) {
             // const user = await AuthService.getProfile()
             // console.log('masuk set profile')
             // console.log(user)

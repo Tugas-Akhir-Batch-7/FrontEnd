@@ -10,6 +10,20 @@
       <div id="title">Bebas</div>
 
       <form @submit.prevent style="justify-content: center">
+        <div class="form-group">
+          <label for="batch">Pilih Batch</label>
+          <select v-model="form.id_batch" v-if="listBatch" class="form-select form-control" required name="batch" id="">
+            <!-- <option value="" disabled>Pilih Batch</option> -->
+            <option v-for="batch in listBatch" :value="batch.id" :key="batch.id">
+              {{batch.name}}
+            </option>
+          </select>
+          <div v-else>
+            <div class="alert alert-danger">
+              <strong>Oops!</strong> Belum ada batch tersedia.
+            </div>
+          </div>
+        </div>
         <div>
           <input
             required
@@ -102,6 +116,8 @@
 
 <script>
 // import moment from "moment";
+import axios from "axios";
+
 export default {
   props: ['name', 'email'],
   data() {
@@ -110,17 +126,29 @@ export default {
       // file1: "",
       // src1: "",
       form: {
+        id_batch: "",
         name: "",
         email: "",
         password: "",
         confirm_password: "",
         birthdate: "",
       },
+      listBatch: []
     };
   },
-  mounted() {
-    if(this.name && this.name != 'undefined') this.form.name = this.name
-    if(this.email && this.email != 'undefined') this.form.email = this.email
+  async mounted() {
+    try {
+
+      if(this.name && this.name != 'undefined') this.form.name = this.name
+      if(this.email && this.email != 'undefined') this.form.email = this.email
+
+      console.log("ini list batch");
+      const listBatch = await axios.get("/available-batch");
+      // console.log(listBatch.data.data);
+      this.listBatch = listBatch.data.data;
+    } catch(e) {
+      console.log(e);
+    }
     // this.step = this.step-inner;
     // const test = moment 
     // var years = this.$moment().diff('1981-01-01', 'years');
