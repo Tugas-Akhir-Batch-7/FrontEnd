@@ -110,7 +110,7 @@
         <li class="page-item" v-if="page!=1">
           <button class="page-link text-warning" @click="navigation('first')">1</button>
         </li>
-        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="page>3"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page>2">
           <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
         </li>
@@ -120,7 +120,7 @@
         <li class="page-item" v-if="(page+1)*jumlah.length < listPertemuan.length">
           <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
           </li>
-        <li class="" v-if="(page+1)*jumlah.length < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="(page)*jumlah.length < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page*jumlah.length < listPertemuan.length">
           <button class="page-link text-warning" @click="navigation('last')">{{
             listPertemuan.length % jumlah.length == 0 ? 
@@ -267,7 +267,6 @@ export default {
       //name guru
       this.nameGuru = await this.$store.getters["auth/user"].name
 
-      console.log(this.listPertemuan)
     }catch(err){
         console.log("error")
         console.log(err)
@@ -370,9 +369,8 @@ export default {
       try{
         let idBatch, idGuru
         //delete tugas
-        console.log(this.listDeletePertemuan)
         for(let i = 0; i < this.listDeletePertemuan.length; i++){
-          console.log(await axios.delete("guru/deletePertemuan/"+this.listDeletePertemuan[i]))
+          await axios.delete("guru/deletePertemuan/"+this.listDeletePertemuan[i])
         }
         this.listDeletePertemuan = []
         //edit tugas

@@ -76,7 +76,7 @@
           <li class="page-item" v-if="page!=1">
             <button class="page-link text-warning" @click="navigation('first')">1</button>
           </li>
-          <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+          <li class="" v-if="page>3"><button class="page-link" style="">. . .</button></li>
           <li class="page-item" v-if="page>2">
             <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
           </li>
@@ -86,7 +86,7 @@
           <li class="page-item" v-if="(page+1)*jumlah.length < listBatch.length">
             <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
             </li>
-          <li class="" v-if="(page+1)*jumlah.length < listBatch.length"><button class="page-link" style="">. . .</button></li>
+          <li class="" v-if="(page+2)*jumlah.length < listBatch.length"><button class="page-link" style="">. . .</button></li>
           <li class="page-item" v-if="page*jumlah.length < listBatch.length">
             <button class="page-link text-warning" @click="navigation('last')">{{
               listBatch.length % jumlah.length == 0 ? 

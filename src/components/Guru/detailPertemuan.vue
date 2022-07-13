@@ -2,6 +2,38 @@
 <main class="d-flex flex-nowrap">
   <sidebar/>
   <div class="d-flex flex-column flex-fill p-3">
+    <div class="card" style="margin-bottom:3%">
+      <h3 class="card-header text-warning">Detail</h3>
+      <div class="card-body">
+        <table class="table table-borderless align-middle m-0" v-if="listPertemuanSatuan.name_guru">
+          <tr>
+            <td style="width:10%">Name Guru</td>
+            <td style="width:2%">:</td>
+            <td style="">{{listPertemuanSatuan.name_guru}}</td>
+          </tr>
+          <tr>
+            <td style="width:10%">Name</td>
+            <td style="width:2%">:</td>
+            <td style="">{{listPertemuanSatuan.name_pertemuan}}</td>
+          </tr>
+          <tr>
+            <td style="width:10%">Keterangan</td>
+            <td style="width:2%">:</td>
+            <td style="">{{listPertemuanSatuan.ket}}</td>
+          </tr>
+          <tr>
+            <td>Start Date</td>
+            <td>:</td>
+            <td>{{moment(listPertemuanSatuan.date).format('dddd, DD MMMM YYYY, HH:mm')}}</td>
+          </tr>
+        </table>
+        <div v-else class="text-center w-100">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--absensi-->
     <div class="nav-tabs d-flex justify-content-between">
       <h3 class="nav-link active bg-light text-warning">Absensi</h3>
@@ -16,8 +48,8 @@
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">Name</th>
-          <th scope="col">Email</th>
+          <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Email</th>
           <th style="text-align:center" scope="col">Status</th>
         </tr>
       </thead>
@@ -61,14 +93,14 @@
         <tr>
           <th scope="col"></th>
           <th v-if="!editModeTugas" scope="col"></th>
-          <th scope="col">Name</th>
-          <th scope="col">Description</th>
+          <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Description</th>
           <th scope="col" v-if="editModeTugas"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="listTugas.length == 0">
-          <td colspan="3">
+          <td colspan="5">
             <div class="text-center">
               <div class="spinner-border text-warning" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -119,14 +151,14 @@
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">File</th>
-          <th scope="col">Keterangan</th>
+          <th scope="col" class="text-center">File</th>
+          <th scope="col" class="text-center">Keterangan</th>
           <th scope="col" v-if="editModeMateri"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-if="listMateri.length == 0">
-          <td colspan="3">
+          <td colspan="5">
             <div class="text-center">
               <div class="spinner-border text-warning" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -236,8 +268,11 @@
 <script>
 import axios from "axios";
 import FormData from "form-data";
+import moment from 'moment';
+moment().format();
 export default {
   data: () => ({
+    listPertemuanSatuan: {},
     //absen
     listAbsen:[],
     listUpdate:{},
@@ -267,6 +302,9 @@ export default {
       //setup
       axios.defaults.headers.common['token'] = await this.$store.getters["auth/token"]
 
+      //pertemuan
+      this.listPertemuanSatuan = (await axios.get("guru/pertemuanSatuan/"+this.$route.params.id, {})).data.data
+
       //list absen
       this.listAbsen = (await axios.get("guru/listAbsensi/"+this.$route.params.id, {})).data.data
       if(this.listAbsen.length == 0) this.listAbsen = false
@@ -282,6 +320,8 @@ export default {
       if(this.listMateri.length == 0) this.listMateri = false
       //clone list tugas
       this.listEditMateri = JSON.parse(JSON.stringify(this.listMateri))
+
+      console.log(this.listPertemuanSatuan)
     }catch(err){
         console.log("error")
         console.log(err)
@@ -473,6 +513,10 @@ export default {
           fileLink.setAttribute('download', file); 
           document.body.appendChild(fileLink); 
           fileLink.click(); 
+          this.messageF('mendownload file', true)
+        }).catch((err)=>{
+          console.log("file tidak ada")
+          this.messageF('file tidak ada', false)
         });
       }catch(err){
         console.log("error")

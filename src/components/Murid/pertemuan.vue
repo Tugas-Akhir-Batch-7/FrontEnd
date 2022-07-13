@@ -44,7 +44,7 @@
             </div>
           </div>
         </h2>
-        <div v-if="new Date(listPertemuan[keyPage() + key].date) <= new Date()" v-bind:id="'panelsStayOpen-collapse'+numberToText.convertToText(keyPage() + key+1).replace(' ','')" class="accordion-collapse collapse" v-bind:aria-labelledby="'panelsStayOpen-heading'+numberToText.convertToText(keyPage() + key+1).replace(' ','')">
+        <div v-if="listPertemuan[keyPage() + key] && new Date(listPertemuan[keyPage() + key].date) <= new Date()" v-bind:id="'panelsStayOpen-collapse'+numberToText.convertToText(keyPage() + key+1).replace(' ','')" class="accordion-collapse collapse" v-bind:aria-labelledby="'panelsStayOpen-heading'+numberToText.convertToText(keyPage() + key+1).replace(' ','')">
           <div class="accordion-body">
             <div v-if="listPertemuan[keyPage() + key].tugas">
               <div class="">
@@ -104,7 +104,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(valueTugas, keyTugas) in listPertemuan[keyPage() + key].tugas">
+                      <tr  v-for="(valueTugas, keyTugas) in listPertemuan[keyPage() + key].tugas">
                         <td style="width:3%" class="text-center">{{keyTugas+1}}</td>
                         <td style="width:25%" class="">{{valueTugas.name}}</td>
                         <td style="width:41%" class="">{{valueTugas.description}}</td>
@@ -150,7 +150,7 @@
         <li class="page-item" v-if="page!=1">
           <button class="page-link text-warning" @click="navigation('first')">1</button>
         </li>
-        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="page>3"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page>2">
           <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
         </li>
@@ -160,7 +160,7 @@
         <li class="page-item" v-if="(page+1)*jumlah.length < listPertemuan.length">
           <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
           </li>
-        <li class="" v-if="(page+1)*jumlah.length < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="(page+2)*jumlah.length < listPertemuan.length"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page*jumlah.length < listPertemuan.length">
           <button class="page-link text-warning" @click="navigation('last')">{{
             listPertemuan.length % jumlah.length == 0 ? 
@@ -199,7 +199,7 @@ export default {
     listPertemuanC:[],
     // listPertemuanView:[],
     page:1,
-    jumlah:[0, 0, 0],
+    jumlah:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     //tugas
     listTugasBaru: {},
     displayAddTugasP:false,
@@ -225,7 +225,6 @@ export default {
       }
       //clone
       this.listPertemuanC = JSON.parse(JSON.stringify(this.listPertemuan))
-      // this.listPertemuanView = JSON.parse(JSON.stringify(this.listPertemuan.slice(0, this.jumlah)))
 
     }catch(err){
       console.log("error")

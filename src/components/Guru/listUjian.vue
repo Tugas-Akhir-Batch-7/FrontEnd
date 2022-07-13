@@ -71,7 +71,7 @@
           <td class="text-center" v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].time}}</td>
           <!--date-->
           <td v-if="editMode && listUjian[keyPage() + key] && listEditUjian[key] && new Date(listUjian[keyPage() + key].date) > new Date()"><input v-model="listEditUjian[key].datetime" class="form-control form-control-sm" type="datetime-local"></td>
-          <td class="text-center" v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].date1}}</td>
+          <td class="" v-else-if="listUjian[keyPage() + key]">{{listUjian[keyPage() + key].date1}}</td>
           <!--delete-->
           <td style="width:5%;text-align:center" v-if="editMode && listUjian[keyPage() + key] && !listDeleteUjian.includes(listUjian[keyPage() + key].id)" @click="listDeleteUjian.push(listUjian[keyPage() + key].id)"><button type="button" class="btn btn-sm btn-outline-danger">x</button></td>
           <td style="width:5%;text-align:center" v-if="editMode && listUjian[keyPage() + key] && listDeleteUjian.includes(listUjian[keyPage() + key].id)" @click="listDeleteUjian.splice(listDeleteUjian.indexOf(listUjian[keyPage() + key].id))"><button type="button" class="btn btn-sm btn-outline-success">v</button></td>
@@ -86,7 +86,7 @@
         <li class="page-item" v-if="page!=1">
           <button class="page-link text-warning" @click="navigation('first')">1</button>
         </li>
-        <li class="" v-if="page>2"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="page>3"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page>2">
           <button class="page-link text-warning" @click="navigation('previous')">{{page-1}}</button>
         </li>
@@ -96,7 +96,7 @@
         <li class="page-item" v-if="(page+1)*jumlah.length < listUjian.length">
           <button class="page-link text-warning" @click="navigation('next')">{{page+1}}</button>
           </li>
-        <li class="" v-if="(page+1)*jumlah.length < listUjian.length"><button class="page-link" style="">. . .</button></li>
+        <li class="" v-if="(page+2)*jumlah.length < listUjian.length"><button class="page-link" style="">. . .</button></li>
         <li class="page-item" v-if="page*jumlah.length < listUjian.length">
           <button class="page-link text-warning" @click="navigation('last')">{{
             listUjian.length % jumlah.length == 0 ? 
@@ -220,7 +220,7 @@ export default {
       this.listBatch = (await axios.get("guru/listBatch", {})).data.data
       if(this.listBatch.length == 0) this.listBatch = false
 
-      console.log(this.listUjian)
+      // console.log(this.listUjian)
     }catch(err){
         console.log("error")
         console.log(err)
