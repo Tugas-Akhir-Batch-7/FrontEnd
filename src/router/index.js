@@ -48,7 +48,7 @@ const router = createRouter({
 
     // lupa password
     {
-      path: '/reset_password', 
+      path: '/reset_password',
       name: 'resetpwd',
       component: () => import('../components/PasswordRecovery/Step1.vue')
     },
@@ -173,6 +173,22 @@ const router = createRouter({
       },
     },
     {
+      path: '/profile/:id',
+      name: 'profile_by_id',
+      component: () => import('../views/ProfileView.vue'),
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      },
+      children: [
+        {
+          path: '',
+          name: 'profile_view_by_id',
+          component: () => import('../components/ProfileComponent.vue'),
+        },
+      ]
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
@@ -191,11 +207,11 @@ const router = createRouter({
           name: 'profile_view',
           component: () => import('../components/ProfileComponent.vue'),
         },
-        
+
       ],
-      
+
     },
-   
+
     {
       path: '/admin/',
       name: 'admin_dashboard',
@@ -205,7 +221,7 @@ const router = createRouter({
         isAdmin: true
       },
       children: [
-        { 
+        {
           path: "profile",
           name: "admin_profile",
           component: () => import('../components/Admin/Profile.vue'),
@@ -256,7 +272,7 @@ const router = createRouter({
 
       ]
     },
-   
+
   ]
 })
 
@@ -285,7 +301,7 @@ router.beforeEach((to, from, next) => {
     if (store.getters['auth/isLoggedIn']) {
       const role = store.getters['auth/user'].role
       // console.log("if pertama loggedin")
-      if(to.meta.allRole) {
+      if (to.meta.allRole) {
         next()
         return
       }
@@ -299,19 +315,19 @@ router.beforeEach((to, from, next) => {
       } else if (to.meta.isAdmin && role === 'admin') {
         next()
         return
-      } 
+      }
       else {
         // console.log('masuk else')
         if (role === 'admin') {
           next(`/${default_admin}`)
           // next()
           return
-  
+
         } else if (role === 'guru') {
           next(`/${default_guru}`)
           // next()
           return
-  
+
         } else if (role === 'murid') {
           next(`/${default_murid}`)
           // next()

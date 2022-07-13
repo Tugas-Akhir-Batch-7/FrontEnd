@@ -3,37 +3,41 @@
 </style>
 
 <template>
- 
-      <div class="p-3 d-flex flex-column flex-fill">
-        <h2 class="mb-4">List Guru</h2>
-        <br />
-        <!--<p>{{token}}</p>-->
-        <!--<button @click="klick">klick</button>-->
-        <!-- <div>
-          <button class="btn btn-primary px-5">Add</button>
+  <div class="p-3 d-flex flex-column flex-fill">
+    <h2 class="mb-4">List Guru</h2>
+    <br />
+    <!--<p>{{token}}</p>-->
+    <!--<button @click="klick">klick</button>-->
+    <!-- <div>
+          <button class="px-5 btn btn-primary">Add</button>
         </div> -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">No</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(i, index) in listData"
-              :key="i.id"
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(i, index) in listData" :key="i.id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ i.User.name }}</td>
+          <td>{{ i.User.email }}</td>
+          <td>
+            <router-link
+              :to="`/profile/${i.id_user}`"
+              class="btn btn-dark"
+              >Detail</router-link
             >
-              <td>{{ index + 1 }}</td>
-              <td>{{ i.User.name }}</td>
-              <td>{{ i.User.email }}</td>
-              <!-- <td>{{ i.pay }}</td> -->
-            </tr>
-          </tbody>
-        </table>
-      </div>
-   
+          </td>
+
+          <!-- <td>{{ i.pay }}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -46,14 +50,14 @@ export default {
   },
   data() {
     return {
-      listData: []
-    }
+      listData: [],
+    };
   },
   async mounted() {
     try {
       // const token = await this.$store.getters["auth/token"];
       // axios.defaults.headers.common["token"] = this.token;
-      
+
       // let response = await axios.get("admin/list-by-role?role=guru", {
       //   headers: {
       //    Authorization: 'Bearer ' + token
@@ -66,6 +70,6 @@ export default {
       console.log("error");
       console.log(err);
     }
-  }
+  },
 };
 </script>
