@@ -29,11 +29,12 @@ a.nav-profile {
       <!-- company logo -->
       <div class="company_space">
         <div id="header_logo">
-          <img src="https://via.placeholder.com/100" alt="" />
+          <!-- <img src="https://via.placeholder.com/100" alt="" /> -->
+          <img class="logo-img" src="./assets/fosanlogo.png" alt="" />
         </div>
-
-        <div id="company_name">
-          <p>Bebas</p>
+        <div id="company_name h4">
+          <!-- <p class="h4">BEBAS</p> -->
+          <router-link to="/" class="h3 logo-name"> BEBAS </router-link>
         </div>
       </div>
       <div v-if="!isLoggedIn" style="display: flex">
@@ -43,13 +44,21 @@ a.nav-profile {
       <!-- user profile -->
       <div v-else class="user_profile">
         <div id="user_pfp">
+          <img class="profile-photo" :src="profilePhoto" alt="">
           <!-- <img src="https://via.placeholder.com/100" alt="" /> -->
         </div>
         <div id="user_name">
-          <router-link exact-active-class="" class="nav-profile" to="/profile">{{ currentName }}</router-link>
+          <router-link
+            exact-active-class=""
+            class="nav-profile"
+            to="/profile"
+            >{{ currentName }}</router-link
+          >
           <p></p>
           <p>{{ currentBatch }}</p>
-          <button @click="handleLogout" class="btn btn-secondary">Logout</button>
+          <button @click="handleLogout" class="btn btn-secondary">
+            Logout
+          </button>
         </div>
       </div>
     </div>
@@ -77,7 +86,11 @@ export default {
     currentBatch() {
       return this.$store.getters["auth/user"].nama_batch;
     },
+    profilePhoto() {
+      return this.$store.getters["auth/user"].photo;
+    },
   },
+  
   methods: {
     async handleLogout() {
       try {
@@ -98,3 +111,26 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.logo-name {
+  color: #525252;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  font-weight: bold;
+}
+
+.logo-img {
+  width: 5em
+}
+
+.profile-photo {
+  /* circular */
+  width: 5em;
+  /* height: 5em; */
+  border-radius: 50%;
+  
+
+}
+</style>
