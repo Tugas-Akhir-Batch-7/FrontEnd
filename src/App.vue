@@ -10,74 +10,7 @@ a.nav-profile {
 
 <template>
   <div id="main">
-    <!-- <header v-if="!isLoggedIn">
-      <div class="navbar">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/login">Sign In</RouterLink>
-        <RouterLink to="/signup">Sign Up</RouterLink>
-        <RouterLink to="/signup_2">Sign Up _ KTP</RouterLink>
-      <RouterLink to="/signup_3">Sign Up _ PFP</RouterLink>
-      <RouterLink to="/signup_4">Sign Up _ Verify</RouterLink>
-      <RouterLink to="/forgot_password">Lupa Pass</RouterLink>
-      </div>
-
-      <div class="navbar">
-        <RouterLink to="/murid_dashboard">Murid</RouterLink>
-      </div>
-    </header> -->
-
-<!-- 
-    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-      <div class="container container-fluid">
-        <a class="navbar-brand" href="/">Title</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navContent"
-          aria-controls="navContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navContent">
-          <ul class="mb-2 navbar-nav ms-auto mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/products">Products</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropd"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropd">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </li>
-            <li class="nav-item float-end ms-md-auto">
-              <a class="nav-link active" v-on:click="showLogoutDialog"
-                >Logout</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav> -->
-
+   
     <nav class="header navbar navbar-expand-lg navbar-light">
       <!-- company logo -->
       <div class="company_space">
@@ -91,7 +24,7 @@ a.nav-profile {
         </div>
       </div>
       <button
-        class="navbar-toggler"
+        class="navbar-toggler me-4"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarSupportedConten"

@@ -2,8 +2,9 @@
   <main class="d-flex flex-nowrap">
     <sidebar />
     <!-- <RouterView /> -->
-     <router-view />
-
+    <div class="w-100" style="padding-bottom: 70px">
+      <router-view />
+    </div>
   </main>
 </template>
 
