@@ -4,7 +4,7 @@
     <sidebar-guru v-else-if="authRole === 'guru'" />
     <sidebar-murid v-else />
 
-    <div class="w-100" style="padding-bottom: 100px">
+    <div class="pt-5 overflow-hidden w-100" style="padding-bottom: 100px">
       <router-view />
     </div>
   </main>
