@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap'; 
 
 import axios from 'axios'
 import store from './store'
@@ -15,7 +16,9 @@ import moment from 'moment'
 
 
 axios.interceptors.request.use((config) => {
+    // config.baseURL = 'http://13.250.38.197:8800'
     config.baseURL = 'http://localhost:5000'
+
         // config.withCredentials = true
     return config
 })

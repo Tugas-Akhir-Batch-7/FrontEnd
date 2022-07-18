@@ -31,7 +31,12 @@ export default {
     actions: {
         async login({ commit }, credential) {
             const user = await AuthService.login(credential)
-            // console.log(user.data)
+            console.log(user.data.photo)
+            let pattern = /^(http|https):\/\//;
+            let isFullLink = pattern.test(user.data.photo);
+            if (!isFullLink) {
+                user.data.photo = `http://localhost:5000/img-profile/${user.data.photo}`;
+            }
             commit('SET_USER', user.data)
             commit('SET_TOKEN', user.token)
             // console.log(this.$store.state.target)

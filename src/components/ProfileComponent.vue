@@ -4,24 +4,17 @@
     <br />
 
     <div class="row align-items-top">
-      <div class="col-lg-5 mb-4 mb-lg-0">
+      <div class="mb-4 col-lg-5 mb-lg-0">
         <div class="d-flex justify-content-center">
           <img :src="profile.photo" alt="..." width="400" />
         </div>
       </div>
       <div class="col-lg-7 px-xl-10">
         <div
-          class="
-            bg-secondary
-            d-lg-inline-block
-            py-1-9
-            px-1-9 px-sm-6
-            mb-1-9
-            rounded
-          "
+          class="rounded bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9"
           style="min-width: 20em"
         >
-          <h3 class="h2 text-white mb-0">{{ profile.name }}</h3>
+          <h3 class="mb-0 text-white h2">{{ profile.name }}</h3>
           <span class="text-primary"
             >{{ profile.role }}
             <span v-if="isMurid">({{ profile.batch }})</span></span
@@ -45,7 +38,7 @@
               {{ profile.profile && profile.profile.address }}
             </li>
 
-             <li class="mb-2 mb-xl-3 display-28">
+            <li class="mb-2 mb-xl-3 display-28">
               <span class="display-26 text-secondary me-2 font-weight-600"
                 >Contact:</span
               >
@@ -60,9 +53,9 @@
               <!-- reactivity object inside object must provide judgement -->
               <!-- https://stackoverflow.com/questions/68348231/vue3-object-deep-reactivity-works-fine-but-getting-error -->
               <div>
-                <a 
-                :href="profile.profile && profile.profile.photo_ktp"
-                target="_blank"
+                <a
+                  :href="profile.profile && profile.profile.photo_ktp"
+                  target="_blank"
                   ><img
                     :src="profile.profile && profile.profile.photo_ktp"
                     alt=""
@@ -86,9 +79,11 @@
             507 - 541 - 4567
           </li> -->
         </ul>
-        <router-link to="/profile/edit" class="btn btn-warning px-5"
-          >Edit Profile</router-link
-        >
+        <div v-if="!id">
+          <router-link to="/profile/edit" class="px-5 btn btn-warning"
+            >Edit Profile</router-link
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -99,11 +94,21 @@ import axios from "axios";
 import authHeader from "../services/auth-header";
 import { onMounted, reactive, computed } from "vue";
 // import { computed } from "@vue/reactivity";
+import { useRoute } from "vue-router";
 export default {
   setup() {
+    const route = useRoute();
+    const { id } = route.params;
+
     let profile = reactive({});
     const fetchProfile = async () => {
-      const res = await axios.get("/user/profile", {
+      let fetchUrl;
+      if (id) {
+        fetchUrl = `/user/profile/${id}`;
+      } else {
+        fetchUrl = `/user/profile`;
+      }
+      const res = await axios.get(fetchUrl, {
         headers: await authHeader(),
       });
       console.log(res.data.data.profile);
@@ -112,12 +117,26 @@ export default {
     };
     const isMurid = computed(() => profile.role === "murid");
     onMounted(async () => {
-      fetchProfile();
-      console.log(profile);
+      await fetchProfile();
+      // console.log(Object.keys(profile));
+      let pattern = /^(http|https):\/\//;
+      let isFullLink = pattern.test(profile.profile.photo_ktp);
+      if (!isFullLink) {
+        profile.profile.photo_ktp = `http://localhost:5000/img-ktp/${profile.profile.photo_ktp}`;
+      }
+
+      isFullLink = pattern.test(profile.photo);
+      if (!isFullLink) {
+        profile.photo = `http://localhost:5000/img-profile/${profile.photo}`;
+      }
+
+      console.log(isFullLink);
+      console.log(id);
     });
     return {
       profile,
       isMurid,
+      id
       // token: this.$store.getters["auth/token"]
     };
   },
