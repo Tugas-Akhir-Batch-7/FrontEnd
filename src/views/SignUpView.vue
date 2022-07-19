@@ -335,12 +335,17 @@ export default {
                 data.append('contact', this.contact)
                 data.append('id_batch', this.batch)
               }
-              console.log(data)
               //kirim backend
               data = (await axios.post("/register", data, {headers: {'Content-Type': 'multipart/form-data'}})).data
-              console.log(data)
+              //cari nama batch
+              for(let i = 0; this.role == 'murid' && i < this.listBatch.length; i++){
+                if(this.listBatch[i].id == this.batch){
+                  data.data.nama_batch = this.listBatch[i].name
+                  break
+                }
+              }
               //simpan data ke desktop
-              await this.$store.dispatch("auth/loginGoogle", data);
+              await this.$store.dispatch("auth/register", data);
               //redirect halaman
               if ((data.data.role) == "murid") {
                 return this.$router.push("/murid_dashboard");

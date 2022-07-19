@@ -43,6 +43,14 @@ export default {
         },
         async loginGoogle({ commit }, credential) {
             // console.log(user.data)
+            credential.data.photo = `http://localhost:5000/img-profile/${credential.data.photo}`;
+            commit('SET_USER', credential.data)
+            commit('SET_TOKEN', credential.token)
+            // console.log(this.$store.state.target)
+        },
+        async register({ commit }, credential) {
+            // console.log(credential)
+            credential.data.photo = `http://localhost:5000/img-profile/${credential.data.photo}`;
             commit('SET_USER', credential.data)
             commit('SET_TOKEN', credential.token)
             // console.log(this.$store.state.target)
@@ -59,18 +67,18 @@ export default {
             // commit('SET_USER', user)
             // commit('SET_TOKEN', user.token)
         },
-        async register({ commit }, form) {
-            try {
-                const user = await AuthService.register(form)
-                if (!user) {
-                    return false
-                }
-                return user
+        // async register({ commit }, form) {
+        //     try {
+        //         const user = await AuthService.register(form)
+        //         if (!user) {
+        //             return false
+        //         }
+        //         return user
 
-            } catch (error) {
-                console.log(error)
-            }
-        },
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // },
         async updateProfile({ dispatch }, form) {
             const user = await AuthService.updateProfile(form)
             // console.log(user)
